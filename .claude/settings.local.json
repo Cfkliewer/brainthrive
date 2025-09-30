@@ -1,0 +1,46 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__serena__get_current_config",
+      "mcp__serena__activate_project",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_navigate",
+      "Bash(npm run dev:*)",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_resize",
+      "mcp__context7__resolve-library-id",
+      "mcp__serena__list_dir",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__serena__onboarding",
+      "mcp__serena__write_memory",
+      "mcp__serena__think_about_task_adherence",
+      "Bash(npm run build:*)",
+      "mcp__serena__think_about_whether_you_are_done",
+      "mcp__serena__read_memory",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_press_key",
+      "WebSearch",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(npm run lint)",
+      "mcp__playwright__browser_close",
+      "mcp__playwright__browser_install",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx next dev:*)",
+      "mcp__gsap-master__generate_complete_setup",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "mcp__serena__get_symbols_overview",
+      "mcp__serena__find_file",
+      "mcp__serena__replace_symbol_body"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "serena",
+    "context7",
+    "playwright"
+  ]
+}
