@@ -1,11 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import "tailwindcss";
 
 @theme {
+  /* BrainThrive Wellness Brand Colors - From Logo Guide */
+  --color-brand-navy: #002554;
+  --color-brand-ultraviolet: #5362EF;
+  --color-brand-teal: #35F3E6;
+  --color-brand-purple: #223BA8;
+  --color-brand-dark-teal: #00D3D2;
+  --color-brand-silver: #F2F2F2;
+
   /* Core Medical Brand Palette */
-  --color-medical-primary: #0F172A;
-  --color-medical-secondary: #1E293B;
-  --color-medical-accent: #1E40AF;
+  --color-medical-primary: #002554;
+  --color-medical-secondary: #001a3d;
+  --color-medical-accent: #5362EF;
   --color-medical-success: #047857;
   --color-medical-warning: #B45309;
   --color-medical-error: #B91C1C;
@@ -161,8 +170,96 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background: #002554;
+  --foreground: #ffffff;
+}
+
+/* Brand Fonts */
+.brand-font {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.body-font {
+  font-family: var(--font-golos), 'Inter', sans-serif;
+}
+
+/* Neural Network Animation Styles */
+@keyframes pulse-node {
+  0%, 100% {
+    fill-opacity: 0.4;
+    r: 3;
+  }
+  50% {
+    fill-opacity: 1;
+    r: 4;
+  }
+}
+
+@keyframes draw-line {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0.2;
+  }
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0.2;
+  }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes reveal-anim {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-teal {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(53, 243, 230, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(53, 243, 230, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(53, 243, 230, 0);
+  }
+}
+
+.node {
+  animation: pulse-node 3s infinite ease-in-out;
+}
+
+.connection-line {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-line 3s infinite ease-in-out;
+}
+
+/* Smooth reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: reveal-anim 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Custom Bullet Pulse */
+.pulse-bullet {
+  box-shadow: 0 0 0 0 rgba(53, 243, 230, 0.7);
+  animation: pulse-teal 2s infinite;
 }
 
 /* Animation keyframes */
@@ -220,13 +317,32 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #002554;
+  color: #ffffff;
+  font-family: var(--font-golos), 'Inter', system-ui, -apple-system, sans-serif;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #001a3d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #223BA8;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5362EF;
 }
 
 /* Medical-grade accessibility improvements */

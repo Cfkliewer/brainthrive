@@ -38,11 +38,11 @@ const conditionServices: TreatmentService[] = [
     title: "ADHD & Autism Support",
     shortDescription: "Targeted brain balance for attention and sensory processing",
     icon: "M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18",
-    gradientFrom: "from-blue-50",
-    gradientTo: "to-blue-100",
-    borderColor: "border-blue-200",
-    iconColor: "bg-blue-600",
-    badgeColor: "bg-blue-100 text-blue-800 border-blue-200",
+    gradientFrom: "from-white",
+    gradientTo: "to-white",
+    borderColor: "border-gray-200",
+    iconColor: "bg-primary-600",
+    badgeColor: "bg-primary-100 text-primary-800 border-primary-200",
     badgeText: "Neuroplasticity Focus",
     progressiveLevels: [
       {
@@ -97,11 +97,11 @@ const conditionServices: TreatmentService[] = [
     title: "Memory & Cognitive Enhancement",
     shortDescription: "Restore mental clarity and cognitive function",
     icon: "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z",
-    gradientFrom: "from-purple-50",
-    gradientTo: "to-purple-100",
-    borderColor: "border-purple-200",
-    iconColor: "bg-purple-600",
-    badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+    gradientFrom: "from-white",
+    gradientTo: "to-white",
+    borderColor: "border-gray-200",
+    iconColor: "bg-primary-600",
+    badgeColor: "bg-primary-100 text-primary-800 border-primary-200",
     badgeText: "Neuroprotective",
     progressiveLevels: [
       {
@@ -156,11 +156,11 @@ const conditionServices: TreatmentService[] = [
     title: "TBI & Concussion Recovery",
     shortDescription: "Accelerate healing and restore brain function",
     icon: "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z",
-    gradientFrom: "from-teal-50",
-    gradientTo: "to-teal-100",
-    borderColor: "border-teal-200",
-    iconColor: "bg-teal-600",
-    badgeColor: "bg-teal-100 text-teal-800 border-teal-200",
+    gradientFrom: "from-white",
+    gradientTo: "to-white",
+    borderColor: "border-gray-200",
+    iconColor: "bg-primary-600",
+    badgeColor: "bg-primary-100 text-primary-800 border-primary-200",
     badgeText: "Regenerative",
     progressiveLevels: [
       {
@@ -240,13 +240,13 @@ export default function ConditionSpecificServices() {
           {conditionServices.map((service) => (
             <div
               key={service.id}
-              className={`condition-card medical-card bg-gradient-to-br ${service.gradientFrom} ${service.gradientTo} rounded-xl border-2 ${service.borderColor} transition-all duration-300 hover:shadow-xl`}
+              className="condition-card medical-card bg-white rounded-xl border-2 border-gray-200 hover:border-primary-400 transition-all duration-300 hover:shadow-xl"
             >
               {/* Header */}
               <div className="p-6 lg:p-8">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                   <div className="flex items-center gap-4">
-                    <div className={`w-16 h-16 rounded-xl ${service.iconColor} flex items-center justify-center shadow-lg`}>
+                    <div className="w-16 h-16 rounded-xl bg-primary-600 flex items-center justify-center shadow-lg">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
                         <path strokeLinecap="round" strokeLinejoin="round" d={service.icon} />
                       </svg>
@@ -267,8 +267,8 @@ export default function ConditionSpecificServices() {
                       onClick={() => setExpandedService(expandedService === service.id ? null : service.id)}
                       className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 medical-focus ${
                         expandedService === service.id
-                          ? `${service.iconColor} text-white ${service.borderColor.replace('border-', 'border-')}`
-                          : `bg-white ${service.iconColor.replace('bg-', 'text-')} ${service.borderColor}`
+                          ? 'bg-primary-600 text-white border-primary-600'
+                          : 'bg-white text-primary-600 border-primary-600'
                       }`}
                       aria-expanded={expandedService === service.id}
                       aria-label={`Toggle detailed information for ${service.title}`}
@@ -277,7 +277,7 @@ export default function ConditionSpecificServices() {
                     </button>
                     <a
                       href="#contact"
-                      className={`px-4 py-2 rounded-lg font-medium ${service.iconColor} text-white hover:opacity-90 transition-all duration-200 text-center medical-focus`}
+                      className="px-4 py-2 rounded-lg font-medium bg-primary-600 text-white hover:bg-primary-700 transition-all duration-200 text-center medical-focus"
                       aria-label={`Schedule consultation for ${service.title}`}
                     >
                       Schedule Consultation
@@ -288,7 +288,7 @@ export default function ConditionSpecificServices() {
 
               {/* Expanded Content */}
               {expandedService === service.id && (
-                <div className="border-t border-white/40 bg-white/30 backdrop-blur-sm">
+                <div className="border-t border-gray-200 bg-gray-50">
                   <div className="p-6 lg:p-8 space-y-8">
                     {/* Progressive Disclosure */}
                     <div>
@@ -368,15 +368,15 @@ export default function ConditionSpecificServices() {
               All condition-specific treatments are guided by objective brain assessments and monitored for progress using our advanced diagnostic tools.
             </p>
             <div className="grid sm:grid-cols-3 gap-4 mb-6">
-              <div className="bg-white p-4 rounded-lg border border-blue-100">
+              <div className="bg-white p-4 rounded-lg border border-primary-200">
                 <h4 className="font-semibold text-medical-primary mb-2">Brain Gauge Assessment</h4>
                 <p className="text-sm text-medical-gray-600">5 key cortical metrics baseline and progress tracking</p>
               </div>
-              <div className="bg-white p-4 rounded-lg border border-purple-100">
+              <div className="bg-white p-4 rounded-lg border border-primary-200">
                 <h4 className="font-semibold text-medical-primary mb-2">qEEG Brain Mapping</h4>
                 <p className="text-sm text-medical-gray-600">Detailed brain activity analysis and treatment targeting</p>
               </div>
-              <div className="bg-white p-4 rounded-lg border border-teal-100">
+              <div className="bg-white p-4 rounded-lg border border-primary-200">
                 <h4 className="font-semibold text-medical-primary mb-2">Customized Protocols</h4>
                 <p className="text-sm text-medical-gray-600">Personalized treatment plans based on your brain data</p>
               </div>

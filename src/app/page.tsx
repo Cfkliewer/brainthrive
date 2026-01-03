@@ -1,770 +1,841 @@
 "use client"
-import { useState, useEffect, useRef } from "react";
-import { useHeroEntrance, useScrollReveal, useStaggerAnimation, useHoverLift, initMedicalAnimations } from "@/lib/animations";
+import { useState } from "react";
 import PageTransition from "@/components/PageTransition";
-import BrainGaugeMetrics from "@/components/BrainGaugeMetrics";
-import ConditionSpecificServices from "@/components/ConditionSpecificServices";
 
 export default function Home() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Animation hooks
-  const heroRef = useHeroEntrance({
-    duration: 1.0,
-    stagger: 0.15
-  });
-  const servicesRef = useScrollReveal(".service-card");
-  const aboutStatsRef = useStaggerAnimation("scaleIn", {
-    duration: 0.8,
-    stagger: 0.2
-  });
-  const faqRef = useScrollReveal(".faq-item", {
-    start: "top 85%",
-    stagger: 0.1
-  });
-
-  // Hover effects for interactive elements
-  const heroCtaRef1 = useHoverLift<HTMLAnchorElement>();
-  const heroCtaRef2 = useHoverLift<HTMLAnchorElement>();
-  const emergencyBtnRef = useHoverLift<HTMLAnchorElement>();
-  
-  // Initialize medical animations and scroll animation
-  useEffect(() => {
-    // Initialize GSAP medical animations
-    initMedicalAnimations();
-
-    // Add CSS for smooth infinite scroll animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes infiniteScroll {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-${services.length * 304}px);
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-
-  const services = [
-    {
-      icon: "M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18",
-      title: "ADHD & Focus Support",
-      description: "Enhanced brain balance for attention, focus, and emotional regulation"
-    },
-    {
-      icon: "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z",
-      title: "Concussion & TBI Recovery",
-      description: "Accelerated healing and restoration of brain function after injury"
-    },
-    {
-      icon: "M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18",
-      title: "Memory Loss & Brain Fog",
-      description: "Restore cognitive clarity and protect against age-related decline"
-    },
-    {
-      icon: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z",
-      title: "Anxiety & Depression",
-      description: "Balanced brain chemistry for improved mental wellness"
-    },
-    {
-      icon: "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z",
-      title: "Chronic Pain",
-      description: "Reduced inflammation and natural pain relief through light therapy"
-    },
-    {
-      icon: "M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z",
-      title: "Inflammation & Fatigue",
-      description: "Combat inflammation and boost cellular energy levels"
-    }
-  ];
-
-  useEffect(() => {
-    // No longer needed - using CSS animation instead
-  }, []);
   return (
     <PageTransition>
-      <div className="min-h-screen">
-      {/* Skip Navigation Link */}
-      <a href="#main-content" className="skip-nav">
-        Skip to main content
-      </a>
-      <header className="bg-white backdrop-blur-sm text-medical-primary flex flex-row justify-between items-center py-4 md:py-6 px-4 md:px-8 shadow-lg border-b border-medical-gray-200 sticky top-0 z-50" role="banner">
-          <div className="text-xl md:text-2xl font-bold text-medical-primary tracking-tight">BrainThrive</div>
-          <nav className="hidden md:flex gap-2 font-medium" role="navigation" aria-label="Main navigation">
-            <a href="services" className="px-4 lg:px-6 py-2 hover:text-brand-blue-600 text-medical-gray-600 transition-all duration-200 rounded-lg hover:bg-medical-gray-50 medical-focus font-medium" aria-label="View our services">Services</a>
-            <a href="about" className="px-4 lg:px-6 py-2 hover:text-brand-blue-600 text-medical-gray-600 transition-all duration-200 rounded-lg hover:bg-medical-gray-50 medical-focus font-medium" aria-label="Learn about us">About</a>
-            <a href="testimonials" className="px-4 lg:px-6 py-2 hover:text-brand-blue-600 text-medical-gray-600 transition-all duration-200 rounded-lg hover:bg-medical-gray-50 medical-focus font-medium" aria-label="Read testimonials">Testimonials</a>
-            <a href="contact" className="bg-brand-blue-600 text-white px-4 lg:px-6 py-2.5 rounded-lg hover:bg-brand-blue-700 transition-all duration-200 medical-button medical-focus font-semibold shadow-lg" aria-label="Book a consultation appointment">Book Consultation</a>
-          </nav>
-          {/* Emergency Contact */}
-          <div className="hidden lg:block">
-            <a ref={emergencyBtnRef} href="tel:911" className="emergency-contact px-4 py-2 rounded-lg font-semibold text-sm" aria-label="Emergency contact - Call 911">
-              🚨 Emergency: Call 911
-            </a>
-          </div>
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-medical-gray-50 transition-colors medical-focus"
-            aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
-            aria-expanded={mobileMenuOpen}
-          >
-            <svg className="w-6 h-6 text-medical-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" role="img" aria-hidden="true">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+      <div className="min-h-screen bg-[#002554] text-white selection:bg-[#35F3E6]/30 selection:text-[#35F3E6]">
+        {/* Skip Navigation */}
+        <a href="#main-content" className="skip-nav">
+          Skip to main content
+        </a>
 
-          {/* Mobile menu */}
+        {/* Navigation */}
+        <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[#002554]/90 backdrop-blur-xl transition-all duration-300">
+          <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            {/* Logo */}
+            <a href="#" className="flex items-center gap-3 group">
+              <div className="relative w-10 h-10 flex items-center justify-center">
+                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(53,243,230,0.5)]">
+                  <circle cx="30" cy="50" r="3" fill="#35F3E6" className="node" style={{ animationDelay: '0s' }}></circle>
+                  <circle cx="50" cy="30" r="3" fill="#35F3E6" className="node" style={{ animationDelay: '0.2s' }}></circle>
+                  <circle cx="70" cy="50" r="3" fill="#5362EF" className="node" style={{ animationDelay: '0.4s' }}></circle>
+                  <circle cx="50" cy="70" r="3" fill="#5362EF" className="node" style={{ animationDelay: '0.6s' }}></circle>
+                  <circle cx="50" cy="50" r="3" fill="white" className="node" style={{ animationDelay: '0.8s' }}></circle>
+                  <path d="M30 50 Q 50 20 70 50 T 50 80 T 30 50" fill="none" stroke="url(#grad1)" strokeWidth="2" className="opacity-50"></path>
+                  <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style={{ stopColor: '#35F3E6', stopOpacity: 1 }}></stop>
+                      <stop offset="100%" style={{ stopColor: '#5362EF', stopOpacity: 1 }}></stop>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl tracking-wide brand-font text-white leading-none">BRAIN THRIVE</span>
+                <span className="text-[10px] font-semibold tracking-[0.2em] text-[#35F3E6]">WELLNESS</span>
+              </div>
+            </a>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-8 text-sm font-medium text-blue-200/70">
+              <a href="#services" className="hover:text-white transition-colors duration-200">Services</a>
+              <a href="/services" className="hover:text-white transition-colors duration-200">Treatments</a>
+              <a href="#methodology" className="hover:text-white transition-colors duration-200">Methodology</a>
+              <a href="#location" className="hover:text-white transition-colors duration-200">Location</a>
+            </div>
+
+            {/* CTA */}
+            <div className="flex items-center gap-4">
+              <a href="#" className="hidden lg:block text-xs font-semibold text-blue-200 hover:text-white transition-colors">Patient Portal</a>
+              <a href="#contact" className="bg-white text-[#002554] text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-[#35F3E6] transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                Book Consultation
+              </a>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+              aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+            >
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="absolute top-full left-0 right-0 bg-white border-t border-medical-gray-200 shadow-lg md:hidden z-40">
-              <div className="px-4 py-6 space-y-4">
-                <a href="services" className="block px-4 py-3 text-medical-gray-600 hover:text-brand-blue hover:bg-medical-gray-50 rounded-lg transition-all duration-200 medical-focus" onClick={() => setMobileMenuOpen(false)}>Services</a>
-                <a href="about" className="block px-4 py-3 text-medical-gray-600 hover:text-brand-blue hover:bg-medical-gray-50 rounded-lg transition-all duration-200 medical-focus" onClick={() => setMobileMenuOpen(false)}>About</a>
-                <a href="testimonials" className="block px-4 py-3 text-medical-gray-600 hover:text-brand-blue hover:bg-medical-gray-50 rounded-lg transition-all duration-200 medical-focus" onClick={() => setMobileMenuOpen(false)}>Testimonials</a>
-                <div className="pt-4 border-t border-medical-gray-200">
-                  <a href="tel:911" className="block emergency-contact px-4 py-3 rounded-lg font-semibold text-center mb-3" onClick={() => setMobileMenuOpen(false)}>🚨 Emergency: Call 911</a>
-                  <a href="contact" className="block bg-brand-blue text-white px-4 py-3 rounded-lg font-semibold text-center hover:bg-brand-indigo transition-all duration-200" onClick={() => setMobileMenuOpen(false)}>Book Consultation</a>
-                </div>
+            <div className="md:hidden bg-[#001a3d] border-t border-white/10">
+              <div className="px-6 py-6 space-y-4">
+                <a href="#services" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Services</a>
+                <a href="/services" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Treatments</a>
+                <a href="#methodology" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Methodology</a>
+                <a href="#location" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Location</a>
+                <a href="#contact" className="block bg-[#5362EF] text-white px-4 py-3 rounded-lg text-center font-semibold mt-4">Book Consultation</a>
               </div>
             </div>
           )}
-      </header>
+        </nav>
 
-      <main id="main-content" role="main">
-        <section ref={heroRef} className="min-h-[100vh] relative overflow-hidden flex items-center" aria-label="Hero section">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2831&q=80"
-              alt="Advanced neurological scanning technology and photobiomodulation therapy equipment in a modern medical facility"
-              className="w-full h-full object-cover"
-            />
-            {/* Enhanced dark overlay for maximum contrast */}
-            <div className="hero-overlay absolute inset-0 bg-gradient-to-r from-black/90 via-medical-gray-900/90 to-medical-secondary/90"></div>
-          </div>
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-            <div className="max-w-4xl mx-auto text-center lg:text-left">
-              <div className="space-y-6 lg:space-y-8">
-                <h1 className="hero-title text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
-                  Advanced Neurology &
-                  <span className="text-brand-blue-400 block">Photobiomodulation</span>
-                  <span className="text-medical-gray-300 text-3xl sm:text-4xl lg:text-5xl font-medium block mt-2">Therapy Center</span>
-                </h1>
-                <p className="hero-subtitle text-lg sm:text-xl lg:text-2xl text-medical-gray-200 leading-relaxed max-w-3xl mx-auto lg:mx-0 font-light">
-                  Experience cutting-edge brain health solutions with FDA-cleared light therapy technology and comprehensive neurological assessment
-                </p>
-                {/* Trust indicators */}
-                <div className="hero-trust flex flex-wrap gap-4 text-sm sm:text-base text-medical-gray-300 font-medium">
-                  <span className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-brand-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    FDA-Cleared Technology
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-brand-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Board-Certified Specialists
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-brand-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Advanced Brain Mapping
-                  </span>
-                </div>
-              </div>
-              <div className="hero-cta flex flex-col sm:flex-row gap-4 pt-8 justify-center lg:justify-start">
-                <a ref={heroCtaRef1} href="#contact" className="bg-brand-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-brand-blue-700 transition-all duration-200 medical-button shadow-xl text-base sm:text-lg medical-focus" aria-label="Schedule a consultation appointment - Step 1 of your healing journey">
-                  📅 Schedule Free Consultation
-                </a>
-                <a ref={heroCtaRef2} href="#services" className="bg-transparent border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 hover:border-white transition-all duration-200 medical-button text-base sm:text-lg medical-focus" aria-label="Learn more about our evidence-based treatments">
-                  🧬 Learn About Treatments
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
+        <main id="main-content" className="pt-20">
+          {/* Hero Section */}
+          <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden">
+            {/* Background Elements */}
+            <div className="absolute inset-0 opacity-20 mix-blend-soft-light pointer-events-none" style={{ backgroundImage: 'url(https://grainy-gradients.vercel.app/noise.svg)' }}></div>
 
-        {/* Enhanced Services Overview Section */}
-        <section ref={servicesRef} id="services" className="py-16 sm:py-20 lg:py-24 bg-white" aria-label="Our medical services">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center mb-16 lg:mb-20">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-medical-primary mb-4 lg:mb-6 tracking-tight">Our Advanced Services</h2>
-              <p className="text-lg sm:text-xl text-medical-gray-600 leading-relaxed mb-6">Evidence-based brain health treatments with FDA-cleared technology</p>
-              <div className="flex flex-wrap justify-center gap-4 text-sm font-medium">
-                <span className="bg-brand-green-100 text-brand-green-800 px-3 py-1 rounded-full border border-brand-green-200">Objective Brain Assessment</span>
-                <span className="bg-brand-blue-100 text-brand-blue-800 px-3 py-1 rounded-full border border-brand-blue-200">Medical-Grade Light Therapy</span>
-                <span className="bg-brand-purple-100 text-brand-purple-800 px-3 py-1 rounded-full border border-brand-purple-200">Personalized Protocols</span>
-              </div>
-            </div>
+            {/* Dot Grid Texture with Edge Fade */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage: `radial-gradient(circle, rgba(53, 243, 230, 0.4) 1px, transparent 1px)`,
+                backgroundSize: '24px 24px',
+                maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(ellipse at center, black 30%, transparent 80%)',
+                opacity: 0.3
+              }}
+            ></div>
 
-            <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              {/* Enhanced Photobiomodulation Service */}
-              <div className="service-card medical-card bg-gradient-to-br from-brand-blue-50 to-white rounded-xl p-6 lg:p-8 border-2 border-brand-blue-200 hover:border-brand-blue-400 transition-all duration-300 group hover:shadow-xl">
-                {/* FDA Badge */}
-                <div className="flex justify-between items-start mb-4">
-                  <span className="bg-brand-green-100 text-brand-green-800 text-xs font-semibold px-2 py-1 rounded-full border border-brand-green-200">FDA Cleared</span>
-                  <span className="bg-brand-blue-50 text-brand-blue-700 text-xs font-medium px-2 py-1 rounded-full">20-30 min sessions</span>
-                </div>
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-[#5362EF]/20 to-transparent rounded-full blur-[120px] pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-t from-[#35F3E6]/10 to-transparent rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
 
-                <div className="flex flex-col items-center text-center mb-6">
-                  <div className="w-16 h-16 rounded-xl bg-brand-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-blue-700 transition-all duration-300 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3 text-medical-primary">Medical-Grade Photobiomodulation</h3>
-                </div>
-
-                {/* Enhanced Benefits with Clinical Data */}
-                <div className="space-y-3 mb-6">
-                  <p className="text-medical-gray-600 leading-relaxed text-sm">Red and near-infrared light therapy that:</p>
-                  <ul className="text-sm text-medical-gray-600 space-y-1">
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-brand-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Increases cellular energy (ATP) production
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-brand-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Reduces neuroinflammation and brain fog
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-brand-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Promotes brain entrainment and healing
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Enhanced Credibility */}
-                <div className="bg-brand-blue-50 p-3 rounded-lg border border-brand-blue-200 mb-6">
-                  <p className="text-xs text-brand-blue-800 font-medium">✓ Professional-grade devices • ✓ Backed by qEEG mapping • ✓ 3,000+ published studies</p>
-                </div>
-
-                {/* CTAs */}
-                <div className="space-y-3">
-                  <a href="#contact" className="w-full bg-brand-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-brand-blue-700 transition-all duration-200 medical-button shadow-lg text-center block medical-focus" aria-label="Schedule assessment for photobiomodulation therapy">
-                    Schedule Free Assessment
-                  </a>
-                  <a href="#condition-treatments" className="w-full bg-transparent border-2 border-brand-blue-600 text-brand-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-brand-blue-50 transition-all duration-200 text-center block medical-focus" aria-label="View condition-specific treatments">
-                    View Treatments
-                  </a>
-                </div>
-              </div>
-
-              {/* Enhanced Brain Gauge Service */}
-              <div className="service-card medical-card bg-gradient-to-br from-brand-purple-50 to-white rounded-xl p-6 lg:p-8 border-2 border-brand-purple-200 hover:border-brand-purple-400 transition-all duration-300 group hover:shadow-xl">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="bg-brand-purple-100 text-brand-purple-800 text-xs font-semibold px-2 py-1 rounded-full border border-brand-purple-200">Clinically Validated</span>
-                  <span className="bg-brand-purple-50 text-brand-purple-700 text-xs font-medium px-2 py-1 rounded-full">15 min assessment</span>
-                </div>
-
-                <div className="flex flex-col items-center text-center mb-6">
-                  <div className="w-16 h-16 rounded-xl bg-brand-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-purple-700 transition-all duration-300 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3 text-medical-primary">Brain Gauge Cortical Metrics</h3>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  <p className="text-medical-gray-600 leading-relaxed text-sm">Objective measurement of 5 key brain functions:</p>
-                  <div className="grid grid-cols-2 gap-2 text-xs text-medical-gray-600">
-                    <div className="flex items-center gap-1">
-                      <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
-                      <span>Reaction Time</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
-                      <span>Attention</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
-                      <span>Cognitive Speed</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
-                      <span>Plasticity</span>
-                    </div>
-                    <div className="flex items-center gap-1 col-span-2">
-                      <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
-                      <span>Fatigue Detection</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-brand-purple-50 p-3 rounded-lg border border-brand-purple-100 mb-6">
-                  <p className="text-xs text-brand-purple-800 font-medium">✓ Fingertip vibration testing • ✓ Real-time results • ✓ Progress tracking</p>
-                </div>
-
-                <div className="space-y-3">
-                  <a href="#contact" className="w-full bg-brand-purple-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-brand-purple-700 transition-all duration-200 medical-button shadow-lg text-center block medical-focus" aria-label="Schedule brain performance assessment">
-                    Book Assessment
-                  </a>
-                  <a href="#brain-gauge-metrics" className="w-full bg-transparent border-2 border-brand-purple-600 text-brand-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-brand-purple-50 transition-all duration-200 text-center block medical-focus" aria-label="Learn about Brain Gauge metrics">
-                    View Metrics
-                  </a>
-                </div>
-              </div>
-
-              {/* Enhanced qEEG Service */}
-              <div className="service-card medical-card bg-gradient-to-br from-brand-teal-50 to-white rounded-xl p-6 lg:p-8 border-2 border-brand-teal-200 hover:border-brand-teal-400 transition-all duration-300 group hover:shadow-xl">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="bg-brand-teal-100 text-brand-teal-800 text-xs font-semibold px-2 py-1 rounded-full border border-brand-teal-200">Medical Grade</span>
-                  <span className="bg-brand-teal-50 text-brand-teal-700 text-xs font-medium px-2 py-1 rounded-full">45-60 min mapping</span>
-                </div>
-
-                <div className="flex flex-col items-center text-center mb-6">
-                  <div className="w-16 h-16 rounded-xl bg-brand-teal-600 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-teal-700 transition-all duration-300 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3 text-medical-primary">Quantitative EEG Brain Mapping</h3>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  <p className="text-medical-gray-600 leading-relaxed text-sm">Comprehensive brain analysis to identify:</p>
-                  <ul className="text-sm text-medical-gray-600 space-y-1">
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-brand-teal-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Areas of brain dysfunction
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-brand-teal-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Optimal treatment targets
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-brand-teal-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Personalized therapy protocols
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="bg-brand-teal-50 p-3 rounded-lg border border-brand-teal-100 mb-6">
-                  <p className="text-xs text-brand-teal-800 font-medium">✓ Board-certified interpretation • ✓ Detailed brain maps • ✓ Treatment guidance</p>
-                </div>
-
-                <div className="space-y-3">
-                  <a href="#contact" className="w-full bg-brand-teal-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-brand-teal-700 transition-all duration-200 medical-button shadow-lg text-center block medical-focus" aria-label="Schedule brain mapping consultation">
-                    Schedule Mapping
-                  </a>
-                  <a href="#services" className="w-full bg-transparent border-2 border-brand-teal-600 text-brand-teal-600 px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-50 transition-all duration-200 text-center block medical-focus" aria-label="Learn more about quantitative EEG">
-                    How It Works
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Enhanced Package Information */}
-            <div className="max-w-4xl mx-auto mt-16 lg:mt-20">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 border border-blue-100">
-                <div className="text-center">
-                  <h3 className="text-2xl font-semibold text-medical-primary mb-4">Integrated Assessment & Treatment</h3>
-                  <p className="text-medical-gray-600 leading-relaxed mb-6">Our comprehensive approach combines objective brain assessment with targeted therapy for optimal results. Each protocol is customized based on your unique brain data.</p>
-
-                  <div className="grid sm:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white p-4 rounded-lg border border-blue-200">
-                      <h4 className="font-semibold text-medical-primary mb-2">Assessment Phase</h4>
-                      <p className="text-sm text-medical-gray-600">Brain Gauge + qEEG comprehensive evaluation</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg border border-purple-200">
-                      <h4 className="font-semibold text-medical-primary mb-2">Treatment Phase</h4>
-                      <p className="text-sm text-medical-gray-600">Personalized PBM therapy protocols</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg border border-teal-200">
-                      <h4 className="font-semibold text-medical-primary mb-2">Monitoring Phase</h4>
-                      <p className="text-sm text-medical-gray-600">Regular progress assessments and adjustments</p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#contact" className="bg-brand-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-blue-700 transition-all duration-200 medical-button shadow-lg medical-focus" aria-label="Schedule free consultation for treatment packages">
-                      Get Free Consultation
-                    </a>
-                    <a href="tel:+1-405-390-0596" className="bg-transparent border-2 border-brand-blue-600 text-brand-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-brand-blue-50 transition-all duration-200 medical-focus" aria-label="Call to discuss treatment options">
-                      Call (405) 390-0596
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Import the new components */}
-        <BrainGaugeMetrics />
-        
-        <ConditionSpecificServices />
-
-        <section id="about" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-medical-primary/5 via-blue-50 to-white relative overflow-hidden" aria-label="About BrainThrive">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="max-w-4xl mx-auto text-center mb-16 lg:mb-20">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-medical-gray-900 mb-4 lg:mb-6 tracking-tight">About BrainThrive</h2>
-              <p className="text-lg sm:text-xl text-medical-gray-600 leading-relaxed font-light">Pioneering brain health through advanced light therapy and neurological assessment</p>
-            </div>
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto">
-              <div className="space-y-6 lg:space-y-8">
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-semibold text-medical-gray-900 mb-3 sm:mb-4">Our Mission</h3>
-                  <p className="text-medical-gray-600 leading-relaxed mb-4">At BrainThrive, we&apos;re dedicated to revolutionizing brain health through cutting-edge photobiomodulation therapy and advanced neurological assessments. Our mission is to provide accessible, non-invasive solutions for cognitive enhancement and neurological recovery.</p>
-                  <p className="text-medical-gray-600 leading-relaxed">We combine the latest in light therapy technology with comprehensive brain mapping to deliver personalized treatment plans that address each client&apos;s unique needs.</p>
-                </div>
-              </div>
-              <div className="space-y-6 lg:space-y-8">
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-semibold text-medical-gray-900 mb-3 sm:mb-4">Expert Care</h3>
-                  <p className="text-medical-gray-600 leading-relaxed mb-6 lg:mb-8">Our team of certified specialists brings together expertise in neuroscience, photobiomodulation therapy, and cognitive health. With years of experience and continuous training in the latest advancements, we ensure the highest standard of care for our clients.</p>
-                </div>
-                <div ref={aboutStatsRef} className="grid grid-cols-2 gap-4 sm:gap-6">
-                  <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-medical border border-orange-100 hover:border-orange-200 transition-all duration-300">
-                    <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-2">500+</div>
-                    <div className="text-xs sm:text-sm text-gray-700 font-medium">Successful Treatments</div>
-                  </div>
-                  <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-medical border border-green-100 hover:border-green-200 transition-all duration-300">
-                    <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent mb-2">98%</div>
-                    <div className="text-xs sm:text-sm text-gray-700 font-medium">Client Satisfaction</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Medical Credentials and Compliance Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-white border-t border-medical-gray-200" aria-label="Medical credentials and compliance">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-12 lg:mb-16">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-medical-primary mb-4 lg:mb-6 tracking-tight">Medical Excellence & Compliance</h2>
-                <p className="text-lg sm:text-xl text-medical-gray-600 leading-relaxed">Your safety and privacy are our highest priorities</p>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 mb-12">
-                {/* Professional Credentials */}
-                <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-white rounded-xl border border-blue-100 hover:shadow-lg transition-all duration-300">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-brand-blue to-brand-indigo rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white" role="img" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443a55.381 55.381 0 0 1 5.25 2.882V15m-9 0h9m0 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-medical-primary mb-3">Board Certified</h3>
-                  <p className="text-medical-gray-600 leading-relaxed">Our practitioners are board-certified in neurology and photobiomodulation therapy</p>
-                </div>
-
-                {/* HIPAA Compliance */}
-                <div className="text-center p-6 bg-gradient-to-br from-green-50 to-white rounded-xl border border-green-100 hover:shadow-lg transition-all duration-300">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-medical-success to-emerald-600 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white" role="img" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.623 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-medical-primary mb-3">HIPAA Compliant</h3>
-                  <p className="text-medical-gray-600 leading-relaxed">Full compliance with healthcare privacy regulations and secure patient data handling</p>
-                </div>
-
-                {/* FDA Cleared */}
-                <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-white rounded-xl border border-purple-100 hover:shadow-lg transition-all duration-300">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-brand-purple to-purple-600 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white" role="img" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.25-4.875a2.25 2.25 0 0 0-.96-.586 48.114 48.114 0 0 0-3.478-.397m.01 0L12 2.25l.01.01m-.01-.01L9.75 3.375m8.25 0v7.5c0 .414-.336.75-.75.75h-2.25a.75.75 0 0 1-.75-.75v-1.5c0-.414.336-.75.75-.75h2.25a.75.75 0 0 0 .75-.75V8.25m0 0V7.5a.75.75 0 0 0-.75-.75H15a.75.75 0 0 0-.75.75v.75m8.25 0V9a2.25 2.25 0 0 1-2.25 2.25h-1.5c-.621 0-1.125-.504-1.125-1.125V9.75m2.25 0V8.25H18a2.25 2.25 0 0 1 2.25 2.25V9Z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-medical-primary mb-3">FDA Cleared</h3>
-                  <p className="text-medical-gray-600 leading-relaxed">All equipment and treatment protocols are FDA-cleared for medical use</p>
-                </div>
-              </div>
-
-              {/* Compliance Statement */}
-              <div className="bg-gradient-to-r from-medical-gray-50 to-blue-50 rounded-xl p-8 border border-medical-gray-200">
-                <div className="max-w-4xl mx-auto text-center">
-                  <h3 className="text-2xl font-semibold text-medical-primary mb-4">Privacy &amp; Compliance Statement</h3>
-                  <p className="text-medical-gray-600 leading-relaxed mb-4">
-                    BrainThrive is fully committed to protecting your health information and maintaining the highest standards of medical practice.
-                    We comply with all HIPAA regulations, maintain secure patient records, and follow evidence-based treatment protocols.
-                  </p>
-                  <p className="text-sm text-medical-gray-500">
-                    <strong>Emergency Contact:</strong> If you are experiencing a medical emergency, please call 911 immediately.
-                    For urgent but non-emergency concerns, contact your primary healthcare provider.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16 sm:py-20 lg:py-24 bg-medical-gray-50 relative overflow-hidden">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="max-w-4xl mx-auto text-center mb-12 lg:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-medical-primary mb-4 lg:mb-6 tracking-tight">What Can Our Services Do For You?</h2>
-              <p className="text-lg sm:text-xl text-medical-gray-600 leading-relaxed">Discover how our treatments can help improve your quality of life</p>
-            </div>
-
-            {/* Horizontal scrolling container with updated descriptions */}
-            <div className="w-full overflow-hidden">
-              <div
-                ref={scrollContainerRef}
-                className="flex gap-4"
-                style={{
-                  width: `${services.length * 2 * 304}px`,
-                  animation: 'infiniteScroll 40s linear infinite'
-                }}
-              >
-                {/* Render cards twice for seamless infinite scroll */}
-                {[...services, ...services].map((service, index) => {
-                  // Apply styleguide colors based on condition type
-                  const getConditionTheme = (title: string) => {
-                    if (title.includes('ADHD') || title.includes('Focus') || title.includes('Concussion') || title.includes('TBI')) {
-                      return {
-                        border: 'border-brand-blue-600',
-                        icon: 'bg-brand-blue-600',
-                        gradientFrom: 'from-brand-blue-50',
-                        gradientTo: 'to-brand-blue-100'
-                      };
-                    } else if (title.includes('Memory') || title.includes('Brain') || title.includes('Anxiety') || title.includes('Depression')) {
-                      return {
-                        border: 'border-brand-purple-600',
-                        icon: 'bg-brand-purple-600',
-                        gradientFrom: 'from-brand-purple-50',
-                        gradientTo: 'to-brand-purple-100'
-                      };
-                    } else {
-                      return {
-                        border: 'border-brand-teal-600',
-                        icon: 'bg-brand-teal-600',
-                        gradientFrom: 'from-brand-teal-50',
-                        gradientTo: 'to-brand-teal-100'
-                      };
-                    }
-                  };
-
-                  const theme = getConditionTheme(service.title);
-
-                  return (
-                    <div
-                      key={`card-${index}`}
-                      className={`flex-shrink-0 w-72 bg-gradient-to-br ${theme.gradientFrom} ${theme.gradientTo} rounded-xl p-6 sm:p-8 medical-card border-2 ${theme.border} transition-all duration-300 hover:shadow-xl`}
-                    >
-                      <div className="flex flex-col items-center text-center h-full">
-                        <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl ${theme.icon} flex items-center justify-center mb-4 sm:mb-6 shadow-lg hover:scale-110 transition-all duration-300`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 sm:w-8 sm:h-8 text-white">
-                            <path strokeLinecap="round" strokeLinejoin="round" d={service.icon} />
-                          </svg>
-                        </div>
-                        <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-medical-primary">{service.title}</h3>
-                        <p className="text-sm sm:text-base text-medical-gray-600 leading-relaxed flex-grow">{service.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-blue-100 via-medical-primary/10 to-blue-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center mb-12 lg:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-medical-gray-900 mb-4 lg:mb-6 tracking-tight">Frequently Asked Questions</h2>
-              <p className="text-lg sm:text-xl text-medical-gray-600 font-light">Get answers to common questions about our treatments</p>
-            </div>
-            <div ref={faqRef} className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
-              {[
-                {
-                  question: "What is Photobiomodulation Therapy?",
-                  answer: "Photobiomodulation therapy uses FDA-cleared, specific wavelengths of light (typically 810-1070nm) to stimulate cellular mitochondria and promote natural healing. This non-invasive treatment has shown clinical efficacy for neurological conditions including cognitive enhancement, depression, anxiety, ADHD, and traumatic brain injury. Research demonstrates improved cellular energy production, reduced inflammation, and enhanced neural connectivity.",
-                  category: "treatment",
-                  icon: "⚡",
-                  trustBadge: "Research-Backed"
-                },
-                {
-                  question: "How long does each session take?",
-                  answer: "Treatment sessions typically last 20-30 minutes for optimal therapeutic benefit. For cognitive enhancement, sessions are usually 20 minutes, while neurological conditions may require 25-30 minutes. Your personalized protocol will be determined during your comprehensive initial consultation based on your specific condition, medical history, and treatment goals.",
-                  category: "treatment",
-                  icon: "⏱️",
-                  trustBadge: "Personalized"
-                },
-                {
-                  question: "Is the treatment safe?",
-                  answer: "Yes, photobiomodulation is FDA-cleared (Class II Medical Device) and extensively researched with over 3,000 published studies. It's non-invasive, painless, and drug-free. Mild side effects may include temporary headache or fatigue in sensitive individuals. All treatments are supervised by licensed healthcare professionals trained in photobiomodulation protocols.",
-                  category: "safety",
-                  icon: "🛡️",
-                  trustBadge: "FDA-Cleared"
-                },
-                {
-                  question: "How many sessions will I need?",
-                  answer: "Treatment protocols vary by condition: Cognitive enhancement typically shows results in 6-10 sessions, depression/anxiety in 8-15 sessions, and ADHD in 12-20 sessions. Many patients notice improvements within the first 3-5 sessions. Maintenance sessions (1-2 monthly) help sustain benefits. Your exact protocol will be customized during consultation.",
-                  category: "treatment",
-                  icon: "📈",
-                  trustBadge: "Evidence-Based"
-                },
-                {
-                  question: "Do you accept insurance? What are the costs?",
-                  answer: "We accept HSA/FSA accounts and provide detailed receipts for insurance reimbursement. While coverage varies by provider, many insurance plans cover neurofeedback and photobiomodulation when medically necessary. We offer flexible payment plans and package discounts. Initial consultation fees and treatment costs will be discussed transparently before beginning care.",
-                  category: "practical",
-                  icon: "💳",
-                  trustBadge: "Transparent Pricing"
-                },
-                {
-                  question: "What should I expect during my first visit?",
-                  answer: "Your initial consultation includes a comprehensive medical history review, neurological assessment, and discussion of treatment goals. We'll explain the photobiomodulation process, demonstrate the equipment, and answer all questions. If appropriate, we may begin with a trial session. The entire visit typically takes 60-90 minutes, ensuring you feel completely informed and comfortable.",
-                  category: "practical",
-                  icon: "🏥",
-                  trustBadge: "Comprehensive Care"
-                },
-                {
-                  question: "Are there any medical conditions that prevent treatment?",
-                  answer: "Few contraindications exist for photobiomodulation. We carefully screen for pregnancy, active cancer in the treatment area, photosensitive medications, and certain neurological conditions. During your consultation, we'll review your complete medical history, current medications, and any concerns to ensure treatment safety and appropriateness.",
-                  category: "safety",
-                  icon: "⚕️",
-                  trustBadge: "Medical Screening"
-                },
-                {
-                  question: "What are your practitioners' qualifications?",
-                  answer: "Our team includes licensed healthcare professionals with specialized training in photobiomodulation therapy. Our practitioners hold relevant medical licenses, have completed manufacturer certification programs, and participate in ongoing continuing education. We maintain the highest standards of care with board-certified oversight and evidence-based protocols.",
-                  category: "credentials",
-                  icon: "🎓",
-                  trustBadge: "Licensed Professionals"
-                }
-              ].map((faq, index) => {
-                const categoryThemes: Record<string, {gradient: string; iconColor: string; badgeColor: string}> = {
-                  safety: {
-                    gradient: 'from-brand-green-50 via-white to-brand-green-100 border-brand-green-200',
-                    iconColor: 'text-brand-green-600',
-                    badgeColor: 'bg-brand-green-100 text-brand-green-800 border-brand-green-200'
-                  },
-                  treatment: {
-                    gradient: 'from-brand-blue-50 via-white to-brand-blue-100 border-brand-blue-200',
-                    iconColor: 'text-brand-blue-600',
-                    badgeColor: 'bg-brand-blue-100 text-brand-blue-800 border-brand-blue-200'
-                  },
-                  credentials: {
-                    gradient: 'from-brand-purple-50 via-white to-brand-purple-100 border-brand-purple-200',
-                    iconColor: 'text-brand-purple-600',
-                    badgeColor: 'bg-brand-purple-100 text-brand-purple-800 border-brand-purple-200'
-                  },
-                  practical: {
-                    gradient: 'from-brand-teal-50 via-white to-brand-teal-100 border-brand-teal-200',
-                    iconColor: 'text-brand-teal-600',
-                    badgeColor: 'bg-brand-teal-100 text-brand-teal-800 border-brand-teal-200'
-                  }
-                };
-                const theme = categoryThemes[faq.category];
-                return (
-                  <div key={index} className={`faq-item medical-card bg-gradient-to-br ${theme.gradient} rounded-xl overflow-hidden border hover:shadow-lg transition-all duration-300`}>
-                    <div className="flex items-start justify-between p-4 sm:p-6 pb-3">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-2xl" role="img" aria-label={faq.category}>{faq.icon}</span>
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${theme.badgeColor}`}>
-                          {faq.trustBadge}
-                        </span>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                      className="w-full px-4 sm:px-6 pb-4 sm:pb-6 text-left hover:bg-white/30 transition-all duration-200 medical-focus"
-                      aria-expanded={openIndex === index}
-                      aria-controls={`faq-answer-${index}`}
-                      aria-label={`Toggle FAQ: ${faq.question}`}
-                    >
-                      <div className="flex justify-between items-start">
-                        <h3 id={`faq-question-${index}`} className="text-xl sm:text-2xl font-semibold text-medical-gray-800 pr-4 leading-tight">{faq.question}</h3>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className={`w-6 h-6 sm:w-7 sm:h-7 ${theme.iconColor} transform transition-transform duration-300 ease-in-out flex-shrink-0 mt-1 ${openIndex === index ? 'rotate-180' : ''}`}
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                    </button>
-                  <div
-                    id={`faq-answer-${index}`}
-                    className={`transition-all duration-500 ease-in-out ${openIndex === index ? 'max-h-96 opacity-100 pb-4 sm:pb-6' : 'max-h-0 opacity-0'} overflow-hidden`}
-                    role="region"
-                    aria-labelledby={`faq-question-${index}`}
-                  >
-                    <div className="px-4 sm:px-6">
-                      <div className="pt-3 border-t border-white/40">
-                        <p className="text-medical-gray-700 leading-relaxed text-base sm:text-lg font-medium">{faq.answer}</p>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <footer className="bg-gradient-to-br from-medical-gray-900 via-medical-secondary to-medical-primary text-medical-gray-100 py-12 lg:py-16" role="contentinfo">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 mb-8 lg:mb-12">
-              <div className="sm:col-span-2 lg:col-span-1">
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">BrainThrive</h3>
-                <p className="text-blue-100 leading-relaxed text-sm sm:text-base">Pioneering brain health through advanced photobiomodulation therapy and neurological assessment.</p>
-              </div>
+            <div className="max-w-7xl mx-auto px-6 w-full z-10 grid lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h4 className="text-lg font-semibold text-white mb-4">Services</h4>
-                <ul className="space-y-2 text-blue-200 text-sm sm:text-base">
-                  <li><a href="#services" className="hover:text-white transition-colors">Photobiomodulation</a></li>
-                  <li><a href="#brain-gauge-metrics" className="hover:text-white transition-colors">Brain Gauge Testing</a></li>
-                  <li><a href="#services" className="hover:text-white transition-colors">Quantitative EEG</a></li>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#35F3E6]/20 bg-[#35F3E6]/5 text-[#35F3E6] text-[10px] uppercase tracking-widest font-semibold mb-8">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#35F3E6] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#35F3E6]"></span>
+                  </span>
+                  Now accepting new patients
+                </div>
+
+                <h1 className="text-7xl md:text-9xl tracking-tight text-white leading-[0.85] mb-8 brand-font">
+                  Optimize Your <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#35F3E6] via-[#5362EF] to-[#35F3E6] bg-[length:200%_auto] animate-[gradient_4s_linear_infinite]">Neural Potential.</span>
+                </h1>
+
+                <p className="text-lg text-blue-100/70 max-w-lg mb-10 leading-relaxed font-light">
+                  Located at Quick Access Neurology in Choctaw, OK, we combine Brain Gauge assessment, QEEG brain mapping, and medical-grade photobiomodulation to create personalized, science-based brain healing programs.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a href="#services" className="h-12 px-8 rounded-lg bg-[#5362EF] hover:bg-[#434fc2] text-white text-sm font-semibold transition-all shadow-[0_0_20px_rgba(83,98,239,0.3)] hover:shadow-[0_0_30px_rgba(83,98,239,0.5)] flex items-center justify-center gap-2">
+                    Explore Our Services
+                    <span className="text-xl">↓</span>
+                  </a>
+                  <a href="#methodology" className="h-12 px-8 rounded-lg border border-[#223BA8] hover:bg-[#001a3d] text-blue-100 text-sm font-semibold transition-all flex items-center justify-center gap-2">
+                    <span>▶</span>
+                    Watch The Science
+                  </a>
+                </div>
+
+                <div className="mt-16 flex items-center gap-6 pt-8 border-t border-white/5">
+                  <div className="flex -space-x-3">
+                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-gray-600"></div>
+                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-gray-500"></div>
+                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-gray-400"></div>
+                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-[#001a3d] flex items-center justify-center text-[10px] font-bold text-white">+2k</div>
+                  </div>
+                  <div>
+                    <div className="flex gap-1 text-[#35F3E6]">
+                      <span>⭐</span>
+                      <span>⭐</span>
+                      <span>⭐</span>
+                      <span>⭐</span>
+                      <span>⭐</span>
+                    </div>
+                    <p className="text-xs text-blue-200/50 mt-1">Trusted by patients worldwide</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Animated Brain Visualization - Hidden on mobile */}
+              <div className="relative h-[600px] hidden lg:flex items-center justify-center">
+                <div className="relative w-full h-full opacity-90">
+                  {/* Realistic Spinning Brain SVG */}
+                  <svg viewBox="0 0 600 600" className="w-full h-full">
+                    <defs>
+                      {/* 3D Lighting Gradients */}
+                      <radialGradient id="brain-light" cx="40%" cy="30%">
+                        <stop offset="0%" style={{ stopColor: '#35F3E6', stopOpacity: 0.8 }}></stop>
+                        <stop offset="50%" style={{ stopColor: '#5362EF', stopOpacity: 0.6 }}></stop>
+                        <stop offset="100%" style={{ stopColor: '#002554', stopOpacity: 0.9 }}></stop>
+                      </radialGradient>
+
+                      <radialGradient id="cerebellum-light" cx="50%" cy="50%">
+                        <stop offset="0%" style={{ stopColor: '#5362EF', stopOpacity: 0.7 }}></stop>
+                        <stop offset="100%" style={{ stopColor: '#35F3E6', stopOpacity: 0.5 }}></stop>
+                      </radialGradient>
+
+                      {/* Glow filter */}
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+
+                      {/* Shadow filter */}
+                      <filter id="shadow">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                        <feOffset dx="2" dy="2" result="offsetblur"/>
+                        <feComponentTransfer>
+                          <feFuncA type="linear" slope="0.5"/>
+                        </feComponentTransfer>
+                        <feMerge>
+                          <feMergeNode/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+
+                    {/* Spinning Brain Group */}
+                    <g className="animate-[spin_20s_linear_infinite]" transform-origin="300 300">
+                      <g transform="translate(300, 280)" filter="url(#shadow)">
+
+                        {/* Main Cerebrum (largest part) */}
+                        <ellipse cx="0" cy="-20" rx="140" ry="110"
+                          fill="url(#brain-light)"
+                          stroke="#35F3E6"
+                          strokeWidth="2"
+                          filter="url(#glow)"
+                          opacity="0.9"
+                        />
+
+                        {/* Frontal Lobe Details */}
+                        <path
+                          d="M -100,-70 Q -110,-50 -115,-30 Q -118,-10 -115,10"
+                          fill="none"
+                          stroke="#35F3E6"
+                          strokeWidth="2.5"
+                          opacity="0.7"
+                        />
+                        <path
+                          d="M -80,-85 Q -90,-65 -95,-45"
+                          fill="none"
+                          stroke="#5362EF"
+                          strokeWidth="2"
+                          opacity="0.6"
+                        />
+                        <path
+                          d="M -60,-95 Q -70,-75 -75,-55"
+                          fill="none"
+                          stroke="#35F3E6"
+                          strokeWidth="2"
+                          opacity="0.5"
+                        />
+
+                        {/* Central Sulcus (major brain fold) */}
+                        <path
+                          d="M -20,-100 Q -25,-50 -30,0 Q -28,30 -25,60"
+                          fill="none"
+                          stroke="#5362EF"
+                          strokeWidth="3"
+                          opacity="0.8"
+                          strokeLinecap="round"
+                        />
+
+                        {/* Parietal Lobe folds */}
+                        <path
+                          d="M 10,-95 Q 5,-65 8,-35 Q 12,-5 15,25"
+                          fill="none"
+                          stroke="#35F3E6"
+                          strokeWidth="2.5"
+                          opacity="0.7"
+                        />
+                        <path
+                          d="M 40,-85 Q 35,-55 38,-25 Q 42,5 45,35"
+                          fill="none"
+                          stroke="#5362EF"
+                          strokeWidth="2"
+                          opacity="0.6"
+                        />
+
+                        {/* Temporal Lobe curves */}
+                        <path
+                          d="M -105,20 Q -100,40 -90,55 Q -75,65 -55,68"
+                          fill="none"
+                          stroke="#35F3E6"
+                          strokeWidth="2.5"
+                          opacity="0.7"
+                        />
+                        <path
+                          d="M -90,35 Q -85,50 -75,60"
+                          fill="none"
+                          stroke="#5362EF"
+                          strokeWidth="2"
+                          opacity="0.5"
+                        />
+
+                        {/* Occipital Lobe (back) */}
+                        <path
+                          d="M 70,-70 Q 85,-50 95,-25 Q 102,0 105,30"
+                          fill="none"
+                          stroke="#35F3E6"
+                          strokeWidth="2.5"
+                          opacity="0.7"
+                        />
+                        <path
+                          d="M 95,-55 Q 105,-35 110,-10"
+                          fill="none"
+                          stroke="#5362EF"
+                          strokeWidth="2"
+                          opacity="0.6"
+                        />
+
+                        {/* Additional gyri (brain folds) for realism */}
+                        <path
+                          d="M -50,-90 Q -45,-60 -40,-30"
+                          fill="none"
+                          stroke="#35F3E6"
+                          strokeWidth="1.5"
+                          opacity="0.4"
+                        />
+                        <path
+                          d="M 60,-75 Q 65,-45 70,-15"
+                          fill="none"
+                          stroke="#5362EF"
+                          strokeWidth="1.5"
+                          opacity="0.4"
+                        />
+                        <path
+                          d="M -70,10 Q -60,30 -50,45"
+                          fill="none"
+                          stroke="#35F3E6"
+                          strokeWidth="1.5"
+                          opacity="0.4"
+                        />
+
+                        {/* Cerebellum (smaller structure at bottom) */}
+                        <ellipse cx="-10" cy="95" rx="80" ry="45"
+                          fill="url(#cerebellum-light)"
+                          stroke="#5362EF"
+                          strokeWidth="2"
+                          opacity="0.85"
+                        />
+
+                        {/* Cerebellum folds (very detailed) */}
+                        <path d="M -70,85 L -65,105" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
+                        <path d="M -50,80 L -48,108" stroke="#5362EF" strokeWidth="1.5" opacity="0.5"/>
+                        <path d="M -30,78 L -28,110" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
+                        <path d="M -10,75 L -8,112" stroke="#5362EF" strokeWidth="1.5" opacity="0.5"/>
+                        <path d="M 10,78 L 12,110" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
+                        <path d="M 30,80 L 32,108" stroke="#5362EF" strokeWidth="1.5" opacity="0.5"/>
+                        <path d="M 50,85 L 52,105" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
+
+                        {/* Brain Stem */}
+                        <ellipse cx="5" cy="140" rx="18" ry="25"
+                          fill="#5362EF"
+                          opacity="0.6"
+                          stroke="#35F3E6"
+                          strokeWidth="1.5"
+                        />
+
+                        {/* Pulsing Neural Activity Points */}
+                        <g className="neural-activity">
+                          <circle cx="-60" cy="-40" r="3" fill="#35F3E6">
+                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+                          </circle>
+                          <circle cx="30" cy="-50" r="3" fill="#5362EF">
+                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+                          </circle>
+                          <circle cx="-40" cy="20" r="3" fill="#35F3E6">
+                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+                          </circle>
+                          <circle cx="50" cy="10" r="3" fill="#5362EF">
+                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite" begin="0.9s"/>
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.9s"/>
+                          </circle>
+                          <circle cx="-20" cy="90" r="2.5" fill="white">
+                            <animate attributeName="r" values="2;4;2" dur="2s" repeatCount="indefinite" begin="0.4s"/>
+                            <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" begin="0.4s"/>
+                          </circle>
+                          <circle cx="15" cy="95" r="2.5" fill="white">
+                            <animate attributeName="r" values="2;4;2" dur="2s" repeatCount="indefinite" begin="0.7s"/>
+                            <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" begin="0.7s"/>
+                          </circle>
+                        </g>
+
+                        {/* Energy waves flowing through brain */}
+                        <circle r="5" fill="#35F3E6" opacity="0.7">
+                          <animateMotion dur="6s" repeatCount="indefinite"
+                            path="M -100,-50 Q 0,-70 100,-30 Q 80,20 60,70 Q 0,90 -60,70 Q -80,30 -100,-50"/>
+                          <animate attributeName="opacity" values="0;0.8;0" dur="6s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle r="5" fill="#5362EF" opacity="0.7">
+                          <animateMotion dur="8s" repeatCount="indefinite"
+                            path="M 100,-30 Q 20,-60 -80,-40 Q -90,10 -70,60 Q 0,85 70,65 Q 100,20 100,-30"/>
+                          <animate attributeName="opacity" values="0;0.8;0" dur="8s" repeatCount="indefinite"/>
+                        </circle>
+                      </g>
+                    </g>
+                  </svg>
+
+                  {/* Floating Data Cards */}
+                  <div className="absolute top-[20%] right-[10%] bg-[#001a3d]/80 backdrop-blur-md border border-[#35F3E6]/20 p-4 rounded-xl shadow-xl w-48 animate-bounce" style={{ animationDuration: '4s' }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] text-blue-200 uppercase tracking-wider">Alpha Waves</span>
+                      <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                    </div>
+                    <div className="w-full bg-gray-700 h-1 rounded-full overflow-hidden">
+                      <div className="h-full bg-[#35F3E6] w-[70%]"></div>
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-[20%] left-[10%] bg-[#001a3d]/80 backdrop-blur-md border border-[#5362EF]/20 p-4 rounded-xl shadow-xl w-48 animate-bounce" style={{ animationDuration: '5s' }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] text-blue-200 uppercase tracking-wider">Coherence</span>
+                      <span className="text-[#35F3E6] text-xs font-bold">94%</span>
+                    </div>
+                    <div className="flex gap-1 h-3 items-end">
+                      <div className="w-1 bg-[#5362EF] h-[40%] rounded-sm"></div>
+                      <div className="w-1 bg-[#5362EF] h-[60%] rounded-sm"></div>
+                      <div className="w-1 bg-[#5362EF] h-[90%] rounded-sm"></div>
+                      <div className="w-1 bg-[#5362EF] h-[70%] rounded-sm"></div>
+                      <div className="w-1 bg-[#5362EF] h-[50%] rounded-sm"></div>
+                      <div className="w-1 bg-[#5362EF] h-[80%] rounded-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Services Section */}
+          <section id="services" className="py-24 bg-[#001a3d] relative">
+            <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-[#35F3E6]/20 to-transparent"></div>
+
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="max-w-3xl mb-16">
+                <span className="text-[#35F3E6] font-semibold tracking-widest text-xs uppercase mb-2 block">Comprehensive Care</span>
+                <h2 className="text-4xl md:text-5xl font-medium text-white mb-6 brand-font">Clinical Services & Modalities</h2>
+                <p className="text-blue-100/60 text-lg">
+                  We combine state-of-the-art diagnostic technology with evidence-based therapeutic interventions to map, train, and optimize your brain&apos;s performance.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Service 1: Brain Gauge */}
+                <div className="group relative bg-[#002554] rounded-2xl p-8 border border-white/5 hover:border-[#35F3E6]/30 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-12 h-12 rounded-lg bg-[#35F3E6]/10 flex items-center justify-center text-[#35F3E6] mb-6 group-hover:bg-[#35F3E6] group-hover:text-[#002554] transition-colors">
+                    <span className="text-2xl">🖐️</span>
+                  </div>
+                  <h3 className="text-2xl font-medium text-white mb-3 brand-font">Brain Gauge Cortical Metrics</h3>
+                  <p className="text-sm text-blue-200/60 leading-relaxed mb-6">
+                    FDA-cleared fingertip test measuring brain health through sensory processing. Quick 15-minute assessment of reaction time, attention, cognitive speed, plasticity, and fatigue detection.
+                  </p>
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#35F3E6]"></span> Non-Invasive & Painless
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#35F3E6]"></span> Immediate Results
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#35F3E6]"></span> Track Progress Over Time
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Service 2: QEEG Brain Mapping */}
+                <div className="group relative bg-[#002554] rounded-2xl p-8 border border-white/5 hover:border-[#5362EF]/30 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-12 h-12 rounded-lg bg-[#5362EF]/10 flex items-center justify-center text-[#5362EF] mb-6 group-hover:bg-[#5362EF] group-hover:text-white transition-colors">
+                    <span className="text-2xl">🧠</span>
+                  </div>
+                  <h3 className="text-2xl font-medium text-white mb-3 brand-font">QEEG Brain Mapping</h3>
+                  <p className="text-sm text-blue-200/60 leading-relaxed mb-6">
+                    Comprehensive brain analysis measuring electrical activity to identify dysregulation patterns. Combined with Brain Gauge and PBM for complete brain assessment and treatment.
+                  </p>
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#5362EF]"></span> Identifies Treatment Targets
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#5362EF]"></span> Tracks Brain Changes
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#5362EF]"></span> Personalized Protocols
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Service 3: Photobiomodulation */}
+                <div className="group relative bg-[#002554] rounded-2xl p-8 border border-white/5 hover:border-[#35F3E6]/30 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-12 h-12 rounded-lg bg-[#35F3E6]/10 flex items-center justify-center text-[#35F3E6] mb-6 group-hover:bg-[#35F3E6] group-hover:text-[#002554] transition-colors">
+                    <span className="text-2xl">💡</span>
+                  </div>
+                  <h3 className="text-2xl font-medium text-white mb-3 brand-font">Medical-Grade Photobiomodulation</h3>
+                  <p className="text-sm text-blue-200/60 leading-relaxed mb-6">
+                    Safe, painless treatment using red and near-infrared light to stimulate cells, increase ATP energy production, and reduce inflammation. Brain entrainment keeps your brain in therapeutic frequency.
+                  </p>
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#35F3E6]"></span> 10-20 Minute Sessions
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#35F3E6]"></span> FDA-Cleared Technology
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-blue-100 font-medium">
+                      <span className="w-1 h-1 rounded-full bg-[#35F3E6]"></span> No Downtime, No Medications
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* Methodology / Science Stats */}
+          <section id="methodology" className="py-24 bg-[#002554] border-y border-white/5">
+            <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+              <div>
+                <h2 className="text-4xl font-medium text-white mb-6 brand-font leading-tight">Advanced Brain Assessment <br /> Meets Light Therapy</h2>
+                <p className="text-blue-100/70 mb-8">
+                  We use Brain Gauge for objective cortical metrics and QEEG brain mapping to identify exact treatment targets. Our medical-grade PBM protocols are customized to your unique brain patterns for optimal healing.
+                </p>
+
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 bg-[#35F3E6]/10 p-2 rounded text-[#35F3E6] border border-[#35F3E6]/20">
+                      <span className="text-xl">🖐️</span>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-medium text-white">Objective Brain Metrics</h4>
+                      <p className="text-sm text-blue-200/50 mt-1">Brain Gauge provides real-time data on reaction time, attention, cognitive speed, plasticity, and fatigue - guiding treatment decisions.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 bg-[#5362EF]/10 p-2 rounded text-[#5362EF] border border-[#5362EF]/20">
+                      <span className="text-xl">💡</span>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-medium text-white">Scientifically Backed Treatment</h4>
+                      <p className="text-sm text-blue-200/50 mt-1">FDA-cleared medical-grade PBM increases cellular ATP, reduces neuroinflammation, and promotes neuroplasticity for lasting brain health.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#001a3d] p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+                  <span className="text-4xl font-bold text-[#35F3E6] brand-font mb-2">94%</span>
+                  <span className="text-xs text-blue-200/60 uppercase tracking-wider">Symptom Reduction</span>
+                </div>
+                <div className="bg-[#001a3d] p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+                  <span className="text-4xl font-bold text-[#5362EF] brand-font mb-2">3k+</span>
+                  <span className="text-xs text-blue-200/60 uppercase tracking-wider">Brain Maps Analyzed</span>
+                </div>
+                <div className="bg-[#001a3d] p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center col-span-2">
+                  <span className="text-4xl font-bold text-white brand-font mb-2">15k+</span>
+                  <span className="text-xs text-blue-200/60 uppercase tracking-wider">Neurofeedback Sessions Completed</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* PBM Treatment Details */}
+          <section id="technology" className="py-24 bg-[#001a3d] overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="flex flex-col lg:flex-row items-center gap-16">
+                <div className="lg:w-1/2">
+                  <div className="inline-block px-3 py-1 rounded-full bg-[#5362EF]/10 border border-[#5362EF]/30 text-[#5362EF] text-[10px] uppercase font-bold tracking-widest mb-6">
+                    Medical-Grade Technology
+                  </div>
+                  <h2 className="text-5xl font-medium text-white mb-6 brand-font">Professional PBM Devices</h2>
+                  <p className="text-blue-100/70 text-lg mb-8">
+                    Our clinical-grade photobiomodulation equipment delivers precise wavelengths of red and near-infrared light, customized to your brain&apos;s specific needs based on QEEG mapping results.
+                  </p>
+
+                  <div className="space-y-4 mb-10">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[#35F3E6] text-xl">✓</span>
+                      <span className="text-blue-100 text-sm">Supervised by trained professionals</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[#35F3E6] text-xl">✓</span>
+                      <span className="text-blue-100 text-sm">Protocols customized to your brain map</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[#35F3E6] text-xl">✓</span>
+                      <span className="text-blue-100 text-sm">Done multiple times per week for best results</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[#35F3E6] text-xl">✓</span>
+                      <span className="text-blue-100 text-sm">Scientifically backed with clinic supervision</span>
+                    </div>
+                  </div>
+
+                  <a href="#contact" className="inline-flex items-center gap-2 text-[#35F3E6] font-semibold border-b border-[#35F3E6]/30 pb-1 hover:border-[#35F3E6] transition-all">
+                    Schedule Your Assessment <span>→</span>
+                  </a>
+                </div>
+
+                <div className="lg:w-1/2 relative">
+                  <div className="absolute inset-0 bg-[#5362EF] blur-[100px] opacity-20"></div>
+                  {/* Treatment Benefits Visualization */}
+                  <div className="relative z-10 space-y-4">
+                    <div className="bg-gradient-to-b from-[#002554] to-[#001a3d] border border-[#35F3E6]/20 rounded-2xl p-6">
+                      <h4 className="text-white font-medium mb-4 brand-font text-xl">Conditions We Treat</h4>
+                      <div className="grid grid-cols-2 gap-4 text-sm text-blue-100">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>ADHD & Focus</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>Memory Loss</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>TBI/Concussion</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>Brain Fog</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>Anxiety</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>Depression</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>Chronic Pain</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#35F3E6] rounded-full"></span>
+                          <span>Inflammation</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-b from-[#002554] to-[#001a3d] border border-[#5362EF]/20 rounded-2xl p-6">
+                      <h4 className="text-white font-medium mb-4 brand-font text-xl">What to Expect</h4>
+                      <ul className="space-y-3 text-sm text-blue-100">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#5362EF] mt-1">•</span>
+                          <span>Relaxing, painless sessions (warm sensation)</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#5362EF] mt-1">•</span>
+                          <span>10-20 minutes per treatment</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#5362EF] mt-1">•</span>
+                          <span>No downtime or side effects</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#5362EF] mt-1">•</span>
+                          <span>Brain entrainment for lasting benefits</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Location & Contact */}
+          <section id="location" className="py-24 bg-[#002554]">
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-medium tracking-tight text-white mb-4 brand-font">Visit Our Clinic</h2>
+                <p className="text-blue-200/60">Located in Choctaw, Oklahoma – Easy to find, convenient to reach.</p>
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-12">
+                {/* Map */}
+                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(53,243,230,0.1)]">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3244.8889!2d-97.2353!3d35.5001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87b21e8c8c8c8c8d%3A0x1234567890abcdef!2s15805%20NE%2023rd%20St%2C%20Choctaw%2C%20OK%2073020!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                    width="100%"
+                    height="500"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full"
+                  ></iframe>
+                </div>
+
+                {/* Contact Information */}
+                <div className="space-y-6">
+                  {/* Address Card */}
+                  <div className="bg-gradient-to-br from-[#001a3d] to-[#002554] rounded-2xl p-8 border border-white/10">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-[#35F3E6]/10 flex items-center justify-center text-[#35F3E6] text-2xl flex-shrink-0">
+                        📍
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-white brand-font mb-2">Our Location</h3>
+                        <p className="text-blue-100/80 leading-relaxed">
+                          Brain Thrive, PLLC<br />
+                          at Quick Access Neurology<br />
+                          15805 NE 23rd St.<br />
+                          Choctaw, OK 73020
+                        </p>
+                      </div>
+                    </div>
+                    <a
+                      href="https://maps.google.com/?q=15805+NE+23rd+St,+Choctaw,+OK+73020"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-[#35F3E6] hover:text-white transition-colors text-sm font-semibold"
+                    >
+                      Get Directions <span>→</span>
+                    </a>
+                  </div>
+
+                  {/* Phone Card */}
+                  <div className="bg-gradient-to-br from-[#001a3d] to-[#002554] rounded-2xl p-8 border border-white/10">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-[#5362EF]/10 flex items-center justify-center text-[#5362EF] text-2xl flex-shrink-0">
+                        📞
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-white brand-font mb-2">Call Us</h3>
+                        <a
+                          href="tel:+14053900596"
+                          className="text-2xl text-blue-100/90 hover:text-[#35F3E6] transition-colors font-medium"
+                        >
+                          (405) 390-0596
+                        </a>
+                        <p className="text-sm text-blue-200/50 mt-2">
+                          Monday - Friday: 9:00 AM - 5:00 PM<br />
+                          Saturday: By Appointment<br />
+                          Sunday: Closed
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Email Card */}
+                  <div className="bg-gradient-to-br from-[#001a3d] to-[#002554] rounded-2xl p-8 border border-white/10">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-[#35F3E6]/10 flex items-center justify-center text-[#35F3E6] text-2xl flex-shrink-0">
+                        ✉️
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-white brand-font mb-2">Email Us</h3>
+                        <a
+                          href="mailto:info@brainthrive.com"
+                          className="text-lg text-blue-100/90 hover:text-[#35F3E6] transition-colors"
+                        >
+                          info@brainthrive.com
+                        </a>
+                        <p className="text-sm text-blue-200/50 mt-2">
+                          We typically respond within 24 hours
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <div className="pt-4">
+                    <a
+                      href="#contact"
+                      className="block w-full py-4 rounded-lg bg-gradient-to-r from-[#5362EF] to-[#434fc2] text-white text-center font-semibold transition-all shadow-[0_0_30px_rgba(83,98,239,0.3)] hover:shadow-[0_0_40px_rgba(83,98,239,0.5)] hover:scale-[1.02]"
+                    >
+                      Schedule Your Consultation
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="border-t border-white/5 bg-[#001a3d] pt-16 pb-8" id="contact">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+              <div>
+                <a href="#" className="flex items-center gap-2 mb-6 group">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#35F3E6] to-[#5362EF]"></div>
+                  <span className="text-xl font-bold text-white brand-font tracking-wide">BRAIN THRIVE</span>
+                </a>
+                <p className="text-xs text-blue-200/50 leading-relaxed mb-6">
+                  Prioritizing brain health through the convergence of neuroscience, technology, and compassionate care.
+                </p>
+                <div className="flex gap-4">
+                  <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#35F3E6] hover:text-[#002554] transition-all text-blue-200/50">
+                    <span>𝕏</span>
+                  </a>
+                  <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#35F3E6] hover:text-[#002554] transition-all text-blue-200/50">
+                    <span>in</span>
+                  </a>
+                  <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#35F3E6] hover:text-[#002554] transition-all text-blue-200/50">
+                    <span>📷</span>
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Services</h4>
+                <ul className="space-y-3 text-xs text-blue-200/60">
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">QEEG Brain Mapping</a></li>
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Neurofeedback</a></li>
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Photobiomodulation</a></li>
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Metabolic Analysis</a></li>
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Remote Training</a></li>
                 </ul>
               </div>
+
               <div>
-                <h4 className="text-lg font-semibold text-white mb-4">Contact</h4>
-                <div className="space-y-3 text-blue-200 text-sm sm:text-base">
-                  <p>Schedule your consultation today</p>
-                  <div className="space-y-3">
-                    <a href="tel:911" className="block bg-medical-error text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-red-700 transition-colors medical-button font-semibold text-sm sm:text-base medical-focus text-center" aria-label="Call for immediate assistance">
-                      🚨 Emergency: Call 911
-                    </a>
-                    <a href="#contact" className="block bg-white text-medical-primary px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-blue-50 transition-colors medical-button font-medium text-sm sm:text-base medical-focus text-center" aria-label="Book your consultation appointment">
-                      📅 Book Consultation
-                    </a>
-                  </div>
-                </div>
+                <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Patient Resources</h4>
+                <ul className="space-y-3 text-xs text-blue-200/60">
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">New Patient Portal</a></li>
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Insurance Information</a></li>
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Clinical Studies</a></li>
+                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">FAQ</a></li>
+                </ul>
               </div>
-          </div>
-          <div className="border-t border-white/20 pt-6 lg:pt-8 text-center">
-            <p className="text-blue-100 text-sm sm:text-base">© {new Date().getFullYear()} BrainThrive. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </main>
-    </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Contact</h4>
+                <ul className="space-y-4 text-xs text-blue-200/60">
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#5362EF]">📍</span>
+                    <span>Brain Thrive, PLLC<br />at Quick Access Neurology<br />15805 NE 23rd St.<br />Choctaw, OK 73020</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="text-[#5362EF]">📞</span>
+                    <span>(405) 390-0596</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="text-[#5362EF]">✉️</span>
+                    <span>info@brainthrive.com</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-[10px] text-blue-200/40">© 2024 Brain Thrive Wellness Inc. All rights reserved.</p>
+              <div className="flex gap-6 text-[10px] text-blue-200/40">
+                <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                <a href="#" className="hover:text-white transition-colors">HIPAA Notice</a>
+              </div>
+            </div>
+          </footer>
+        </main>
+      </div>
     </PageTransition>
   );
 }
