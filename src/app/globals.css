@@ -366,8 +366,8 @@
     -webkit-backdrop-filter: none !important;
   }
 
-  /* Hide expensive fixed blur background effects on mobile */
-  .fixed[class*="blur-"],
+  /* Hide expensive decorative blur background effects on mobile */
+  /* Note: Only target blur backgrounds, not navigation backdrop-blur */
   [class*="blur-[100px]"],
   [class*="blur-[120px]"] {
     display: none !important;

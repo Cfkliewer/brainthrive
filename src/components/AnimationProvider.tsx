@@ -46,11 +46,12 @@ export default function AnimationProvider({ children }: AnimationProviderProps) 
       // Only initialize Lenis on desktop
       if (shouldUseLenis) {
         const lenis = new Lenis({
-          duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          duration: 0.8, // Faster response for snappier feel in both directions
+          easing: (t) => 1 - Math.pow(1 - t, 3), // Cubic ease-out - feels natural in both directions
           orientation: "vertical",
           gestureOrientation: "vertical",
           smoothWheel: true,
+          syncTouch: false, // Disable touch sync for better native feel
         });
 
         lenisRef.current = lenis;
