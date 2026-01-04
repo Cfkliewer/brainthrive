@@ -15,6 +15,14 @@ export interface MedicalAnimationOptions {
   force3D?: boolean;
 }
 
+// Check if device is mobile - used throughout for mobile-optimized animations
+const isMobile = () => {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 768px)").matches ||
+         'ontouchstart' in window ||
+         navigator.maxTouchPoints > 0;
+};
+
 // Professional fade-in animation for medical content
 export const fadeInUp = (
   elements: string | Element | Element[],
@@ -27,9 +35,27 @@ export const fadeInUp = (
     ease = medicalEasing.professional,
   } = options;
 
+  // Always ensure visibility first
+  gsap.set(elements, { visibility: 'visible' });
+
   if (prefersReducedMotion()) {
     gsap.set(elements, { opacity: 1, y: 0 });
     return;
+  }
+
+  // Simpler animation on mobile
+  if (isMobile()) {
+    return gsap.fromTo(
+      elements,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.4,
+        delay,
+        stagger: stagger * 0.5,
+        ease: "power1.out",
+      }
+    );
   }
 
   return gsap.fromTo(
@@ -170,11 +196,55 @@ export const scrollReveal = (
     end = "bottom 20%",
   } = options;
 
+  // Reduced motion - make visible immediately
   if (prefersReducedMotion()) {
-    gsap.set(elements, { opacity: 1, y: 0 });
+    gsap.set(elements, { opacity: 1, y: 0, visibility: 'visible' });
     return;
   }
 
+  const isMobileDevice = isMobile();
+
+  // On mobile, use simpler animations with immediate visibility
+  if (isMobileDevice) {
+    // First ensure elements are visible
+    gsap.set(elements, { opacity: 1, y: 0, visibility: 'visible' });
+
+    // Simple fade-in on scroll with no transform
+    if (trigger) {
+      return ScrollTrigger.create({
+        trigger,
+        start: "top 95%", // Trigger earlier on mobile
+        once: true, // Only play once
+        onEnter: () => {
+          gsap.fromTo(
+            elements,
+            { opacity: 0.3 },
+            {
+              opacity: 1,
+              duration: 0.4,
+              stagger: stagger * 0.5,
+              ease: "power1.out",
+            }
+          );
+        }
+      });
+    }
+
+    return ScrollTrigger.batch(elements, {
+      onEnter: (batch) => {
+        gsap.to(batch, {
+          opacity: 1,
+          duration: 0.4,
+          stagger: stagger * 0.5,
+          ease: "power1.out",
+        });
+      },
+      start: "top 95%",
+      once: true,
+    });
+  }
+
+  // Desktop: Full animations
   if (trigger) {
     return ScrollTrigger.create({
       trigger,
@@ -185,7 +255,7 @@ export const scrollReveal = (
           elements,
           {
             opacity: 0,
-            y: 50,
+            y: 30,
             force3D: true,
           },
           {
@@ -206,7 +276,7 @@ export const scrollReveal = (
         batch,
         {
           opacity: 0,
-          y: 50,
+          y: 30,
           force3D: true,
         },
         {
@@ -427,32 +497,35 @@ export const statsCounter = (
 // Page transition animation
 export const pageTransition = {
   enter: (element: string | Element) => {
-    if (prefersReducedMotion()) {
-      gsap.set(element, { opacity: 1 });
+    // Always ensure visibility first
+    gsap.set(element, { visibility: 'visible' });
+
+    if (prefersReducedMotion() || isMobile()) {
+      gsap.set(element, { opacity: 1, y: 0 });
       return;
     }
 
     return gsap.fromTo(
       element,
-      { opacity: 0, y: 20, force3D: true },
+      { opacity: 0, y: 15, force3D: true },
       {
         opacity: 1,
         y: 0,
-        duration: getAnimationDuration(0.6),
+        duration: getAnimationDuration(0.5),
         ease: medicalEasing.professional
       }
     );
   },
   exit: (element: string | Element) => {
-    if (prefersReducedMotion()) {
+    if (prefersReducedMotion() || isMobile()) {
       gsap.set(element, { opacity: 0 });
       return;
     }
 
     return gsap.to(element, {
       opacity: 0,
-      y: -20,
-      duration: getAnimationDuration(0.4),
+      y: -15,
+      duration: getAnimationDuration(0.3),
       ease: medicalEasing.professional,
     });
   },

@@ -27,60 +27,75 @@ export default function AnimationProvider({ children }: AnimationProviderProps) 
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
+    // Mobile detection - disable Lenis on mobile to prevent scroll issues
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const shouldUseLenis = !isMobile && !isTouchDevice;
+
     if (prefersReducedMotion) {
-      // Minimal animations for accessibility
+      // Minimal animations for accessibility - make all elements visible immediately
       gsap.globalTimeline.timeScale(0.01);
       ScrollTrigger.config({
         autoRefreshEvents: "none",
       });
+      // Ensure all animated elements are visible
+      document.querySelectorAll('.metric-card, .condition-card, .service-card, .medical-card, .faq-item, .reveal-item').forEach(el => {
+        gsap.set(el, { opacity: 1, y: 0, scale: 1, visibility: 'visible' });
+      });
     } else {
-      // Initialize Lenis smooth scroll
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: "vertical",
-        gestureOrientation: "vertical",
-        smoothWheel: true,
-        touchMultiplier: 2,
-      });
+      // Only initialize Lenis on desktop
+      if (shouldUseLenis) {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: "vertical",
+          gestureOrientation: "vertical",
+          smoothWheel: true,
+        });
 
-      lenisRef.current = lenis;
+        lenisRef.current = lenis;
 
-      // Connect Lenis to ScrollTrigger
-      lenis.on("scroll", ScrollTrigger.update);
+        // Connect Lenis to ScrollTrigger
+        lenis.on("scroll", ScrollTrigger.update);
 
-      // Use GSAP ticker for smooth animation loop
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
+        // Use GSAP ticker for smooth animation loop
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+      }
 
       // Full animation configuration
       gsap.defaults({
-        duration: 0.8,
+        duration: isMobile ? 0.5 : 0.8, // Faster animations on mobile
         ease: "power2.out",
         force3D: true,
       });
 
-      // Mobile-specific optimizations
-      const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
+      // ScrollTrigger configuration
       ScrollTrigger.config({
         limitCallbacks: isMobile,
         ignoreMobileResize: true,
       });
 
       ScrollTrigger.defaults({
-        start: "top 85%",
+        start: isMobile ? "top 90%" : "top 85%", // Trigger earlier on mobile
         end: "bottom 15%",
         toggleActions: "play none none none",
       });
     }
 
-    // Critical: Refresh ScrollTrigger after hydration
+    // Critical: Refresh ScrollTrigger after hydration with longer delay on mobile
+    const refreshDelay = isMobile ? 300 : 100;
     const refreshTimeout = setTimeout(() => {
       ScrollTrigger.refresh(true);
-    }, 100);
+    }, refreshDelay);
+
+    // Additional refresh after fonts/images load
+    const loadRefresh = () => {
+      setTimeout(() => ScrollTrigger.refresh(true), 100);
+    };
+    window.addEventListener("load", loadRefresh);
 
     // Refresh on resize (debounced)
     let resizeTimeout: NodeJS.Timeout;
@@ -113,6 +128,7 @@ export default function AnimationProvider({ children }: AnimationProviderProps) 
       clearTimeout(refreshTimeout);
       clearTimeout(resizeTimeout);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("load", loadRefresh);
       motionMediaQuery.removeEventListener("change", handleMotionChange);
       lenisRef.current?.destroy();
     };

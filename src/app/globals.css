@@ -561,3 +561,71 @@ select:focus {
     border: 2px solid currentColor;
   }
 }
+
+/* =================================================================
+   MOBILE SCROLL ANIMATION FIX
+   Ensures content is visible by default before JavaScript loads.
+   JavaScript will handle animations, but content won't be hidden.
+   ================================================================= */
+
+/* Default visibility for all animated elements - visible before JS */
+.metric-card,
+.condition-card,
+.service-card,
+.medical-card,
+.faq-item,
+.reveal-item,
+.page-transition-container {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Once JS is initialized, allow GSAP to control these properties */
+.js-animations-ready .metric-card,
+.js-animations-ready .condition-card,
+.js-animations-ready .service-card,
+.js-animations-ready .medical-card,
+.js-animations-ready .faq-item,
+.js-animations-ready .reveal-item,
+.js-animations-ready .page-transition-container {
+  opacity: unset !important;
+  visibility: unset !important;
+  transform: unset !important;
+}
+
+/* Mobile-specific: Always keep elements visible, simpler animations */
+@media (max-width: 768px) {
+  .metric-card,
+  .condition-card,
+  .service-card,
+  .medical-card,
+  .faq-item,
+  .reveal-item,
+  .page-transition-container {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+
+  /* Simpler hover effects on mobile */
+  .medical-card:hover,
+  .service-card:hover {
+    transform: none !important;
+  }
+}
+
+/* Reduced motion: Always visible, no animations */
+@media (prefers-reduced-motion: reduce) {
+  .metric-card,
+  .condition-card,
+  .service-card,
+  .medical-card,
+  .faq-item,
+  .reveal-item,
+  .page-transition-container {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+}
