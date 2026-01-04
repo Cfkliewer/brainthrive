@@ -91,8 +91,26 @@ export default function ServicesPage() {
 
   const currentTreatment = treatmentData.find(t => t.id === selectedTreatment);
 
-  // Intersection Observer for reveal animations
+  // Intersection Observer for reveal animations - Desktop only
   useEffect(() => {
+    // Skip on mobile - content is visible by default via CSS
+    const isMobile = window.matchMedia("(max-width: 768px)").matches ||
+                     'ontouchstart' in window ||
+                     navigator.maxTouchPoints > 0;
+
+    if (isMobile) {
+      // On mobile, just ensure all sections are visible immediately
+      if (contentRef.current) {
+        const sections = contentRef.current.querySelectorAll('.reveal-section');
+        sections.forEach(section => {
+          (section as HTMLElement).style.opacity = '1';
+          (section as HTMLElement).style.transform = 'none';
+        });
+      }
+      return;
+    }
+
+    // Desktop: Use IntersectionObserver for reveal animations
     const observerOptions = {
       threshold: 0.1,
       rootMargin: "0px 0px -50px 0px"

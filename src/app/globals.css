@@ -282,11 +282,21 @@
   animation: draw-line 3s infinite ease-in-out;
 }
 
-/* Smooth reveal animation */
+/* Smooth reveal animation - Desktop only */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
   animation: reveal-anim 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* On mobile, skip the reveal animation - show content immediately */
+@media (max-width: 768px) {
+  .reveal,
+  .reveal-section {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }
 
 /* Custom Bullet Pulse */
@@ -333,22 +343,34 @@
 @media (max-width: 768px) {
   /* Reduce animation complexity on mobile */
   .animate-float,
-  [class*="animate-[spin"] {
+  [class*="animate-[spin"],
+  [class*="animate-[float"] {
     animation-duration: 0s !important;
     animation: none !important;
   }
 
   /* Disable gradient animation on mobile - static gradient instead */
+  /* This targets the Neural Potential text animation */
   .animate-gradient,
+  [class*="animate-[gradient"],
   [style*="background-size: 200%"] {
     animation: none !important;
-    background-position: 50% 50% !important;
+    background-position: 0% 50% !important;
   }
 
-  /* Reduce backdrop blur intensity on mobile for performance */
-  .backdrop-blur-xl {
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+  /* Reduce/disable backdrop blur on mobile for performance */
+  .backdrop-blur-xl,
+  .backdrop-blur-sm,
+  .backdrop-blur {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Hide expensive fixed blur background effects on mobile */
+  .fixed[class*="blur-"],
+  [class*="blur-[100px]"],
+  [class*="blur-[120px]"] {
+    display: none !important;
   }
 
   /* Disable will-change on mobile to save memory */
@@ -366,6 +388,21 @@
   .connection-line {
     animation: none !important;
     stroke-dashoffset: 0;
+  }
+
+  /* Disable pulse animations on mobile */
+  .pulse-bullet,
+  [class*="animate-pulse"],
+  [class*="animate-ping"] {
+    animation: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Disable hover transforms on mobile */
+  .hover\:-translate-y-1:hover,
+  .hover\:scale-105:hover,
+  .hover\:scale-\[1\.02\]:hover {
+    transform: none !important;
   }
 }
 
