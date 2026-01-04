@@ -228,11 +228,26 @@
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-20px) translateZ(0);
   }
+}
+
+/* GPU-accelerated animation classes */
+.animate-float {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.animate-gradient {
+  will-change: background-position;
+}
+
+.animate-spin-slow {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @keyframes reveal-anim {
@@ -311,6 +326,46 @@
   .heading-responsive {
     font-size: clamp(1.5rem, 8vw, 2.25rem);
     line-height: 1.2;
+  }
+}
+
+/* Mobile animation performance optimizations */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  .animate-float,
+  [class*="animate-[spin"] {
+    animation-duration: 0s !important;
+    animation: none !important;
+  }
+
+  /* Disable gradient animation on mobile - static gradient instead */
+  .animate-gradient,
+  [style*="background-size: 200%"] {
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
+
+  /* Reduce backdrop blur intensity on mobile for performance */
+  .backdrop-blur-xl {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* Disable will-change on mobile to save memory */
+  .animate-float,
+  .animate-gradient,
+  .animate-spin-slow {
+    will-change: auto;
+  }
+
+  /* Simpler transforms on mobile */
+  .node {
+    animation: none !important;
+  }
+
+  .connection-line {
+    animation: none !important;
+    stroke-dashoffset: 0;
   }
 }
 

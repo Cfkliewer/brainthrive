@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import AnimationProvider from "@/components/AnimationProvider";
 
 // Golos Text - Secondary font from brand guide
 const golosText = Inter({
@@ -23,8 +24,13 @@ export const metadata: Metadata = {
   title: "Brain Thrive Wellness | Prioritizing Brain Health",
   description: "Brain Thrive Wellness is a premier integrative clinic prioritizing brain health through advanced diagnostics, neurofeedback, and metabolic optimization.",
   keywords: "brain health, neurofeedback, QEEG, photobiomodulation, brain mapping, ADHD, anxiety, TBI recovery, cognitive enhancement",
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0F172A",
 };
 
 export default function RootLayout({
@@ -35,15 +41,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0F172A" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body
         className={`${golosText.variable} ${bebasNeue.variable} antialiased`}
       >
-        {children}
+        <AnimationProvider>{children}</AnimationProvider>
       </body>
     </html>
   );
