@@ -316,7 +316,7 @@ export default function ServicesPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#002554] text-white selection:bg-[#35F3E6]/30 selection:text-[#35F3E6] antialiased">
+      <div className="min-h-screen flex flex-col bg-[#002554] text-white selection:bg-[#35F3E6]/30 selection:text-[#35F3E6] antialiased">
         {/* Skip Navigation */}
         <a href="#main-content" className="skip-nav">
           Skip to main content
@@ -387,7 +387,7 @@ export default function ServicesPage() {
           )}
         </nav>
 
-        <main id="main-content" className="relative min-h-screen pt-32 pb-24 px-6 overflow-hidden">
+        <main id="main-content" className="relative flex-1 pt-32 pb-24 px-6 overflow-hidden">
           {/* Background Ambient Effects */}
           <div className="fixed inset-0 opacity-20 mix-blend-soft-light pointer-events-none" style={{ backgroundImage: 'url(https://grainy-gradients.vercel.app/noise.svg)' }}></div>
           <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-[#5362EF]/10 rounded-full blur-[120px] pointer-events-none translate-x-1/2 -translate-y-1/2"></div>
@@ -505,11 +505,6 @@ export default function ServicesPage() {
 
           <div className="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-[10px] text-blue-200/40">© {new Date().getFullYear()} Brain Thrive Wellness Inc. All rights reserved.</p>
-            <div className="flex gap-6 text-[10px] text-blue-200/40">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">HIPAA Notice</a>
-            </div>
           </div>
         </footer>
       </div>

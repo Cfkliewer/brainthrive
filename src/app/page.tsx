@@ -542,11 +542,6 @@ export default function Home() {
 
             <div className="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-[10px] text-blue-200/40">© {new Date().getFullYear()} Brain Thrive Wellness Inc. All rights reserved.</p>
-              <div className="flex gap-6 text-[10px] text-blue-200/40">
-                <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-                <a href="#" className="hover:text-white transition-colors">HIPAA Notice</a>
-              </div>
             </div>
           </footer>
         </main>
