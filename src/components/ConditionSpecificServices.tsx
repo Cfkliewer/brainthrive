@@ -276,11 +276,11 @@ export default function ConditionSpecificServices() {
                       {expandedService === service.id ? 'Hide Details' : 'Learn More'}
                     </button>
                     <a
-                      href="#contact"
+                      href="tel:4053900596"
                       className="px-4 py-2 rounded-lg font-medium bg-primary-600 text-white hover:bg-primary-700 transition-all duration-200 text-center medical-focus"
-                      aria-label={`Schedule consultation for ${service.title}`}
+                      aria-label={`Call to inquire about ${service.title}`}
                     >
-                      Schedule Consultation
+                      Call Us
                     </a>
                   </div>
                 </div>

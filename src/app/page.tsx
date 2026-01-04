@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react";
+import Link from "next/link";
 import PageTransition from "@/components/PageTransition";
 
 export default function Home() {
@@ -20,20 +21,11 @@ export default function Home() {
             {/* Logo */}
             <a href="#" className="flex items-center gap-3 group">
               <div className="relative w-10 h-10 flex items-center justify-center">
-                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(53,243,230,0.5)]">
-                  <circle cx="30" cy="50" r="3" fill="#35F3E6" className="node" style={{ animationDelay: '0s' }}></circle>
-                  <circle cx="50" cy="30" r="3" fill="#35F3E6" className="node" style={{ animationDelay: '0.2s' }}></circle>
-                  <circle cx="70" cy="50" r="3" fill="#5362EF" className="node" style={{ animationDelay: '0.4s' }}></circle>
-                  <circle cx="50" cy="70" r="3" fill="#5362EF" className="node" style={{ animationDelay: '0.6s' }}></circle>
-                  <circle cx="50" cy="50" r="3" fill="white" className="node" style={{ animationDelay: '0.8s' }}></circle>
-                  <path d="M30 50 Q 50 20 70 50 T 50 80 T 30 50" fill="none" stroke="url(#grad1)" strokeWidth="2" className="opacity-50"></path>
-                  <defs>
-                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" style={{ stopColor: '#35F3E6', stopOpacity: 1 }}></stop>
-                      <stop offset="100%" style={{ stopColor: '#5362EF', stopOpacity: 1 }}></stop>
-                    </linearGradient>
-                  </defs>
-                </svg>
+                <img
+                  src="/BrainThrive_Icon_White.png"
+                  alt="Brain Thrive Logo"
+                  className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(53,243,230,0.5)]"
+                />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl tracking-wide brand-font text-white leading-none">BRAIN THRIVE</span>
@@ -44,16 +36,15 @@ export default function Home() {
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8 text-sm font-medium text-blue-200/70">
               <a href="#services" className="hover:text-white transition-colors duration-200">Services</a>
-              <a href="/services" className="hover:text-white transition-colors duration-200">Treatments</a>
+              <Link href="/services" className="hover:text-white transition-colors duration-200">Treatments</Link>
               <a href="#methodology" className="hover:text-white transition-colors duration-200">Methodology</a>
               <a href="#location" className="hover:text-white transition-colors duration-200">Location</a>
             </div>
 
             {/* CTA */}
-            <div className="flex items-center gap-4">
-              <a href="#" className="hidden lg:block text-xs font-semibold text-blue-200 hover:text-white transition-colors">Patient Portal</a>
+            <div className="hidden md:flex items-center gap-4">
               <a href="#contact" className="bg-white text-[#002554] text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-[#35F3E6] transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                Book Consultation
+                Contact Us
               </a>
             </div>
 
@@ -78,10 +69,10 @@ export default function Home() {
             <div className="md:hidden bg-[#001a3d] border-t border-white/10">
               <div className="px-6 py-6 space-y-4">
                 <a href="#services" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Services</a>
-                <a href="/services" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Treatments</a>
+                <Link href="/services" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Treatments</Link>
                 <a href="#methodology" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Methodology</a>
                 <a href="#location" className="block text-blue-200 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Location</a>
-                <a href="#contact" className="block bg-[#5362EF] text-white px-4 py-3 rounded-lg text-center font-semibold mt-4">Book Consultation</a>
+                <a href="tel:4053900596" className="block bg-[#5362EF] text-white px-4 py-3 rounded-lg text-center font-semibold mt-4">Call (405) 390-0596</a>
               </div>
             </div>
           )}
@@ -132,282 +123,42 @@ export default function Home() {
                     Explore Our Services
                     <span className="text-xl">↓</span>
                   </a>
-                  <a href="#methodology" className="h-12 px-8 rounded-lg border border-[#223BA8] hover:bg-[#001a3d] text-blue-100 text-sm font-semibold transition-all flex items-center justify-center gap-2">
-                    <span>▶</span>
-                    Watch The Science
-                  </a>
+                  <Link href="/services" className="h-12 px-8 rounded-lg border border-[#223BA8] hover:bg-[#001a3d] text-blue-100 text-sm font-semibold transition-all flex items-center justify-center gap-2">
+                    See the Treatments
+                    <span className="text-xl">→</span>
+                  </Link>
                 </div>
 
-                <div className="mt-16 flex items-center gap-6 pt-8 border-t border-white/5">
-                  <div className="flex -space-x-3">
-                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-gray-600"></div>
-                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-gray-500"></div>
-                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-gray-400"></div>
-                    <div className="w-10 h-10 rounded-full border-2 border-[#002554] bg-[#001a3d] flex items-center justify-center text-[10px] font-bold text-white">+2k</div>
-                  </div>
-                  <div>
-                    <div className="flex gap-1 text-[#35F3E6]">
-                      <span>⭐</span>
-                      <span>⭐</span>
-                      <span>⭐</span>
-                      <span>⭐</span>
-                      <span>⭐</span>
-                    </div>
-                    <p className="text-xs text-blue-200/50 mt-1">Trusted by patients worldwide</p>
-                  </div>
-                </div>
               </div>
 
-              {/* Animated Brain Visualization - Hidden on mobile */}
+              {/* Hero Logo Visualization - Hidden on mobile */}
               <div className="relative h-[600px] hidden lg:flex items-center justify-center">
-                <div className="relative w-full h-full opacity-90">
-                  {/* Realistic Spinning Brain SVG */}
-                  <svg viewBox="0 0 600 600" className="w-full h-full">
-                    <defs>
-                      {/* 3D Lighting Gradients */}
-                      <radialGradient id="brain-light" cx="40%" cy="30%">
-                        <stop offset="0%" style={{ stopColor: '#35F3E6', stopOpacity: 0.8 }}></stop>
-                        <stop offset="50%" style={{ stopColor: '#5362EF', stopOpacity: 0.6 }}></stop>
-                        <stop offset="100%" style={{ stopColor: '#002554', stopOpacity: 0.9 }}></stop>
-                      </radialGradient>
+                <div className="relative w-full h-full">
+                  {/* Main Logo with Glow Effects */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {/* Outer glow ring */}
+                    <div className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-r from-[#35F3E6]/20 via-[#5362EF]/20 to-[#35F3E6]/20 blur-[60px] animate-pulse"></div>
 
-                      <radialGradient id="cerebellum-light" cx="50%" cy="50%">
-                        <stop offset="0%" style={{ stopColor: '#5362EF', stopOpacity: 0.7 }}></stop>
-                        <stop offset="100%" style={{ stopColor: '#35F3E6', stopOpacity: 0.5 }}></stop>
-                      </radialGradient>
+                    {/* Rotating rings */}
+                    <div className="absolute w-[420px] h-[420px] rounded-full border border-[#35F3E6]/30 animate-[spin_20s_linear_infinite]"></div>
+                    <div className="absolute w-[380px] h-[380px] rounded-full border border-[#5362EF]/20 animate-[spin_15s_linear_infinite_reverse]"></div>
 
-                      {/* Glow filter */}
-                      <filter id="glow">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                        <feMerge>
-                          <feMergeNode in="coloredBlur"/>
-                          <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                      </filter>
+                    {/* Staggered Logo Stack */}
+                    {/* Full Color Logo - Back layer (offset) */}
+                    <img
+                      src="/BrainThrive_Icon_FullColor.png"
+                      alt=""
+                      className="absolute w-[240px] h-[240px] object-contain opacity-60 animate-[float_6s_ease-in-out_infinite] drop-shadow-[0_0_30px_rgba(53,243,230,0.3)]"
+                      style={{ animationDelay: '0s', transform: 'translate(-80px, -80px)' }}
+                    />
 
-                      {/* Shadow filter */}
-                      <filter id="shadow">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-                        <feOffset dx="2" dy="2" result="offsetblur"/>
-                        <feComponentTransfer>
-                          <feFuncA type="linear" slope="0.5"/>
-                        </feComponentTransfer>
-                        <feMerge>
-                          <feMergeNode/>
-                          <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                      </filter>
-                    </defs>
-
-                    {/* Spinning Brain Group */}
-                    <g className="animate-[spin_20s_linear_infinite]" transform-origin="300 300">
-                      <g transform="translate(300, 280)" filter="url(#shadow)">
-
-                        {/* Main Cerebrum (largest part) */}
-                        <ellipse cx="0" cy="-20" rx="140" ry="110"
-                          fill="url(#brain-light)"
-                          stroke="#35F3E6"
-                          strokeWidth="2"
-                          filter="url(#glow)"
-                          opacity="0.9"
-                        />
-
-                        {/* Frontal Lobe Details */}
-                        <path
-                          d="M -100,-70 Q -110,-50 -115,-30 Q -118,-10 -115,10"
-                          fill="none"
-                          stroke="#35F3E6"
-                          strokeWidth="2.5"
-                          opacity="0.7"
-                        />
-                        <path
-                          d="M -80,-85 Q -90,-65 -95,-45"
-                          fill="none"
-                          stroke="#5362EF"
-                          strokeWidth="2"
-                          opacity="0.6"
-                        />
-                        <path
-                          d="M -60,-95 Q -70,-75 -75,-55"
-                          fill="none"
-                          stroke="#35F3E6"
-                          strokeWidth="2"
-                          opacity="0.5"
-                        />
-
-                        {/* Central Sulcus (major brain fold) */}
-                        <path
-                          d="M -20,-100 Q -25,-50 -30,0 Q -28,30 -25,60"
-                          fill="none"
-                          stroke="#5362EF"
-                          strokeWidth="3"
-                          opacity="0.8"
-                          strokeLinecap="round"
-                        />
-
-                        {/* Parietal Lobe folds */}
-                        <path
-                          d="M 10,-95 Q 5,-65 8,-35 Q 12,-5 15,25"
-                          fill="none"
-                          stroke="#35F3E6"
-                          strokeWidth="2.5"
-                          opacity="0.7"
-                        />
-                        <path
-                          d="M 40,-85 Q 35,-55 38,-25 Q 42,5 45,35"
-                          fill="none"
-                          stroke="#5362EF"
-                          strokeWidth="2"
-                          opacity="0.6"
-                        />
-
-                        {/* Temporal Lobe curves */}
-                        <path
-                          d="M -105,20 Q -100,40 -90,55 Q -75,65 -55,68"
-                          fill="none"
-                          stroke="#35F3E6"
-                          strokeWidth="2.5"
-                          opacity="0.7"
-                        />
-                        <path
-                          d="M -90,35 Q -85,50 -75,60"
-                          fill="none"
-                          stroke="#5362EF"
-                          strokeWidth="2"
-                          opacity="0.5"
-                        />
-
-                        {/* Occipital Lobe (back) */}
-                        <path
-                          d="M 70,-70 Q 85,-50 95,-25 Q 102,0 105,30"
-                          fill="none"
-                          stroke="#35F3E6"
-                          strokeWidth="2.5"
-                          opacity="0.7"
-                        />
-                        <path
-                          d="M 95,-55 Q 105,-35 110,-10"
-                          fill="none"
-                          stroke="#5362EF"
-                          strokeWidth="2"
-                          opacity="0.6"
-                        />
-
-                        {/* Additional gyri (brain folds) for realism */}
-                        <path
-                          d="M -50,-90 Q -45,-60 -40,-30"
-                          fill="none"
-                          stroke="#35F3E6"
-                          strokeWidth="1.5"
-                          opacity="0.4"
-                        />
-                        <path
-                          d="M 60,-75 Q 65,-45 70,-15"
-                          fill="none"
-                          stroke="#5362EF"
-                          strokeWidth="1.5"
-                          opacity="0.4"
-                        />
-                        <path
-                          d="M -70,10 Q -60,30 -50,45"
-                          fill="none"
-                          stroke="#35F3E6"
-                          strokeWidth="1.5"
-                          opacity="0.4"
-                        />
-
-                        {/* Cerebellum (smaller structure at bottom) */}
-                        <ellipse cx="-10" cy="95" rx="80" ry="45"
-                          fill="url(#cerebellum-light)"
-                          stroke="#5362EF"
-                          strokeWidth="2"
-                          opacity="0.85"
-                        />
-
-                        {/* Cerebellum folds (very detailed) */}
-                        <path d="M -70,85 L -65,105" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
-                        <path d="M -50,80 L -48,108" stroke="#5362EF" strokeWidth="1.5" opacity="0.5"/>
-                        <path d="M -30,78 L -28,110" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
-                        <path d="M -10,75 L -8,112" stroke="#5362EF" strokeWidth="1.5" opacity="0.5"/>
-                        <path d="M 10,78 L 12,110" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
-                        <path d="M 30,80 L 32,108" stroke="#5362EF" strokeWidth="1.5" opacity="0.5"/>
-                        <path d="M 50,85 L 52,105" stroke="#35F3E6" strokeWidth="1.5" opacity="0.6"/>
-
-                        {/* Brain Stem */}
-                        <ellipse cx="5" cy="140" rx="18" ry="25"
-                          fill="#5362EF"
-                          opacity="0.6"
-                          stroke="#35F3E6"
-                          strokeWidth="1.5"
-                        />
-
-                        {/* Pulsing Neural Activity Points */}
-                        <g className="neural-activity">
-                          <circle cx="-60" cy="-40" r="3" fill="#35F3E6">
-                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite"/>
-                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
-                          </circle>
-                          <circle cx="30" cy="-50" r="3" fill="#5362EF">
-                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite" begin="0.3s"/>
-                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.3s"/>
-                          </circle>
-                          <circle cx="-40" cy="20" r="3" fill="#35F3E6">
-                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite" begin="0.6s"/>
-                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.6s"/>
-                          </circle>
-                          <circle cx="50" cy="10" r="3" fill="#5362EF">
-                            <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite" begin="0.9s"/>
-                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.9s"/>
-                          </circle>
-                          <circle cx="-20" cy="90" r="2.5" fill="white">
-                            <animate attributeName="r" values="2;4;2" dur="2s" repeatCount="indefinite" begin="0.4s"/>
-                            <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" begin="0.4s"/>
-                          </circle>
-                          <circle cx="15" cy="95" r="2.5" fill="white">
-                            <animate attributeName="r" values="2;4;2" dur="2s" repeatCount="indefinite" begin="0.7s"/>
-                            <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" begin="0.7s"/>
-                          </circle>
-                        </g>
-
-                        {/* Energy waves flowing through brain */}
-                        <circle r="5" fill="#35F3E6" opacity="0.7">
-                          <animateMotion dur="6s" repeatCount="indefinite"
-                            path="M -100,-50 Q 0,-70 100,-30 Q 80,20 60,70 Q 0,90 -60,70 Q -80,30 -100,-50"/>
-                          <animate attributeName="opacity" values="0;0.8;0" dur="6s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle r="5" fill="#5362EF" opacity="0.7">
-                          <animateMotion dur="8s" repeatCount="indefinite"
-                            path="M 100,-30 Q 20,-60 -80,-40 Q -90,10 -70,60 Q 0,85 70,65 Q 100,20 100,-30"/>
-                          <animate attributeName="opacity" values="0;0.8;0" dur="8s" repeatCount="indefinite"/>
-                        </circle>
-                      </g>
-                    </g>
-                  </svg>
-
-                  {/* Floating Data Cards */}
-                  <div className="absolute top-[20%] right-[10%] bg-[#001a3d]/80 backdrop-blur-md border border-[#35F3E6]/20 p-4 rounded-xl shadow-xl w-48 animate-bounce" style={{ animationDuration: '4s' }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] text-blue-200 uppercase tracking-wider">Alpha Waves</span>
-                      <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                    </div>
-                    <div className="w-full bg-gray-700 h-1 rounded-full overflow-hidden">
-                      <div className="h-full bg-[#35F3E6] w-[70%]"></div>
-                    </div>
-                  </div>
-
-                  <div className="absolute bottom-[20%] left-[10%] bg-[#001a3d]/80 backdrop-blur-md border border-[#5362EF]/20 p-4 rounded-xl shadow-xl w-48 animate-bounce" style={{ animationDuration: '5s' }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] text-blue-200 uppercase tracking-wider">Coherence</span>
-                      <span className="text-[#35F3E6] text-xs font-bold">94%</span>
-                    </div>
-                    <div className="flex gap-1 h-3 items-end">
-                      <div className="w-1 bg-[#5362EF] h-[40%] rounded-sm"></div>
-                      <div className="w-1 bg-[#5362EF] h-[60%] rounded-sm"></div>
-                      <div className="w-1 bg-[#5362EF] h-[90%] rounded-sm"></div>
-                      <div className="w-1 bg-[#5362EF] h-[70%] rounded-sm"></div>
-                      <div className="w-1 bg-[#5362EF] h-[50%] rounded-sm"></div>
-                      <div className="w-1 bg-[#5362EF] h-[80%] rounded-sm"></div>
-                    </div>
+                    {/* Full Color Logo - Front layer (center) */}
+                    <img
+                      src="/BrainThrive_Icon_FullColor.png"
+                      alt="Brain Thrive"
+                      className="relative z-10 w-[280px] h-[280px] object-contain drop-shadow-[0_0_40px_rgba(53,243,230,0.4)] animate-[float_6s_ease-in-out_infinite]"
+                      style={{ animationDelay: '1s' }}
+                    />
                   </div>
                 </div>
               </div>
@@ -500,47 +251,30 @@ export default function Home() {
 
           {/* Methodology / Science Stats */}
           <section id="methodology" className="py-24 bg-[#002554] border-y border-white/5">
-            <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="text-4xl font-medium text-white mb-6 brand-font leading-tight">Advanced Brain Assessment <br /> Meets Light Therapy</h2>
-                <p className="text-blue-100/70 mb-8">
-                  We use Brain Gauge for objective cortical metrics and QEEG brain mapping to identify exact treatment targets. Our medical-grade PBM protocols are customized to your unique brain patterns for optimal healing.
-                </p>
+            <div className="max-w-4xl mx-auto px-6 text-center">
+              <h2 className="text-4xl font-medium text-white mb-6 brand-font leading-tight">Advanced Brain Assessment <br /> Meets Light Therapy</h2>
+              <p className="text-blue-100/70 mb-12">
+                We use Brain Gauge for objective cortical metrics and QEEG brain mapping to identify exact treatment targets. Our medical-grade PBM protocols are customized to your unique brain patterns for optimal healing.
+              </p>
 
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 bg-[#35F3E6]/10 p-2 rounded text-[#35F3E6] border border-[#35F3E6]/20">
-                      <span className="text-xl">🖐️</span>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-medium text-white">Objective Brain Metrics</h4>
-                      <p className="text-sm text-blue-200/50 mt-1">Brain Gauge provides real-time data on reaction time, attention, cognitive speed, plasticity, and fatigue - guiding treatment decisions.</p>
-                    </div>
+              <div className="grid md:grid-cols-2 gap-8 text-left">
+                <div className="flex items-start gap-4 bg-white/5 rounded-xl p-6">
+                  <div className="mt-1 bg-[#35F3E6]/10 p-2 rounded text-[#35F3E6] border border-[#35F3E6]/20">
+                    <span className="text-xl">🖐️</span>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 bg-[#5362EF]/10 p-2 rounded text-[#5362EF] border border-[#5362EF]/20">
-                      <span className="text-xl">💡</span>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-medium text-white">Scientifically Backed Treatment</h4>
-                      <p className="text-sm text-blue-200/50 mt-1">FDA-cleared medical-grade PBM increases cellular ATP, reduces neuroinflammation, and promotes neuroplasticity for lasting brain health.</p>
-                    </div>
+                  <div>
+                    <h4 className="text-lg font-medium text-white">Objective Brain Metrics</h4>
+                    <p className="text-sm text-blue-200/50 mt-1">Brain Gauge provides real-time data on reaction time, attention, cognitive speed, plasticity, and fatigue - guiding treatment decisions.</p>
                   </div>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#001a3d] p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
-                  <span className="text-4xl font-bold text-[#35F3E6] brand-font mb-2">94%</span>
-                  <span className="text-xs text-blue-200/60 uppercase tracking-wider">Symptom Reduction</span>
-                </div>
-                <div className="bg-[#001a3d] p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
-                  <span className="text-4xl font-bold text-[#5362EF] brand-font mb-2">3k+</span>
-                  <span className="text-xs text-blue-200/60 uppercase tracking-wider">Brain Maps Analyzed</span>
-                </div>
-                <div className="bg-[#001a3d] p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center col-span-2">
-                  <span className="text-4xl font-bold text-white brand-font mb-2">15k+</span>
-                  <span className="text-xs text-blue-200/60 uppercase tracking-wider">Neurofeedback Sessions Completed</span>
+                <div className="flex items-start gap-4 bg-white/5 rounded-xl p-6">
+                  <div className="mt-1 bg-[#5362EF]/10 p-2 rounded text-[#5362EF] border border-[#5362EF]/20">
+                    <span className="text-xl">💡</span>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-medium text-white">Scientifically Backed Treatment</h4>
+                    <p className="text-sm text-blue-200/50 mt-1">FDA-cleared medical-grade PBM increases cellular ATP, reduces neuroinflammation, and promotes neuroplasticity for lasting brain health.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -578,8 +312,8 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <a href="#contact" className="inline-flex items-center gap-2 text-[#35F3E6] font-semibold border-b border-[#35F3E6]/30 pb-1 hover:border-[#35F3E6] transition-all">
-                    Schedule Your Assessment <span>→</span>
+                  <a href="/services" className="inline-flex items-center gap-2 text-[#35F3E6] font-semibold border-b border-[#35F3E6]/30 pb-1 hover:border-[#35F3E6] transition-all">
+                    See Treatments <span>→</span>
                   </a>
                 </div>
 
@@ -662,16 +396,16 @@ export default function Home() {
 
               <div className="grid lg:grid-cols-2 gap-12">
                 {/* Map */}
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(53,243,230,0.1)]">
+                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-lg h-full min-h-[400px]">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3244.8889!2d-97.2353!3d35.5001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87b21e8c8c8c8c8d%3A0x1234567890abcdef!2s15805%20NE%2023rd%20St%2C%20Choctaw%2C%20OK%2073020!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                     width="100%"
-                    height="500"
+                    height="100%"
                     style={{ border: 0 }}
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    className="w-full"
+                    className="w-full h-full absolute inset-0"
                   ></iframe>
                 </div>
 
@@ -753,7 +487,7 @@ export default function Home() {
                       href="#contact"
                       className="block w-full py-4 rounded-lg bg-gradient-to-r from-[#5362EF] to-[#434fc2] text-white text-center font-semibold transition-all shadow-[0_0_30px_rgba(83,98,239,0.3)] hover:shadow-[0_0_40px_rgba(83,98,239,0.5)] hover:scale-[1.02]"
                     >
-                      Schedule Your Consultation
+                      Call (405) 390-0596
                     </a>
                   </div>
                 </div>
@@ -763,65 +497,46 @@ export default function Home() {
 
           {/* Footer */}
           <footer className="border-t border-white/5 bg-[#001a3d] pt-16 pb-8" id="contact">
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-              <div>
+            <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-12 mb-12">
+              <div className="md:max-w-sm">
                 <a href="#" className="flex items-center gap-2 mb-6 group">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#35F3E6] to-[#5362EF]"></div>
+                  <img src="/BrainThrive_Icon_White.png" alt="Brain Thrive Logo" className="w-8 h-8 object-contain" />
                   <span className="text-xl font-bold text-white brand-font tracking-wide">BRAIN THRIVE</span>
                 </a>
-                <p className="text-xs text-blue-200/50 leading-relaxed mb-6">
+                <p className="text-xs text-blue-200/50 leading-relaxed">
                   Prioritizing brain health through the convergence of neuroscience, technology, and compassionate care.
                 </p>
-                <div className="flex gap-4">
-                  <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#35F3E6] hover:text-[#002554] transition-all text-blue-200/50">
-                    <span>𝕏</span>
-                  </a>
-                  <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#35F3E6] hover:text-[#002554] transition-all text-blue-200/50">
-                    <span>in</span>
-                  </a>
-                  <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#35F3E6] hover:text-[#002554] transition-all text-blue-200/50">
-                    <span>📷</span>
-                  </a>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-12 md:gap-16">
+                <div>
+                  <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Services</h4>
+                  <ul className="space-y-3 text-xs text-blue-200/60">
+                    <li><a href="#" className="hover:text-[#35F3E6] transition-colors">QEEG Brain Mapping</a></li>
+                    <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Neurofeedback</a></li>
+                    <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Photobiomodulation</a></li>
+                    <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Metabolic Analysis</a></li>
+                    <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Remote Training</a></li>
+                  </ul>
                 </div>
-              </div>
 
-              <div>
-                <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Services</h4>
-                <ul className="space-y-3 text-xs text-blue-200/60">
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">QEEG Brain Mapping</a></li>
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Neurofeedback</a></li>
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Photobiomodulation</a></li>
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Metabolic Analysis</a></li>
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Remote Training</a></li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Patient Resources</h4>
-                <ul className="space-y-3 text-xs text-blue-200/60">
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">New Patient Portal</a></li>
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Insurance Information</a></li>
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">Clinical Studies</a></li>
-                  <li><a href="#" className="hover:text-[#35F3E6] transition-colors">FAQ</a></li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Contact</h4>
-                <ul className="space-y-4 text-xs text-blue-200/60">
-                  <li className="flex items-start gap-3">
-                    <span className="text-[#5362EF]">📍</span>
-                    <span>Brain Thrive, PLLC<br />at Quick Access Neurology<br />15805 NE 23rd St.<br />Choctaw, OK 73020</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="text-[#5362EF]">📞</span>
-                    <span>(405) 390-0596</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="text-[#5362EF]">✉️</span>
-                    <span>info@brainthrive.com</span>
-                  </li>
-                </ul>
+                <div>
+                  <h4 className="text-sm font-semibold text-white mb-6 brand-font tracking-wider">Contact</h4>
+                  <ul className="space-y-4 text-xs text-blue-200/60">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#5362EF]">📍</span>
+                      <span>Brain Thrive, PLLC<br />at Quick Access Neurology<br />15805 NE 23rd St.<br />Choctaw, OK 73020</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <span className="text-[#5362EF]">📞</span>
+                      <span>(405) 390-0596</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <span className="text-[#5362EF]">✉️</span>
+                      <span>info@brainthrive.com</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 

@@ -294,7 +294,7 @@ export default function StyleguidePage() {
 
               <div className="space-y-3">
                 <button className="w-full medical-button bg-brand-blue-600 hover:bg-brand-blue-700 text-white py-3 rounded-lg font-medium transition-all duration-200">
-                  Schedule Assessment
+                  Call Us
                 </button>
                 <button className="w-full medical-button border-2 border-brand-blue-600 text-brand-blue-600 hover:bg-brand-blue-600 hover:text-white py-3 rounded-lg font-medium transition-all duration-200">
                   Learn More
@@ -328,7 +328,7 @@ export default function StyleguidePage() {
 
               <div className="space-y-3">
                 <button className="w-full medical-button bg-brand-purple-600 hover:bg-brand-purple-700 text-white py-3 rounded-lg font-medium transition-all duration-200">
-                  Book Assessment
+                  Contact Us
                 </button>
                 <button className="w-full medical-button border-2 border-brand-purple-600 text-brand-purple-600 hover:bg-brand-purple-600 hover:text-white py-3 rounded-lg font-medium transition-all duration-200">
                   View Research
@@ -362,7 +362,7 @@ export default function StyleguidePage() {
 
               <div className="space-y-3">
                 <button className="w-full medical-button bg-brand-teal-600 hover:bg-brand-teal-700 text-white py-3 rounded-lg font-medium transition-all duration-200">
-                  Schedule Consultation
+                  Contact Us
                 </button>
                 <button className="w-full medical-button border-2 border-brand-teal-600 text-brand-teal-600 hover:bg-brand-teal-600 hover:text-white py-3 rounded-lg font-medium transition-all duration-200">
                   How It Works

@@ -179,11 +179,11 @@ export default function BrainGaugeMetrics() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="#contact"
+                href="tel:4053900596"
                 className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-all duration-200 medical-button shadow-lg text-center medical-focus"
-                aria-label="Schedule Brain Gauge assessment"
+                aria-label="Call to inquire about Brain Gauge assessment"
               >
-                Schedule Assessment
+                Call (405) 390-0596
               </a>
               <a
                 href="#services"
