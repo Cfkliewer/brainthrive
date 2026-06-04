@@ -29,6 +29,7 @@ export default function NeuronWeb({ particleCount, color = "#5EEAD4" }: NeuronWe
     });
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.computeBoundingSphere(); // so the line set isn't incorrectly frustum-culled
     return geo;
   }, [graph]);
 
@@ -58,7 +59,7 @@ export default function NeuronWeb({ particleCount, color = "#5EEAD4" }: NeuronWe
 
   return (
     <group ref={groupRef}>
-      <instancedMesh ref={meshRef} args={[undefined, undefined, graph.nodes.length]}>
+      <instancedMesh ref={meshRef} frustumCulled={false} args={[undefined, undefined, graph.nodes.length]}>
         <sphereGeometry args={[1, 8, 8]} />
         <meshBasicMaterial color={color} toneMapped={false} />
       </instancedMesh>
