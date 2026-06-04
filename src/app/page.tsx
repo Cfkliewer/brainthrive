@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import PageTransition from "@/components/PageTransition";
+import BrainVideoSection from "@/components/BrainVideoSection";
 
 export default function Home() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -164,6 +165,9 @@ export default function Home() {
               </div>
             </div>
           </section>
+
+          {/* 3D Brain Visualization - Scroll-Scrubbed */}
+          <BrainVideoSection />
 
           {/* Services Section */}
           <section id="services" className="py-24 bg-[#001a3d] relative">
