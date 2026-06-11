@@ -792,3 +792,25 @@ body[data-version="v1"]
 body[data-version="v1"] .v1-band-dark :is(a, button):focus-visible {
   outline-color: var(--color-brand-dark-teal);
 }
+
+/* === V3 Immersive Neuro === */
+
+/* Bebas Neue display utility; --font-bebas-v3 is provided by
+   src/app/v3/layout.tsx via next/font so the payload stays /v3-scoped. */
+.v3-display {
+  font-family: var(--font-bebas-v3), "Bebas Neue", "Arial Narrow", sans-serif;
+  letter-spacing: 0.015em;
+}
+
+/* Replace the heavy global blue 3px :focus outline with a teal
+   focus-visible ring that reads as light against the dark surfaces. */
+body[data-version="v3"]
+  :is(a, button, input, textarea, select, summary):focus {
+  outline: none;
+}
+
+body[data-version="v3"]
+  :is(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--color-brand-teal);
+  outline-offset: 3px;
+}
