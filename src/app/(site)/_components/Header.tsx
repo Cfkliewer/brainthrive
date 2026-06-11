@@ -11,18 +11,20 @@ import MagneticButton from "./MagneticButton";
 import { BTN_PRIMARY, CONTAINER, EYEBROW_ON_LIGHT } from "./styles";
 
 /** Portion of the viewport height to scroll before the homepage header
- *  trades its transparent-over-hero look for the solid white one. */
-const HERO_EXIT_RATIO = 0.8;
+ *  trades its transparent-over-hero look for the solid white one.
+ *  Tuned to the 72svh hero: flips just before the hero bottom passes
+ *  under the header so the white bar never floats over white content. */
+const HERO_EXIT_RATIO = 0.6;
 
 const LINK_BASE = "text-sm font-medium transition-colors";
 const LINK_ON_LIGHT = `${LINK_BASE} text-medical-gray-700 hover:text-brand-purple`;
 const LINK_ON_DARK = `${LINK_BASE} text-white/90 hover:text-brand-teal`;
 
 /**
- * V2 masthead. On the homepage it overlays the full-screen hero: fixed,
+ * V2 masthead. On the homepage it overlays the hero: fixed,
  * transparent, white text (the hero's top scrim provides the backing),
- * switching to the solid white + blur treatment after ~80% of the
- * viewport height. Everywhere else it is the solid sticky header from
+ * switching to the solid white + blur treatment as the hero scrolls
+ * out. Everywhere else it is the solid sticky header from
  * the first paint (state derives from the pathname synchronously, so
  * there is no transparent flash on inner pages). Also hosts the
  * "Who We Help" mega panel and the full-screen mobile menu.

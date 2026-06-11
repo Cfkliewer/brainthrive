@@ -759,10 +759,10 @@ body[data-version="v2"]
   outline-color: var(--color-brand-blue-600);
 }
 
-/* Full-viewport hero height with a vh fallback for older engines. */
+/* Hero height (~3/4 viewport) with a vh fallback for older engines. */
 .v2-hero-vh {
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 72vh;
+  min-height: 72svh;
 }
 
 /* Caption chip swap on the hero carousel (re-runs via React key change). */

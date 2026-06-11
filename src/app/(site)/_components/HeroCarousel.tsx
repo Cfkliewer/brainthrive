@@ -123,8 +123,8 @@ function SlidePlaceholder({ slide }: { slide: ResolvedHeroSlide }) {
  * placeholder treatment instead.
  *
  * The transparent-over-hero header relies on this section being exactly
- * the first thing in <main> at 100svh — Header.tsx flips to its solid
- * style after ~80% of the viewport height.
+ * the first thing in <main> at 72svh (.v2-hero-vh) — Header.tsx flips to
+ * its solid style at the matching HERO_EXIT_RATIO threshold.
  *
  * Ken Burns and the load-in stagger are gated to no-preference; the
  * crossfade is a CSS opacity transition driven by React state, so dot
