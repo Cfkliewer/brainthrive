@@ -764,3 +764,32 @@ body[data-version="v3"] ::selection {
 body[data-version="v3"] :focus-visible {
   outline-color: #35F3E6;
 }
+
+/* =================================================================
+   V1 "EDITORIAL CALM" (appended block — /v1 subtree only)
+   Fraunces display utility + a quieter, on-palette focus treatment.
+   --font-fraunces is provided by src/app/v1/layout.tsx via next/font.
+   ================================================================= */
+
+.v1-display {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-optical-sizing: auto;
+}
+
+/* Replace the heavy global 3px :focus outline with a calm
+   focus-visible ring in the v1 palette. */
+body[data-version="v1"] :is(a, button, input, textarea, select, summary):focus {
+  outline: none;
+}
+
+body[data-version="v1"]
+  :is(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid #223ba8;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Teal ring inside the navy CTA band, where navy-on-navy would vanish */
+body[data-version="v1"] .v1-band-dark :is(a, button):focus-visible {
+  outline-color: #00d3d2;
+}

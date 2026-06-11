@@ -12,6 +12,14 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
+    // Test fixtures legitimately render bare <a> elements; the
+    // no-html-link-for-pages rule only matters in shipped pages.
+    files: ["**/*.test.ts", "**/*.test.tsx"],
+    rules: {
+      "@next/next/no-html-link-for-pages": "off",
+    },
+  },
+  {
     ignores: [
       "node_modules/**",
       ".next/**",
