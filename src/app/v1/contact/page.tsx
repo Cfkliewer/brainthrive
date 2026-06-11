@@ -5,8 +5,7 @@ import Reveal from "../_components/Reveal";
 
 export const metadata: Metadata = {
   title: "Contact & Scheduling",
-  description:
-    "Schedule a consultation with Brain Thrive Wellness in Choctaw, Oklahoma. Call 405-563-0816 or email admin@brainthrivewellness.com to get started.",
+  description: `Schedule a consultation with ${SITE.name} in Choctaw, Oklahoma. Call ${SITE.phone.display} or email ${SITE.email} to get started.`,
 };
 
 const EYEBROW = "text-[11px] uppercase tracking-[0.22em] text-[#002554]/70";
