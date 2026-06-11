@@ -15,6 +15,8 @@ export interface ConditionContent {
   subhead?: string;
   /** Body copy, one entry per paragraph (verbatim source copy). */
   paragraphs: string[];
+  /** One short hand-written sentence summarizing the condition copy. */
+  excerpt: string;
   /** The "Schedule a consultation today..." closing line. */
   cta: string;
   /** <=160 chars, used for the page's meta description. */
@@ -31,6 +33,10 @@ export interface SiteContent {
   email: string;
   address: {
     street: string;
+    city: string;
+    state: string;
+    zip: string;
+    /** Pre-joined "City, ST 00000" display form. */
     cityStateZip: string;
     note: string;
     mapsHref: string;
@@ -62,6 +68,23 @@ export interface InfoPage {
   headline: string;
   subhead?: string;
   sections: InfoSection[];
+}
+
+export interface HowItWorksStep {
+  /** Step title without any "Step N:" prefix — render numbering yourself. */
+  title: string;
+  body: string[];
+  /** One short hand-written sentence for compact step summaries. */
+  excerpt: string;
+}
+
+export interface HowItWorksPage {
+  headline: string;
+  subhead?: string;
+  /** The four method steps, in order. */
+  steps: HowItWorksStep[];
+  /** The "Why Neurofeedback" explainer. */
+  why: InfoSection;
 }
 
 export interface FaqEntry {

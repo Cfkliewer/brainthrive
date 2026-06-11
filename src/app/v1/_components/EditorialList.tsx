@@ -20,33 +20,33 @@ interface EditorialListProps {
 function RowContent({ item }: { item: EditorialListItem }) {
   return (
     <>
-      <span className="v1-display pt-1 text-sm text-[#5362EF] tabular-nums">
+      <span className="v1-display pt-1 text-sm text-brand-ultraviolet tabular-nums">
         {item.number}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-lg leading-snug transition-colors group-hover:text-[#5362EF] md:text-xl">
+        <span className="block text-lg leading-snug transition-colors group-hover:text-brand-ultraviolet md:text-xl">
           {item.title}
         </span>
         {item.kicker && (
-          <span className="mt-1.5 block text-[11px] uppercase tracking-[0.18em] text-[#002554]/70">
+          <span className="mt-1.5 block text-[11px] uppercase tracking-[0.18em] text-brand-navy/70">
             {item.kicker}
           </span>
         )}
         {item.description && (
-          <span className="mt-3 block max-w-[60ch] text-[15px] leading-relaxed text-[#002554]/70">
+          <span className="mt-3 block max-w-[60ch] text-[15px] leading-relaxed text-brand-navy/70">
             {item.description}
           </span>
         )}
       </span>
       {item.meta && (
-        <span className="pt-1 text-[11px] uppercase tracking-[0.18em] text-[#002554]/70">
+        <span className="pt-1 text-[11px] uppercase tracking-[0.18em] text-brand-navy/70">
           {item.meta}
         </span>
       )}
       {item.href && (
         <span
           aria-hidden
-          className="pt-1 text-[#002554]/30 transition-colors group-hover:text-[#5362EF]"
+          className="pt-1 text-brand-navy/30 transition-colors group-hover:text-brand-ultraviolet"
         >
           &rarr;
         </span>
@@ -64,12 +64,12 @@ export default function EditorialList({
 }: EditorialListProps) {
   return (
     <ul
-      className={`grid border-b border-[#002554]/10 ${
+      className={`grid border-b border-brand-navy/10 ${
         columns === 2 ? "gap-x-16 sm:grid-cols-2" : ""
       }`}
     >
       {items.map((item) => (
-        <li key={item.number + item.title} className="border-t border-[#002554]/10">
+        <li key={item.number + item.title} className="border-t border-brand-navy/10">
           {item.href ? (
             <Link
               href={item.href}

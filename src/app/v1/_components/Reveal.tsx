@@ -55,7 +55,8 @@ export default function Reveal({
         });
       });
     },
-    { scope: ref }
+    // Re-create the tween if the variant/delay props ever change at runtime.
+    { scope: ref, dependencies: [delay, variant] }
   );
 
   return (

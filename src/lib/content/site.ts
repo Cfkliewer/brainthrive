@@ -13,6 +13,9 @@ export const SITE: SiteContent = {
   email: "admin@brainthrivewellness.com",
   address: {
     street: "15805 NE 23rd St.",
+    city: "Choctaw",
+    state: "OK",
+    zip: "73020",
     cityStateZip: "Choctaw, OK 73020",
     note: "Located inside Quick Access Neurology, next door to FNB Bank.",
     mapsHref:

@@ -36,7 +36,7 @@ export default function V1Layout({
   return (
     <div
       data-version="v1"
-      className={`${fraunces.variable} min-h-screen bg-white font-[family-name:var(--font-golos)] text-[#002554] antialiased`}
+      className={`${fraunces.variable} min-h-screen bg-white font-[family-name:var(--font-golos)] text-brand-navy antialiased`}
     >
       <SetBodyVersion version="v1" />
       <VersionAnimationProvider

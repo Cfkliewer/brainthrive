@@ -1,24 +1,24 @@
 import Link from "next/link";
 import { navFor, quickLinksFor } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
+import { CONTAINER, EYEBROW_MUTED } from "./styles";
 
 const NAV = navFor("v1");
 const QUICK_LINKS = quickLinksFor("v1");
 
-const COLUMN_HEADING =
-  "text-[11px] uppercase tracking-[0.22em] text-[#002554]/70";
-const LINK = "transition-colors hover:text-[#5362EF]";
+const COLUMN_HEADING = EYEBROW_MUTED;
+const LINK = "transition-colors hover:text-brand-ultraviolet";
 
 /** Silver editorial footer: wordmark, four hairline columns, legal row. */
 export default function Footer() {
   return (
-    <footer className="border-t border-[#002554]/10 bg-[#F2F2F2]">
-      <div className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:py-20">
-        <div className="border-b border-[#002554]/10 pb-10">
+    <footer className="border-t border-brand-navy/10 bg-brand-silver">
+      <div className={`${CONTAINER} py-16 lg:py-20`}>
+        <div className="border-b border-brand-navy/10 pb-10">
           <p className="v1-display text-2xl tracking-tight md:text-3xl">
             {SITE.name}
           </p>
-          <p className="mt-2 text-[11px] uppercase tracking-[0.28em] text-[#002554]/70">
+          <p className="mt-2 text-[11px] uppercase tracking-[0.28em] text-brand-navy/70">
             {SITE.tagline}
           </p>
         </div>
@@ -63,18 +63,18 @@ export default function Footer() {
                   {SITE.email}
                 </a>
               </li>
-              <li className="pt-2 text-[#002554]/75">
+              <li className="pt-2 text-brand-navy/75">
                 {SITE.address.street}
                 <br />
                 {SITE.address.cityStateZip}
               </li>
-              <li className="text-[#002554]/70">{SITE.address.note}</li>
+              <li className="text-brand-navy/70">{SITE.address.note}</li>
               <li>
                 <a
                   href={SITE.address.mapsHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${LINK} text-[#5362EF] underline decoration-[#5362EF]/30 underline-offset-4`}
+                  className={`${LINK} text-brand-ultraviolet underline decoration-brand-ultraviolet/30 underline-offset-4`}
                 >
                   Open in Google Maps
                 </a>
@@ -109,7 +109,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-[#002554]/10 pt-6 text-xs text-[#002554]/70 md:flex-row md:items-baseline md:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-brand-navy/10 pt-6 text-xs text-brand-navy/70 md:flex-row md:items-baseline md:justify-between">
           <p>
             &copy; {new Date().getFullYear()} {SITE.name}
           </p>

@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import { useDisclosure } from "@/components/versions/DisclosureMenu";
 import { navFor } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
+import IndexRow from "./IndexRow";
+import { CONTAINER, EYEBROW_ACCENT } from "./styles";
 import WhoWeHelpPanel from "./WhoWeHelpPanel";
 
 const NAV = navFor("v1");
 
-/** "Choctaw, OK" — cityStateZip with the trailing ZIP removed. */
-const CITY_STATE = SITE.address.cityStateZip.replace(/\s*\d{5}(-\d{4})?$/, "");
+/** "Choctaw, OK" */
+const CITY_STATE = `${SITE.address.city}, ${SITE.address.state}`;
 
 /**
  * V1 masthead: hairline utility bar (phone + city), sticky wordmark header
@@ -21,7 +23,11 @@ const CITY_STATE = SITE.address.cityStateZip.replace(/\s*\d{5}(-\d{4})?$/, "");
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const whoWeHelp = useDisclosure<HTMLElement>();
-  const mobileMenu = useDisclosure<HTMLDivElement>();
+  // Auto-close when the viewport reaches the desktop nav breakpoint, so the
+  // body scroll-lock below can't get stuck behind an invisible menu.
+  const mobileMenu = useDisclosure<HTMLDivElement>({
+    closeAboveQuery: "(min-width: 1024px)",
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -45,15 +51,17 @@ export default function Header() {
   return (
     <>
       {/* Hairline utility bar (scrolls away) */}
-      <div className="border-b border-[#002554]/10">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2.5 text-[11px] uppercase tracking-[0.18em] md:px-10">
+      <div className="border-b border-brand-navy/10">
+        <div
+          className={`${CONTAINER} flex items-center justify-between py-2.5 text-[11px] uppercase tracking-[0.18em]`}
+        >
           <a
             href={SITE.phone.href}
-            className="transition-colors hover:text-[#5362EF]"
+            className="transition-colors hover:text-brand-ultraviolet"
           >
             {SITE.phone.display}
           </a>
-          <span className="text-[#002554]/70">{CITY_STATE}</span>
+          <span className="text-brand-navy/70">{CITY_STATE}</span>
         </div>
       </div>
 
@@ -61,16 +69,18 @@ export default function Header() {
         ref={whoWeHelp.containerRef}
         className={`sticky top-0 z-40 border-b transition-colors duration-300 ${
           solid
-            ? "border-[#002554]/10 bg-white"
+            ? "border-brand-navy/10 bg-white"
             : "border-transparent bg-transparent"
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10 lg:py-5">
+        <div
+          className={`${CONTAINER} flex items-center justify-between py-4 lg:py-5`}
+        >
           <Link href="/v1" className="block">
             <span className="v1-display block text-xl leading-none tracking-tight md:text-[1.4rem]">
               {SITE.name}
             </span>
-            <span className="mt-1.5 block text-[10px] uppercase tracking-[0.28em] text-[#002554]/70">
+            <span className="mt-1.5 block text-[10px] uppercase tracking-[0.28em] text-brand-navy/70">
               {SITE.tagline}
             </span>
           </Link>
@@ -82,7 +92,7 @@ export default function Header() {
           >
             <button
               {...whoWeHelp.triggerProps}
-              className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-[#5362EF]"
+              className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-brand-ultraviolet"
             >
               Who We Help
               <svg
@@ -99,14 +109,14 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="transition-colors hover:text-[#5362EF]"
+                className="transition-colors hover:text-brand-ultraviolet"
               >
                 {item.label}
               </Link>
             ))}
             <Link
               href={NAV.cta.href}
-              className="font-medium text-[#5362EF] underline decoration-[#5362EF]/30 underline-offset-[6px] transition-colors hover:decoration-[#5362EF]"
+              className="font-medium text-brand-ultraviolet underline decoration-brand-ultraviolet/30 underline-offset-[6px] transition-colors hover:decoration-brand-ultraviolet"
             >
               {NAV.cta.label} <span aria-hidden>&rarr;</span>
             </Link>
@@ -124,12 +134,12 @@ export default function Header() {
               {...mobileMenu.panelProps}
               className="fixed inset-0 z-50 overflow-y-auto bg-white"
             >
-              <div className="flex items-center justify-between border-b border-[#002554]/10 px-6 py-4">
+              <div className="flex items-center justify-between border-b border-brand-navy/10 px-6 py-4">
                 <span className="v1-display text-xl tracking-tight">
                   {SITE.name}
                 </span>
                 <button
-                  onClick={() => mobileMenu.setOpen(false)}
+                  onClick={mobileMenu.close}
                   className="cursor-pointer text-[13px] uppercase tracking-[0.18em]"
                 >
                   Close
@@ -150,31 +160,26 @@ export default function Header() {
                   <li>
                     <Link
                       href={NAV.cta.href}
-                      className="v1-display block py-2 text-3xl tracking-tight text-[#5362EF]"
+                      className="v1-display block py-2 text-3xl tracking-tight text-brand-ultraviolet"
                     >
                       {NAV.cta.label}
                     </Link>
                   </li>
                 </ul>
-                <p className="mt-10 border-t border-[#002554]/10 pt-6 text-[11px] uppercase tracking-[0.22em] text-[#5362EF]">
+                <p
+                  className={`mt-10 border-t border-brand-navy/10 pt-6 ${EYEBROW_ACCENT}`}
+                >
                   Who We Help
                 </p>
                 <ul className="mt-3">
                   {NAV.whoWeHelp.map((item, index) => (
-                    <li
+                    <IndexRow
                       key={item.href}
-                      className="border-b border-[#002554]/10"
-                    >
-                      <Link
-                        href={item.href}
-                        className="flex items-baseline gap-4 py-3"
-                      >
-                        <span className="v1-display text-xs text-[#5362EF] tabular-nums">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="text-base">{item.label}</span>
-                      </Link>
-                    </li>
+                      href={item.href}
+                      index={index}
+                      label={item.label}
+                      density="mobile"
+                    />
                   ))}
                 </ul>
                 <div className="mt-10 space-y-2 text-sm">

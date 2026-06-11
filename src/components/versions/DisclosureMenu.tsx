@@ -24,12 +24,24 @@ export interface DisclosurePanelProps {
 export interface Disclosure<T extends HTMLElement = HTMLElement> {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  /** Closes the disclosure and returns focus to the trigger. */
+  close: () => void;
   /** Spread onto the trigger <button>. */
   triggerProps: DisclosureTriggerProps;
   /** Spread onto the dropdown panel element. */
   panelProps: DisclosurePanelProps;
   /** Attach to the wrapper containing both trigger and panel. */
   containerRef: React.RefObject<T | null>;
+}
+
+export interface DisclosureOptions {
+  /**
+   * Media query (e.g. "(min-width: 1024px)") that closes the disclosure
+   * when it flips to matching — e.g. a mobile menu left open while the
+   * viewport grows past the desktop breakpoint, which would otherwise
+   * strand side effects like a body scroll-lock on an invisible menu.
+   */
+  closeAboveQuery?: string;
 }
 
 /**
@@ -39,14 +51,18 @@ export interface Disclosure<T extends HTMLElement = HTMLElement> {
  * - click outside the container
  * - focus leaving the container
  * - client-side route change (nav lives in a persistent layout)
+ * - the viewport crossing `closeAboveQuery`, when provided
+ *
+ * `close()` closes programmatically and returns focus to the trigger —
+ * use it for explicit Close buttons so focus does not drop to <body>.
  *
  * Type parameter T is the container element type, so
  * `useDisclosure<HTMLDivElement>()` attaches to `<div ref={...}>`
  * without casts.
  */
-export function useDisclosure<
-  T extends HTMLElement = HTMLElement,
->(): Disclosure<T> {
+export function useDisclosure<T extends HTMLElement = HTMLElement>({
+  closeAboveQuery,
+}: DisclosureOptions = {}): Disclosure<T> {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<T | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -61,6 +77,18 @@ export function useDisclosure<
       setOpen(false);
     }
   }, [pathname]);
+
+  // Close when the viewport crosses into `closeAboveQuery` (no focus
+  // restoration — the trigger is typically hidden at that breakpoint).
+  useEffect(() => {
+    if (!closeAboveQuery) return;
+    const mediaQuery = window.matchMedia(closeAboveQuery);
+    const handleChange = (event: MediaQueryListEvent) => {
+      if (event.matches) setOpen(false);
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [closeAboveQuery]);
 
   useEffect(() => {
     if (!open) return;
@@ -100,9 +128,15 @@ export function useDisclosure<
     triggerRef.current = node;
   }, []);
 
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
   return {
     open,
     setOpen,
+    close,
     triggerProps: {
       ref: setTriggerRef,
       "aria-expanded": open,

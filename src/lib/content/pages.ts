@@ -1,4 +1,9 @@
-import type { FaqEntry, InfoPage, NewsletterEntry } from "./types";
+import type {
+  FaqEntry,
+  HowItWorksPage,
+  InfoPage,
+  NewsletterEntry,
+} from "./types";
 
 /**
  * Drafted page copy shared by all three site versions.
@@ -8,13 +13,14 @@ import type { FaqEntry, InfoPage, NewsletterEntry } from "./types";
  * (photobiomodulation, quantitative EEG, Brain Gauge cortical metrics).
  */
 
-export const HOW_IT_WORKS: InfoPage = {
+export const HOW_IT_WORKS: HowItWorksPage = {
   headline: "How It Works",
   subhead:
     "A measured, step-by-step approach to brain wellness — assess first, personalize second, train third, and verify progress along the way.",
-  sections: [
+  steps: [
     {
-      heading: "Step 1: Measure Your Brain — qEEG Brain Mapping & Brain Gauge",
+      title: "Measure Your Brain — qEEG Brain Mapping & Brain Gauge",
+      excerpt: "Everything we do starts with data, not guesswork.",
       body: [
         "Everything we do starts with data, not guesswork. Your first visits include a quantitative EEG (qEEG) brain map — a non-invasive recording of your brain's electrical activity using a comfortable sensor cap. The map shows how different regions of your brain are communicating and highlights patterns that may be associated with the challenges you're experiencing.",
         "We pair the brain map with a Brain Gauge assessment, a quick, FDA-cleared test that measures brain function through gentle vibrations on your fingertips. In about 15 minutes it produces objective scores for reaction time, attention, cognitive speed, plasticity, and fatigue — and your results are explained to you right away.",
@@ -22,14 +28,17 @@ export const HOW_IT_WORKS: InfoPage = {
       ],
     },
     {
-      heading: "Step 2: Your Personalized Protocol",
+      title: "Your Personalized Protocol",
+      excerpt:
+        "No two brains are alike, so no two protocols should be either.",
       body: [
         "No two brains are alike, so no two protocols should be either. Using your qEEG map and Brain Gauge scores, we design a personalized plan that targets the specific patterns we found — including which therapies to use, where to focus them, and how often to train.",
         "We review the plan with you in plain language, answer your questions, and set clear goals so you know exactly what we're working toward.",
       ],
     },
     {
-      heading: "Step 3: Train & Restore — Photobiomodulation + Neurofeedback",
+      title: "Train & Restore — Photobiomodulation + Neurofeedback",
+      excerpt: "Your sessions combine two gentle, drug-free therapies.",
       body: [
         "Your sessions combine two gentle, drug-free therapies. Photobiomodulation (PBM) uses medical-grade red and near-infrared light to stimulate your cells: mitochondria absorb the light and produce more energy (ATP), inflammation goes down, and circulation improves. Sessions are relaxing and painless — most last 10 to 20 minutes, with no downtime and no medications.",
         "Traditional Neurofeedback works alongside PBM by showing your brain its own activity in real time and rewarding healthier patterns. Through this gentle feedback loop, your brain gradually learns to regulate itself more efficiently — a process built on neuroplasticity, the brain's lifelong ability to adapt and rewire.",
@@ -37,21 +46,22 @@ export const HOW_IT_WORKS: InfoPage = {
       ],
     },
     {
-      heading: "Step 4: Re-Measure & Refine",
+      title: "Re-Measure & Refine",
+      excerpt: "Progress shouldn't be a matter of opinion.",
       body: [
         "Progress shouldn't be a matter of opinion. At regular intervals we repeat the Brain Gauge assessment and qEEG mapping to objectively measure how your brain is responding, then refine your protocol based on what the data shows.",
         "You see your progress in numbers and maps — not just in how you feel — so you always know whether the training is working.",
       ],
     },
-    {
-      heading: "Why Neurofeedback",
-      body: [
-        "Your brain is not hard-wired or fixed. Thanks to neuroplasticity, it remains capable of change and adaptation throughout life — and neurofeedback is a way of guiding that change on purpose.",
-        "During a neurofeedback session, sensors read your brain's activity while you relax and watch or listen to simple feedback. When your brain produces healthier, more regulated patterns, it gets rewarded in real time. Over repeated sessions, your brain learns to reach those states on its own — you are literally retraining your brain.",
-        "Neurofeedback is non-invasive and drug-free: nothing goes into your brain, and nothing is taken out. It is designed to support healthier self-regulation, which is why people seek it out for focus, calm, sleep, recovery, and performance. It can be used on its own or alongside care from your existing healthcare providers.",
-      ],
-    },
   ],
+  why: {
+    heading: "Why Neurofeedback",
+    body: [
+      "Your brain is not hard-wired or fixed. Thanks to neuroplasticity, it remains capable of change and adaptation throughout life — and neurofeedback is a way of guiding that change on purpose.",
+      "During a neurofeedback session, sensors read your brain's activity while you relax and watch or listen to simple feedback. When your brain produces healthier, more regulated patterns, it gets rewarded in real time. Over repeated sessions, your brain learns to reach those states on its own — you are literally retraining your brain.",
+      "Neurofeedback is non-invasive and drug-free: nothing goes into your brain, and nothing is taken out. It is designed to support healthier self-regulation, which is why people seek it out for focus, calm, sleep, recovery, and performance. It can be used on its own or alongside care from your existing healthcare providers.",
+    ],
+  },
 };
 
 export const ABOUT: InfoPage = {

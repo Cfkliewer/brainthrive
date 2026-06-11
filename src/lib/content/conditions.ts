@@ -17,6 +17,8 @@ export const CONDITIONS: ConditionContent[] = [
       "At Brain Thrive Wellness, we utilize Photobiomodulation Therapy (PBM) and Traditional Neurofeedback to support healthier brain function and help improve attention, focus, concentration, and self-regulation—without medication or alongside existing treatment plans.",
       "ADHD is not a lack of intelligence or motivation—it's often a difference in how the brain processes and regulates information. With the right support, individuals with ADHD can develop stronger attention, improved self-control, and greater confidence in their abilities.",
     ],
+    excerpt:
+      "Drug-free support for stronger focus, attention, and self-regulation in children, teens, and adults.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may help improve focus, attention, and overall cognitive performance.",
     metaDescription:
       "Drug-free ADHD, focus, and attention support in Choctaw, OK. Photobiomodulation and neurofeedback to help improve concentration and self-regulation.",
@@ -33,6 +35,8 @@ export const CONDITIONS: ConditionContent[] = [
       "At Brain Thrive Wellness, we utilize Photobiomodulation Therapy (PBM) and Traditional Neurofeedback to help support healthy brain function, improve nervous system regulation, and promote a greater sense of calm and resilience.",
       "Living with anxiety can be exhausting, but lasting improvement is possible. By supporting healthier brain function and helping the nervous system become more balanced, PBM and Neurofeedback offer a natural, non-invasive path toward greater emotional well-being.",
     ],
+    excerpt:
+      "A natural, non-drug path toward a calmer, more balanced nervous system and greater resilience.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may help you take control of anxiety and achieve lasting brain wellness.",
     metaDescription:
       "Non-drug anxiety support in Choctaw, OK. Photobiomodulation and neurofeedback to help calm the nervous system and promote lasting emotional well-being.",
@@ -50,6 +54,8 @@ export const CONDITIONS: ConditionContent[] = [
       "If chronic headaches or migraines are affecting your quality of life, Brain Thrive Wellness offers innovative, non-invasive therapies designed to support healthier brain function and long-term wellness.",
       "Discover how brain-based therapies may help you regain control and get back to living life with fewer headaches.",
     ],
+    excerpt:
+      "Brain-based therapies that address underlying function to help reduce headache frequency and severity.",
     cta: "Schedule your consultation today to learn whether Photobiomodulation Therapy and Neurofeedback are right for you.",
     metaDescription:
       "A different approach to chronic headaches and migraines in Choctaw, OK. Non-invasive PBM and neurofeedback that address underlying brain function.",
@@ -67,6 +73,8 @@ export const CONDITIONS: ConditionContent[] = [
       "Recovery from trauma is possible. While PTSD can feel overwhelming, the brain has an incredible ability to adapt and heal when given the right support.",
       "At Brain Thrive Wellness, our goal is to help individuals regain control, improve emotional well-being, and move forward with greater confidence and resilience.",
     ],
+    excerpt:
+      "Non-invasive support for the neurological effects of trauma — helping the brain regulate, heal, and recover.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may support your journey toward healing and recovery.",
     metaDescription:
       "Non-invasive PTSD support in Choctaw, OK. Photobiomodulation and neurofeedback to help the brain regulate, heal, and recover after trauma.",
@@ -83,6 +91,8 @@ export const CONDITIONS: ConditionContent[] = [
       "By supporting healthier brain function, PBM may help create the conditions necessary for more consistent and restorative sleep.",
       "As brain regulation improves, many individuals notice deeper sleep, fewer nighttime awakenings, and improved daytime functioning. Because sleep challenges can arise from many different causes, individualized treatment is essential for achieving the best results.",
     ],
+    excerpt:
+      "Helping the brain reach more restful, restorative sleep naturally — without medication.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may help improve sleep quality, reduce insomnia symptoms, and support long-term brain wellness.",
     metaDescription:
       "Natural sleep support in Choctaw, OK. Photobiomodulation and neurofeedback to help you achieve more restful, restorative sleep without medication.",
@@ -99,6 +109,8 @@ export const CONDITIONS: ConditionContent[] = [
       "At Brain Thrive Wellness, we utilize Photobiomodulation Therapy (PBM) and Traditional Neurofeedback to support brain health, cognitive performance, and memory function. Our goal is to help individuals optimize brain function and support long-term cognitive wellness.",
       "Your brain is your most valuable asset. Supporting memory, focus, and cognitive function today may help preserve independence, confidence, and overall well-being for years to come.",
     ],
+    excerpt:
+      "Support for memory, mental clarity, and long-term cognitive wellness at any age.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may help support memory, cognitive performance, and long-term brain health.",
     metaDescription:
       "Memory and cognitive health support in Choctaw, OK. PBM and neurofeedback designed to support brain health, memory function, and long-term wellness.",
@@ -117,6 +129,8 @@ export const CONDITIONS: ConditionContent[] = [
       "Many people are told that once the initial healing period has passed, there is little else that can be done for lingering concussion symptoms. However, the brain remains capable of change and adaptation throughout life.",
       "By supporting neuroplasticity, improving brain function, and promoting recovery at the cellular level, PBM and Neurofeedback offer a promising, non-invasive approach for individuals seeking to regain their cognitive abilities and quality of life after a concussion or traumatic brain injury.",
     ],
+    excerpt:
+      "Supporting the brain's recovery after injury — even when symptoms have lingered for months or years.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may support your recovery from concussion and traumatic brain injury.",
     metaDescription:
       "Concussion and TBI recovery support in Choctaw, OK. Non-invasive PBM and neurofeedback to support brain healing, even months or years after injury.",
@@ -134,6 +148,8 @@ export const CONDITIONS: ConditionContent[] = [
       "Recovery is not simply about abstinence—it's about rebuilding health, resilience, and quality of life. Supporting the brain's ability to heal may help individuals regain focus, emotional balance, motivation, and confidence as they move forward.",
       "As brain function improves, many individuals report feeling more capable of managing stress, maintaining focus, and supporting long-term recovery goals.",
     ],
+    excerpt:
+      "Helping the brain heal during recovery — supporting focus, emotional balance, and resilience.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may support cognitive recovery, emotional resilience, and overall brain wellness during your recovery journey.",
     metaDescription:
       "Brain-based substance use recovery support in Choctaw, OK. PBM and neurofeedback to support cognitive recovery and emotional resilience.",
@@ -152,6 +168,8 @@ export const CONDITIONS: ConditionContent[] = [
       "Physical training develops the body. Brain training develops the command center that controls it.",
       "The difference between good and great performance often comes down to focus, reaction time, mental resilience, and the ability to perform under pressure. By optimizing brain function, athletes may unlock levels of performance they didn't realize were possible.",
     ],
+    excerpt:
+      "Brain training for sharper focus, faster reaction time, and composure when it matters most.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback can help you gain a competitive edge and perform at your highest potential.",
     metaDescription:
       "Brain training for athletes in Choctaw, OK. PBM and neurofeedback to sharpen focus, reaction time, and mental resilience for peak performance.",
@@ -169,6 +187,8 @@ export const CONDITIONS: ConditionContent[] = [
       "At Brain Thrive Wellness, we utilize Photobiomodulation Therapy (PBM) and Traditional Neurofeedback to support brain recovery, cognitive function, and overall neurological wellness following COVID-related cognitive challenges.",
       "Persistent brain fog and cognitive symptoms can be frustrating, but they do not have to define your future. The brain has an incredible capacity for adaptation and recovery when given the right support.",
     ],
+    excerpt:
+      "Support for lingering post-COVID brain fog — clearer thinking, better recall, less mental fatigue.",
     cta: "Schedule a consultation today to learn how Photobiomodulation Therapy and Neurofeedback may help support recovery from COVID-related brain fog and cognitive challenges.",
     metaDescription:
       "COVID brain fog support in Choctaw, OK. PBM and neurofeedback to support cognitive recovery, mental clarity, and neurological wellness after COVID-19.",

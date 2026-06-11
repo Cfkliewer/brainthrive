@@ -6,11 +6,11 @@ import type { FaqEntry } from "@/lib/content/types";
  */
 export default function Faq({ entries }: { entries: FaqEntry[] }) {
   return (
-    <div className="border-t border-[#002554]/10">
+    <div className="border-t border-brand-navy/10">
       {entries.map((entry) => (
         <details
           key={entry.question}
-          className="group border-b border-[#002554]/10"
+          className="group border-b border-brand-navy/10"
         >
           <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 [&::-webkit-details-marker]:hidden">
             <span className="text-base font-medium leading-snug md:text-lg">
@@ -18,12 +18,12 @@ export default function Faq({ entries }: { entries: FaqEntry[] }) {
             </span>
             <span
               aria-hidden
-              className="v1-display mt-0.5 text-xl leading-none text-[#5362EF] transition-transform duration-200 group-open:rotate-45"
+              className="v1-display mt-0.5 text-xl leading-none text-brand-ultraviolet transition-transform duration-200 group-open:rotate-45"
             >
               +
             </span>
           </summary>
-          <p className="max-w-[65ch] pb-6 text-[15px] leading-relaxed text-[#002554]/75">
+          <p className="max-w-[65ch] pb-6 text-[15px] leading-relaxed text-brand-navy/75">
             {entry.answer}
           </p>
         </details>

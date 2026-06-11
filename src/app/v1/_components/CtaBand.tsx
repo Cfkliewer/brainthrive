@@ -2,6 +2,7 @@ import Link from "next/link";
 import { navFor } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
 import Reveal from "./Reveal";
+import { CONTAINER, EYEBROW } from "./styles";
 
 const CTA = navFor("v1").cta;
 
@@ -16,12 +17,12 @@ export default function CtaBand({ text = DEFAULT_TEXT }: { text?: string }) {
   return (
     <section
       aria-label="Schedule a consultation"
-      className="v1-band-dark bg-[#002554] text-white"
+      className="v1-band-dark bg-brand-navy text-white"
     >
-      <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 lg:py-32">
+      <div className={`${CONTAINER} py-24 lg:py-32`}>
         <Reveal>
-          <div aria-hidden className="h-0.5 w-14 bg-[#00D3D2]" />
-          <p className="mt-8 text-[11px] uppercase tracking-[0.22em] text-[#00D3D2]">
+          <div aria-hidden className="h-0.5 w-14 bg-brand-dark-teal" />
+          <p className={`mt-8 ${EYEBROW} text-brand-dark-teal`}>
             Take the first step
           </p>
           <h2 className="v1-display mt-5 max-w-4xl text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.04] tracking-tight">
@@ -33,7 +34,7 @@ export default function CtaBand({ text = DEFAULT_TEXT }: { text?: string }) {
           <div className="mt-12 flex flex-wrap items-baseline gap-x-12 gap-y-5">
             <Link
               href={CTA.href}
-              className="text-lg font-medium underline decoration-[#00D3D2]/60 decoration-2 underline-offset-[8px] transition-colors hover:decoration-[#00D3D2]"
+              className="text-lg font-medium underline decoration-brand-dark-teal/60 decoration-2 underline-offset-[8px] transition-colors hover:decoration-brand-dark-teal"
             >
               {CTA.label} <span aria-hidden>&rarr;</span>
             </Link>

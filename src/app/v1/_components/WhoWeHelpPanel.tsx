@@ -1,4 +1,5 @@
-import Link from "next/link";
+import IndexRow from "./IndexRow";
+import { CONTAINER, EYEBROW_ACCENT } from "./styles";
 
 interface WhoWeHelpPanelProps {
   /** From useDisclosure().panelProps */
@@ -20,33 +21,20 @@ export default function WhoWeHelpPanel({
     <div
       id={id}
       hidden={hidden}
-      className="absolute inset-x-0 top-full border-b-2 border-[#00D3D2] bg-white"
+      className="absolute inset-x-0 top-full border-b-2 border-brand-dark-teal bg-white"
     >
-      <div className="mx-auto max-w-7xl px-6 py-10 md:px-10">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-[#5362EF]">
-          Who We Help
-        </p>
+      <div className={`${CONTAINER} py-10`}>
+        <p className={EYEBROW_ACCENT}>Who We Help</p>
         <ul className="mt-6 grid gap-x-16 sm:grid-cols-2">
           {items.map((item, index) => (
-            <li key={item.href} className="border-t border-[#002554]/10">
-              <Link
-                href={item.href}
-                className="group flex items-baseline gap-4 py-3.5"
-              >
-                <span className="v1-display text-xs text-[#5362EF] tabular-nums">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="text-[15px] transition-colors group-hover:text-[#5362EF]">
-                  {item.label}
-                </span>
-                <span
-                  aria-hidden
-                  className="ml-auto text-[#002554]/30 transition-colors group-hover:text-[#5362EF]"
-                >
-                  &rarr;
-                </span>
-              </Link>
-            </li>
+            <IndexRow
+              key={item.href}
+              href={item.href}
+              index={index}
+              label={item.label}
+              density="comfortable"
+              borderSide="top"
+            />
           ))}
         </ul>
       </div>

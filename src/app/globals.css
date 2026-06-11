@@ -784,12 +784,11 @@ body[data-version="v1"] :is(a, button, input, textarea, select, summary):focus {
 
 body[data-version="v1"]
   :is(a, button, input, textarea, select, summary):focus-visible {
-  outline: 2px solid #223ba8;
+  outline: 2px solid var(--color-brand-purple);
   outline-offset: 3px;
-  border-radius: 2px;
 }
 
 /* Teal ring inside the navy CTA band, where navy-on-navy would vanish */
 body[data-version="v1"] .v1-band-dark :is(a, button):focus-visible {
-  outline-color: #00d3d2;
+  outline-color: var(--color-brand-dark-teal);
 }
