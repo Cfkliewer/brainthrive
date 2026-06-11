@@ -1,11 +1,11 @@
-import { TEAM_PHOTO, TEAM_PHOTO_ALT } from "@/lib/content/assets";
 import { CONDITIONS } from "@/lib/content/conditions";
+import { RESOLVED_HERO_SLIDES } from "@/lib/content/heroSlides";
 import { FAQ, HOW_IT_WORKS } from "@/lib/content/pages";
 import { SITE } from "@/lib/content/site";
 import ConditionCarousel from "./_components/ConditionCarousel";
 import CtaBand from "./_components/CtaBand";
 import Faq from "./_components/Faq";
-import HeroParallax from "./_components/HeroParallax";
+import HeroCarousel from "./_components/HeroCarousel";
 import Marquee from "./_components/Marquee";
 import PinnedSteps from "./_components/PinnedSteps";
 import Reveal from "./_components/Reveal";
@@ -38,7 +38,7 @@ const TRUST_POINTS = [
 export default function V2HomePage() {
   return (
     <>
-      <HeroParallax teamPhoto={TEAM_PHOTO} teamPhotoAlt={TEAM_PHOTO_ALT} />
+      <HeroCarousel slides={RESOLVED_HERO_SLIDES} />
 
       <Marquee items={MARQUEE_ITEMS} />
 
