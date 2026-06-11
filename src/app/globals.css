@@ -792,3 +792,58 @@ body[data-version="v1"]
 body[data-version="v1"] .v1-band-dark :is(a, button):focus-visible {
   outline-color: var(--color-brand-dark-teal);
 }
+
+/* =================================================================
+   V2 "MODERN CLINICAL" (appended block — /v2 subtree only)
+   Bebas display utility, focus treatment, navy band texture, card
+   shadow recipe. --font-bebas-real is provided by src/app/v2/layout.tsx.
+   ================================================================= */
+
+.v2-display {
+  font-family: var(--font-bebas-real), "Arial Narrow", "Oswald", sans-serif;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+/* Replace the heavy global 3px :focus outline with a focus-visible ring
+   in the v2 palette (blue on light surfaces, teal inside navy bands). */
+body[data-version="v2"] :is(a, button, input, textarea, select, summary):focus {
+  outline: none;
+}
+
+body[data-version="v2"]
+  :is(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--color-brand-blue-600);
+  outline-offset: 3px;
+}
+
+body[data-version="v2"]
+  .v2-band-dark
+  :is(a, button, summary):focus-visible {
+  outline-color: var(--color-brand-teal);
+}
+
+/* Fine engineering-grid texture for navy bands (decorative only). */
+.v2-grid-pattern {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Layered elevation for white cards sitting on slate sections. */
+.v2-card-shadow {
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.05),
+    0 16px 40px -16px rgb(15 23 42 / 0.2);
+}
+
+/* Hide the scrollbar on the mobile scroll-snap carousel track without
+   disabling scrolling (cards remain swipeable + keyboard reachable). */
+.v2-no-scrollbar {
+  scrollbar-width: none;
+}
+
+.v2-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
