@@ -10,8 +10,10 @@ import { TEAM_PHOTO, TEAM_PHOTO_ALT } from "./assets";
  * /public/images/hero/ using the exact filename in `src` below
  * (slide-1.jpg ... slide-4.jpg) and rebuild.
  *
- * Recommended crop: ~4:5 portrait or 1:1 square, at least 1200px wide.
- * The carousel crops with object-cover, so keep the subject centered.
+ * The hero renders slides full-screen (object-cover at every viewport),
+ * so buy wide landscape crops — ~16:9, at least 1920px wide — and keep
+ * the subject in the upper-right half: a navy legibility gradient covers
+ * the bottom-left where the headline and CTAs sit.
  *
  * Availability is resolved server-side at build time (node:fs — do not
  * import this module from client components; see assets.ts for the same

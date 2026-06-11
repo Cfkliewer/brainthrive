@@ -3,23 +3,17 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { NAV } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
 import type { ResolvedHeroSlide } from "@/lib/content/heroSlides";
 import MagneticButton from "./MagneticButton";
 import {
-  BTN_GHOST_LIGHT,
+  BTN_GHOST_DARK,
   BTN_PRIMARY,
-  CARD,
   CONTAINER,
-  EYEBROW_ON_LIGHT,
+  EYEBROW_ON_DARK,
 } from "./styles";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 /** Time each slide stays up before auto-advancing. */
 const SLIDE_MS = 5500;
@@ -90,38 +84,51 @@ function useAutoRotate(
   };
 }
 
-/** Styled stand-in panel for a slide whose photo hasn't been added yet. */
+/**
+ * Styled full-bleed stand-in for a slide whose photo hasn't been added
+ * yet: navy gradient + engineering grid + soft color blooms, with the
+ * slide's eyebrow as an art-direction motif in the upper-right (the area
+ * the legibility overlay leaves clear).
+ */
 function SlidePlaceholder({ slide }: { slide: ResolvedHeroSlide }) {
   return (
     <div className="absolute inset-0">
       <div
         data-kenburns
         aria-hidden
-        className="absolute inset-0 bg-linear-to-br from-brand-navy via-brand-navy/90 to-medical-gray-500"
+        className="absolute inset-0 bg-linear-to-br from-brand-navy via-brand-navy/95 to-medical-gray-600"
       >
         <div className="v2-grid-pattern absolute inset-0" />
-        <div className="absolute left-1/4 top-1/4 h-48 w-48 rounded-full bg-brand-ultraviolet/35 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/5 h-40 w-40 rounded-full bg-brand-teal/20 blur-3xl" />
+        <div className="absolute left-[16%] top-[20%] h-80 w-80 rounded-full bg-brand-ultraviolet/30 blur-3xl" />
+        <div className="absolute right-[10%] top-[28%] h-96 w-96 rounded-full bg-brand-teal/15 blur-3xl" />
+        <div className="absolute bottom-[12%] right-[30%] h-64 w-64 rounded-full bg-brand-purple/25 blur-3xl" />
       </div>
-      {/* Sits above center so it clears the caption chip on short crops. */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-8 pb-16 text-center">
-        <span aria-hidden className="h-px w-10 bg-brand-teal/60" />
-        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-white">
+      {/* Eyebrow motif, kept out of the bottom-left text zone. */}
+      <div className="absolute right-0 top-[28%] hidden w-1/2 flex-col items-center gap-3 px-8 text-center md:flex">
+        <span aria-hidden className="h-px w-12 bg-brand-teal/60" />
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/90">
           {slide.eyebrow}
         </p>
-        <span aria-hidden className="h-px w-10 bg-brand-teal/60" />
+        <span aria-hidden className="h-px w-12 bg-brand-teal/60" />
       </div>
     </div>
   );
 }
 
 /**
- * Split hero: humanized headline + dual CTA on the left; a rotating image
- * carousel on the right (crossfade + subtle Ken Burns, ~5.5s per slide).
- * Slides without a purchased photo render a gradient placeholder panel.
- * Ken Burns, the load-in stagger, and the scroll parallax are gated to
- * no-preference; the crossfade is a CSS opacity transition driven by React
- * state, so dot navigation still works (instantly) under reduced motion.
+ * Full-screen hero: rotating full-bleed imagery (crossfade + subtle Ken
+ * Burns, ~5.5s per slide) under a layered navy legibility overlay, with
+ * the headline + dual CTA overlaid bottom-left and the caption chip +
+ * dots bottom-right. Slides without a purchased photo render a gradient
+ * placeholder treatment instead.
+ *
+ * The transparent-over-hero header relies on this section being exactly
+ * the first thing in <main> at 100svh — Header.tsx flips to its solid
+ * style after ~80% of the viewport height.
+ *
+ * Ken Burns and the load-in stagger are gated to no-preference; the
+ * crossfade is a CSS opacity transition driven by React state, so dot
+ * navigation still works (instantly) under reduced motion.
  */
 export default function HeroCarousel({
   slides,
@@ -138,6 +145,7 @@ export default function HeroCarousel({
   // Preload the first slide that actually has a photo (it's above the fold
   // even while crossfaded out, and may be the page's LCP element).
   const firstImageIndex = slides.findIndex((slide) => slide.resolvedSrc);
+  const activeSlide = slides[active];
 
   useGSAP(
     () => {
@@ -145,27 +153,13 @@ export default function HeroCarousel({
       if (!section) return;
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // Staggered load-in.
+        // Staggered load-in for the overlaid content.
         gsap.from("[data-hero-intro]", {
           autoAlpha: 0,
           y: 32,
           duration: 0.9,
           ease: "power3.out",
           stagger: 0.09,
-        });
-        // Subtle depth parallax while the hero scrolls out of view.
-        gsap.utils.toArray<HTMLElement>("[data-depth]").forEach((layer) => {
-          const depth = parseFloat(layer.dataset.depth ?? "1");
-          gsap.to(layer, {
-            yPercent: -9 * depth,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: true,
-            },
-          });
         });
       });
     },
@@ -196,115 +190,126 @@ export default function HeroCarousel({
   );
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-white">
+    <section
+      ref={ref}
+      {...pauseHandlers}
+      className="v2-hero-vh v2-band-dark relative isolate flex flex-col justify-end overflow-hidden bg-brand-navy text-white"
+    >
+      {/* Full-bleed rotating imagery */}
       <div
-        aria-hidden
-        className="absolute -top-48 left-[-12%] h-[28rem] w-[28rem] rounded-full bg-brand-ultraviolet/10 blur-3xl"
-      />
-      <div
-        className={`${CONTAINER} relative grid items-center gap-x-16 gap-y-16 pb-20 pt-14 lg:grid-cols-12 lg:pb-28 lg:pt-20`}
+        ref={stageRef}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="What a visit looks like"
+        className="absolute inset-0 -z-10"
       >
-        {/* Copy */}
-        <div className="lg:col-span-6">
-          <p data-hero-intro className={EYEBROW_ON_LIGHT}>
-            Brain wellness clinic in{" "}
-            <span className="whitespace-nowrap">
-              {SITE.address.city}, {SITE.address.state}
-            </span>
-          </p>
-          <h1
-            data-hero-intro
-            className="mt-6 text-balance text-[clamp(2.6rem,5.4vw,4.4rem)] font-semibold leading-[1.02] tracking-[-0.025em] text-brand-navy"
-          >
-            Feel like{" "}
-            <span className="bg-linear-to-r from-brand-ultraviolet to-brand-purple bg-clip-text text-transparent">
-              yourself
-            </span>{" "}
-            again.
-          </h1>
-          <p
-            data-hero-intro
-            className="mt-7 max-w-[52ch] text-lg leading-relaxed text-medical-gray-600"
-          >
-            We start with a qEEG brain map to see what&rsquo;s going on, then
-            use gentle, drug-free therapies like neurofeedback and light
-            therapy to help. Right here in Choctaw, Oklahoma.
-          </p>
-          <div data-hero-intro className="mt-9 flex flex-wrap items-center gap-4">
-            <MagneticButton href={NAV.cta.href} className={BTN_PRIMARY}>
-              {NAV.cta.label}
-            </MagneticButton>
-            <a href={SITE.phone.href} className={BTN_GHOST_LIGHT}>
-              Call {SITE.phone.display}
-            </a>
-          </div>
-          <p data-hero-intro className="mt-8 text-sm text-medical-gray-500">
-            {SITE.address.note}
-          </p>
-        </div>
-
-        {/* Rotating image carousel */}
-        <div data-hero-intro className="relative lg:col-span-6">
+        {slides.map((slide, index) => (
           <div
-            aria-hidden
-            data-depth="0.5"
-            className="v2-grid-pattern absolute -right-5 -top-5 hidden h-[calc(100%-2.25rem)] w-full rounded-3xl bg-brand-navy sm:block"
-          />
-          <div data-depth="0.8" className="relative">
-            <div
-              ref={stageRef}
-              role="region"
-              aria-roledescription="carousel"
-              aria-label="What a visit looks like"
-              {...pauseHandlers}
-              className="v2-card-shadow relative aspect-[4/3] overflow-hidden rounded-2xl bg-brand-navy lg:aspect-[5/4]"
-            >
-              {slides.map((slide, index) => (
-                <div
-                  key={slide.src}
-                  data-slide={index}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`${index + 1} of ${slides.length}`}
-                  aria-hidden={index !== active}
-                  className={`absolute inset-0 transition-opacity duration-[900ms] ease-out motion-reduce:transition-none ${
-                    index === active
-                      ? "opacity-100"
-                      : "pointer-events-none opacity-0"
-                  }`}
-                >
-                  {slide.resolvedSrc ? (
-                    <div data-kenburns className="absolute inset-0">
-                      <Image
-                        src={slide.resolvedSrc}
-                        alt={slide.alt}
-                        fill
-                        priority={index === firstImageIndex}
-                        sizes="(min-width: 1024px) 45vw, 100vw"
-                        className="object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <SlidePlaceholder slide={slide} />
-                  )}
-                  {/* Caption chip. The placeholder panel already shows the
-                      eyebrow front and center, so repeat it only on photos. */}
-                  <div className="v2-card-shadow absolute bottom-4 left-4 max-w-[85%] rounded-xl bg-white/95 px-4 py-3 backdrop-blur-sm">
-                    {slide.resolvedSrc ? (
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-ultraviolet">
-                        {slide.eyebrow}
-                      </p>
-                    ) : null}
-                    <p className="mt-0.5 text-sm font-medium leading-snug text-brand-navy">
-                      {slide.caption}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            key={slide.src}
+            data-slide={index}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${index + 1} of ${slides.length}`}
+            aria-hidden={index !== active}
+            className={`absolute inset-0 transition-opacity duration-[900ms] ease-out motion-reduce:transition-none ${
+              index === active ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+          >
+            {slide.resolvedSrc ? (
+              <div data-kenburns className="absolute inset-0">
+                <Image
+                  src={slide.resolvedSrc}
+                  alt={slide.alt}
+                  fill
+                  priority={index === firstImageIndex}
+                  sizes="100vw"
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <SlidePlaceholder slide={slide} />
+            )}
+          </div>
+        ))}
 
-            {/* Progress dots */}
-            <div className="mt-4 flex items-center gap-1.5">
+        {/* Legibility overlay: a soft navy wash, a directional gradient
+            rising from the bottom-left text zone (guarantees AA contrast
+            for the white copy on photos AND placeholders), and a top
+            scrim under the transparent header. Photos still read in the
+            upper-right. */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-medical-secondary/35" />
+          <div className="absolute inset-0 bg-linear-to-tr from-medical-secondary/90 via-medical-secondary/45 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-44 bg-linear-to-b from-medical-secondary/60 to-transparent" />
+        </div>
+      </div>
+
+      {/* Overlaid content */}
+      <div className={`${CONTAINER} relative w-full pb-16 pt-36 md:pb-20 lg:pt-44`}>
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          {/* Copy */}
+          <div className="max-w-2xl">
+            <p data-hero-intro className={EYEBROW_ON_DARK}>
+              Brain wellness clinic in{" "}
+              <span className="whitespace-nowrap">
+                {SITE.address.city}, {SITE.address.state}
+              </span>
+            </p>
+            <h1
+              data-hero-intro
+              className="mt-5 text-balance text-[clamp(2.4rem,5.2vw,4.4rem)] font-semibold leading-[1.04] tracking-[-0.025em] text-white"
+            >
+              Feel like{" "}
+              <span className="bg-linear-to-r from-brand-teal to-brand-ultraviolet bg-clip-text text-transparent">
+                yourself
+              </span>{" "}
+              again.
+            </h1>
+            <p
+              data-hero-intro
+              className="mt-6 max-w-[52ch] text-pretty text-base leading-relaxed text-white/85 md:text-lg"
+            >
+              We start with a qEEG brain map to see what&rsquo;s going on, then
+              use gentle, drug-free therapies like neurofeedback and light
+              therapy to help. Right here in Choctaw, Oklahoma.
+            </p>
+            <div
+              data-hero-intro
+              className="mt-8 flex flex-wrap items-center gap-4"
+            >
+              <MagneticButton href={NAV.cta.href} className={BTN_PRIMARY}>
+                {NAV.cta.label}
+              </MagneticButton>
+              <a href={SITE.phone.href} className={BTN_GHOST_DARK}>
+                Call {SITE.phone.display}
+              </a>
+            </div>
+            <p data-hero-intro className="mt-7 text-sm text-white/70">
+              {SITE.address.note}
+            </p>
+          </div>
+
+          {/* Caption chip + slide dots */}
+          <div
+            data-hero-intro
+            className="flex shrink-0 flex-col items-start gap-4 lg:items-end"
+          >
+            <div
+              key={active}
+              className="v2-hero-caption-in max-w-xs rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-md"
+            >
+              {/* The placeholder treatment already shows the eyebrow as a
+                  motif, so repeat it on the chip only for real photos. */}
+              {activeSlide.resolvedSrc ? (
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-teal">
+                  {activeSlide.eyebrow}
+                </p>
+              ) : null}
+              <p className="mt-0.5 text-sm font-medium leading-snug text-white">
+                {activeSlide.caption}
+              </p>
+            </div>
+            <div className="flex items-center gap-1.5">
               {slides.map((slide, index) => (
                 <button
                   key={slide.src}
@@ -317,41 +322,33 @@ export default function HeroCarousel({
                   <span
                     className={`block h-1.5 rounded-full transition-all duration-300 ${
                       index === active
-                        ? "w-9 bg-brand-ultraviolet"
-                        : "w-4 bg-medical-gray-300 group-hover:bg-medical-gray-400"
+                        ? "w-9 bg-brand-teal"
+                        : "w-4 bg-white/40 group-hover:bg-white/70"
                     }`}
                   />
                 </button>
               ))}
             </div>
           </div>
-
-          {/* Single floating chip (parallax) */}
-          <div
-            data-depth="1.6"
-            className={`absolute -top-5 left-[-6%] hidden items-center gap-3 px-4 py-3 sm:flex ${CARD}`}
-          >
-            <span
-              aria-hidden
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-navy"
-            >
-              <svg
-                viewBox="0 0 14 11"
-                className="h-3.5 w-3.5 fill-none stroke-brand-teal"
-              >
-                <path d="M1 5.5l4 4L13 1" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </span>
-            <span>
-              <span className="block text-sm font-semibold leading-tight text-brand-navy">
-                Drug-free &amp; non-invasive
-              </span>
-              <span className="block text-xs text-medical-gray-500">
-                Gentle light and feedback only
-              </span>
-            </span>
-          </div>
         </div>
+      </div>
+
+      {/* Scroll cue */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-5 hidden justify-center md:flex"
+      >
+        <svg
+          viewBox="0 0 16 9"
+          className="h-2.5 w-4 fill-none stroke-white/70 motion-safe:animate-bounce"
+        >
+          <path
+            d="M1 1l7 7 7-7"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </div>
     </section>
   );
