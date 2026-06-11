@@ -3,7 +3,9 @@
  * Keep these shapes stable — multiple version builds code against them.
  */
 
-export type VersionId = "v1" | "v2" | "v3";
+export const VERSION_IDS = ["v1", "v2", "v3"] as const;
+
+export type VersionId = (typeof VERSION_IDS)[number];
 
 export interface ConditionContent {
   slug: string;

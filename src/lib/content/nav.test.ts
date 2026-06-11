@@ -1,13 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { navFor, quickLinksFor } from "./nav";
 import { CONDITIONS } from "./conditions";
-import type { VersionId } from "./types";
-
-const VERSIONS: VersionId[] = ["v1", "v2", "v3"];
+import { VERSION_IDS } from "./types";
 
 describe("navFor", () => {
   it("prefixes every href with the version segment", () => {
-    for (const version of VERSIONS) {
+    for (const version of VERSION_IDS) {
       const nav = navFor(version);
       const allHrefs = [
         ...nav.primary.map((l) => l.href),
@@ -30,7 +28,7 @@ describe("navFor", () => {
   });
 
   it("points the cta at /vN/contact", () => {
-    for (const version of VERSIONS) {
+    for (const version of VERSION_IDS) {
       const nav = navFor(version);
       expect(nav.cta).toEqual({
         label: "Schedule Consultation",

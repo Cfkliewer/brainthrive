@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { VersionId } from "@/lib/content/types";
-
-const VERSIONS: VersionId[] = ["v1", "v2", "v3"];
+import { VERSION_IDS, type VersionId } from "@/lib/content/types";
 
 /**
  * Fixed bottom-right pill with 1/2/3 links for switching between the three
@@ -22,7 +20,7 @@ export default function VersionSwitcher() {
       aria-label="Switch design version"
       className="fixed bottom-4 right-4 z-50 flex items-center gap-1 rounded-full bg-[#001A3D]/90 p-1 shadow-lg ring-1 ring-white/15 backdrop-blur"
     >
-      {VERSIONS.map((version) => {
+      {VERSION_IDS.map((version) => {
         const isActive = version === activeVersion;
         return (
           <Link

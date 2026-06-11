@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import {
   useCallback,
   useEffect,
@@ -20,7 +21,7 @@ export interface DisclosurePanelProps {
   hidden: boolean;
 }
 
-export interface Disclosure {
+export interface Disclosure<T extends HTMLElement = HTMLElement> {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   /** Spread onto the trigger <button>. */
@@ -28,7 +29,7 @@ export interface Disclosure {
   /** Spread onto the dropdown panel element. */
   panelProps: DisclosurePanelProps;
   /** Attach to the wrapper containing both trigger and panel. */
-  containerRef: React.RefObject<HTMLElement | null>;
+  containerRef: React.RefObject<T | null>;
 }
 
 /**
@@ -37,12 +38,29 @@ export interface Disclosure {
  * - Escape (returns focus to the trigger)
  * - click outside the container
  * - focus leaving the container
+ * - client-side route change (nav lives in a persistent layout)
+ *
+ * Type parameter T is the container element type, so
+ * `useDisclosure<HTMLDivElement>()` attaches to `<div ref={...}>`
+ * without casts.
  */
-export function useDisclosure(): Disclosure {
+export function useDisclosure<
+  T extends HTMLElement = HTMLElement,
+>(): Disclosure<T> {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLElement | null>(null);
+  const containerRef = useRef<T | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const panelId = useId();
+  const pathname = usePathname();
+  const previousPathname = useRef(pathname);
+
+  // Close when the route changes (skip the initial mount).
+  useEffect(() => {
+    if (previousPathname.current !== pathname) {
+      previousPathname.current = pathname;
+      setOpen(false);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -78,7 +96,7 @@ export function useDisclosure(): Disclosure {
     };
   }, [open]);
 
-  const setTriggerRef = useCallback((node: HTMLButtonElement) => {
+  const setTriggerRef = useCallback((node: HTMLButtonElement | null) => {
     triggerRef.current = node;
   }, []);
 

@@ -708,6 +708,15 @@ body[data-version="v2"] {
 }
 
 /* Light scrollbars for v1/v2 — viewport (root) scrollbar, body, and inner scrollables */
+
+/* Firefox: scrollbar-color (thumb track) inherits, so html/body covers inner scrollables */
+html:has(body[data-version="v1"]),
+html:has(body[data-version="v2"]),
+body[data-version="v1"],
+body[data-version="v2"] {
+  scrollbar-color: #94A3B8 #F2F2F2;
+}
+
 html:has(body[data-version="v1"])::-webkit-scrollbar-track,
 html:has(body[data-version="v2"])::-webkit-scrollbar-track,
 body[data-version="v1"]::-webkit-scrollbar-track,
