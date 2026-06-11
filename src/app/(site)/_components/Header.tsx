@@ -4,12 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDisclosure } from "@/components/versions/DisclosureMenu";
 import { CONDITIONS } from "@/lib/content/conditions";
-import { navFor } from "@/lib/content/nav";
+import { NAV } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
 import MagneticButton from "./MagneticButton";
 import { BTN_PRIMARY, CONTAINER, EYEBROW_ON_LIGHT } from "./styles";
-
-const NAV = navFor("v2");
 
 const DESKTOP_LINK =
   "text-sm font-medium text-medical-gray-700 transition-colors hover:text-brand-purple";
@@ -53,7 +51,7 @@ export default function Header() {
           scrolled ? "py-2.5" : "py-4 lg:py-5"
         }`}
       >
-        <Link href="/v2" className="block">
+        <Link href="/" className="block">
           <span className="block text-lg font-semibold leading-none tracking-tight text-brand-navy">
             {SITE.name}
           </span>
@@ -186,7 +184,7 @@ export default function Header() {
             {CONDITIONS.map((condition, index) => (
               <li key={condition.slug}>
                 <Link
-                  href={`/v2/who-we-help/${condition.slug}`}
+                  href={`/who-we-help/${condition.slug}`}
                   className="group flex items-baseline gap-4 rounded-xl px-3 py-2.5 transition-colors hover:bg-medical-gray-50"
                 >
                   <span className="text-xs font-semibold text-medical-gray-400 tabular-nums">

@@ -1,58 +1,53 @@
 import { describe, it, expect } from "vitest";
-import { navFor, quickLinksFor } from "./nav";
+import { NAV, QUICK_LINKS } from "./nav";
 import { CONDITIONS } from "./conditions";
-import { VERSION_IDS } from "./types";
 
-describe("navFor", () => {
-  it("prefixes every href with the version segment", () => {
-    for (const version of VERSION_IDS) {
-      const nav = navFor(version);
-      const allHrefs = [
-        ...nav.primary.map((l) => l.href),
-        ...nav.whoWeHelp.map((l) => l.href),
-        nav.cta.href,
-      ];
-      for (const href of allHrefs) {
-        expect(href.startsWith(`/${version}/`)).toBe(true);
-      }
+describe("NAV", () => {
+  it("uses root-relative hrefs everywhere", () => {
+    const allHrefs = [
+      ...NAV.primary.map((l) => l.href),
+      ...NAV.whoWeHelp.map((l) => l.href),
+      NAV.cta.href,
+    ];
+    for (const href of allHrefs) {
+      expect(href.startsWith("/")).toBe(true);
+      expect(href.startsWith("/v")).toBe(false);
     }
   });
 
   it("exposes 10 whoWeHelp condition links matching CONDITIONS order", () => {
-    const nav = navFor("v2");
-    expect(nav.whoWeHelp).toHaveLength(10);
-    nav.whoWeHelp.forEach((link, i) => {
+    expect(NAV.whoWeHelp).toHaveLength(10);
+    NAV.whoWeHelp.forEach((link, i) => {
       expect(link.label).toBe(CONDITIONS[i].navLabel);
-      expect(link.href).toBe(`/v2/who-we-help/${CONDITIONS[i].slug}`);
+      expect(link.href).toBe(`/who-we-help/${CONDITIONS[i].slug}`);
     });
   });
 
-  it("points the cta at /vN/contact", () => {
-    for (const version of VERSION_IDS) {
-      const nav = navFor(version);
-      expect(nav.cta).toEqual({
-        label: "Schedule Consultation",
-        href: `/${version}/contact`,
-      });
-    }
+  it("points the cta at /contact", () => {
+    expect(NAV.cta).toEqual({
+      label: "Schedule Consultation",
+      href: "/contact",
+    });
   });
 
   it("includes the three primary pages", () => {
-    const nav = navFor("v1");
-    expect(nav.primary).toEqual([
-      { label: "How It Works", href: "/v1/how-it-works" },
-      { label: "About Us", href: "/v1/about" },
-      { label: "Newsletters", href: "/v1/newsletters" },
+    expect(NAV.primary).toEqual([
+      { label: "How It Works", href: "/how-it-works" },
+      { label: "About Us", href: "/about" },
+      { label: "Newsletters", href: "/newsletters" },
     ]);
   });
 });
 
-describe("quickLinksFor", () => {
-  it("resolves version-relative quick link paths to prefixed hrefs", () => {
-    const links = quickLinksFor("v3");
-    expect(links.length).toBeGreaterThan(0);
-    for (const link of links) {
-      expect(link.href.startsWith("/v3/")).toBe(true);
+describe("QUICK_LINKS", () => {
+  it("resolves SITE.quickLinks paths verbatim", () => {
+    expect(QUICK_LINKS.length).toBeGreaterThan(0);
+    expect(QUICK_LINKS).toContainEqual({
+      label: "Services",
+      href: "/how-it-works#services",
+    });
+    for (const link of QUICK_LINKS) {
+      expect(link.href.startsWith("/")).toBe(true);
     }
   });
 });

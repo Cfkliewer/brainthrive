@@ -1,7 +1,7 @@
 import type { SiteContent } from "./types";
 
 /**
- * Clinic-wide contact and identity content shared by all three site versions.
+ * Clinic-wide contact and identity content.
  */
 export const SITE: SiteContent = {
   name: "Brain Thrive Wellness",
@@ -25,7 +25,7 @@ export const SITE: SiteContent = {
     instagram: "https://www.instagram.com/brainthriveok",
     facebook: "https://www.facebook.com/p/Brain-Thrive-61577093643627/",
   },
-  // Version-relative paths; resolve to /vN-prefixed hrefs via quickLinksFor() in nav.ts.
+  // Root-relative paths; exposed as hrefs via QUICK_LINKS in nav.ts.
   // Note: there is no standalone services index page, so "Services" points at the
   // services section of the How It Works page (/how-it-works#services), where the
   // qEEG -> protocol -> PBM + Neurofeedback flow is described.

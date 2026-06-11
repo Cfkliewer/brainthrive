@@ -1,4 +1,4 @@
-import { navFor } from "@/lib/content/nav";
+import { NAV } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
 import MagneticButton from "./MagneticButton";
 import {
@@ -8,8 +8,6 @@ import {
   DARK_BAND,
   EYEBROW_ON_DARK,
 } from "./styles";
-
-const NAV = navFor("v2");
 
 /**
  * Navy closing CTA band rendered at the bottom of every page (above the

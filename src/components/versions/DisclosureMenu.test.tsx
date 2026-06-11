@@ -10,7 +10,7 @@ vi.mock("next/navigation", () => ({
   usePathname: usePathnameMock,
 }));
 
-/** Minimal consumer mirroring how version navs will use the hook. */
+/** Minimal consumer mirroring how the site nav uses the hook. */
 function TestMenu({ closeAboveQuery }: { closeAboveQuery?: string }) {
   const disclosure = useDisclosure<HTMLDivElement>({ closeAboveQuery });
   return (
@@ -18,7 +18,7 @@ function TestMenu({ closeAboveQuery }: { closeAboveQuery?: string }) {
       <div ref={disclosure.containerRef}>
         <button {...disclosure.triggerProps}>Who We Help</button>
         <div {...disclosure.panelProps} data-testid="panel">
-          <a href="/v1/who-we-help/anxiety">Anxiety</a>
+          <a href="/who-we-help/anxiety">Anxiety</a>
           <button onClick={disclosure.close}>Close</button>
         </div>
       </div>
@@ -34,7 +34,7 @@ function getTrigger() {
 describe("useDisclosure", () => {
   beforeEach(() => {
     usePathnameMock.mockReset();
-    usePathnameMock.mockReturnValue("/v1");
+    usePathnameMock.mockReturnValue("/");
   });
 
   it("opens on trigger click with aria-expanded=true", () => {
@@ -93,7 +93,7 @@ describe("useDisclosure", () => {
     fireEvent.click(trigger);
     expect(trigger).toHaveAttribute("aria-expanded", "true");
 
-    usePathnameMock.mockReturnValue("/v1/who-we-help/anxiety");
+    usePathnameMock.mockReturnValue("/who-we-help/anxiety");
     rerender(<TestMenu />);
 
     expect(trigger).toHaveAttribute("aria-expanded", "false");

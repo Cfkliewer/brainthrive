@@ -86,7 +86,7 @@ export default function ConditionHero({
           className="flex flex-wrap items-baseline gap-x-3 text-xs font-semibold uppercase tracking-[0.2em]"
         >
           <Link
-            href="/v2#who-we-help"
+            href="/#who-we-help"
             className="text-brand-teal transition-colors hover:text-white"
           >
             Who We Help

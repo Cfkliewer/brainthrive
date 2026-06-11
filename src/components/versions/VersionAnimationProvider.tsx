@@ -30,18 +30,16 @@ const BASE_SCROLL_TRIGGER_DEFAULTS: ScrollTrigger.StaticVars = {
 };
 
 /**
- * Parameterized animation provider for the /v1, /v2, /v3 subtrees.
- * Mirrors the wiring of the root AnimationProvider (Lenis -> ScrollTrigger.update,
- * gsap.ticker drives lenis.raf) but keeps configuration per-version. Only one
- * animation provider may be mounted per route subtree.
+ * Parameterized animation provider for the site (Lenis -> ScrollTrigger.update,
+ * gsap.ticker drives lenis.raf). Only one animation provider may be mounted
+ * per route subtree.
  *
- * GSAP global policy (deterministic overwrite): version code must not depend
+ * GSAP global policy (deterministic overwrite): page code must not depend
  * on inherited GSAP globals; this provider deterministically sets them on
  * mount. Every mount writes the complete set of globals it relies on —
  * gsap.defaults (ease, duration) and the full ScrollTrigger.defaults — with
  * caller `scrollTriggerDefaults` merged over the base values. Nothing is
- * inherited from a previously visited route (the legacy root provider and
- * other versions also write these globals), so animation behavior is never
+ * inherited from a previously visited route, so animation behavior is never
  * visit-order dependent.
  *
  * Lenis is only created on desktop widths (>= 1024px) without

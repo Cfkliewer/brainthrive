@@ -1,19 +1,16 @@
 import Link from "next/link";
-import { navFor } from "@/lib/content/nav";
+import { NAV } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
 import { BTN_PRIMARY } from "./styles";
 
-const NAV = navFor("v2");
-
 /**
  * Slim fixed bottom CTA bar for condition pages, below lg only: Schedule
- * Consultation plus a call icon button. The right padding keeps clear of
- * the fixed VersionSwitcher pill.
+ * Consultation plus a call icon button.
  */
 export default function StickyMobileCta() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-medical-gray-200 bg-white/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md lg:hidden">
-      <div className="flex items-center gap-3 pr-28">
+      <div className="flex items-center gap-3">
         <Link href={NAV.cta.href} className={`${BTN_PRIMARY} flex-1 py-3`}>
           {NAV.cta.label}
         </Link>

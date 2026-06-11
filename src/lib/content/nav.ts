@@ -1,35 +1,24 @@
 import { CONDITIONS } from "./conditions";
 import { SITE } from "./site";
-import type { NavConfig, VersionId } from "./types";
+import type { NavConfig } from "./types";
 
-/**
- * Builds the navigation config for a given site version, prefixing every
- * href with /v1, /v2, or /v3.
- */
-export function navFor(version: VersionId): NavConfig {
-  const base = `/${version}`;
-  return {
-    primary: [
-      { label: "How It Works", href: `${base}/how-it-works` },
-      { label: "About Us", href: `${base}/about` },
-      { label: "Newsletters", href: `${base}/newsletters` },
-    ],
-    whoWeHelp: CONDITIONS.map((condition) => ({
-      label: condition.navLabel,
-      href: `${base}/who-we-help/${condition.slug}`,
-    })),
-    cta: { label: "Schedule Consultation", href: `${base}/contact` },
-  };
-}
+/** Site navigation config (root-relative hrefs). */
+export const NAV: NavConfig = {
+  primary: [
+    { label: "How It Works", href: "/how-it-works" },
+    { label: "About Us", href: "/about" },
+    { label: "Newsletters", href: "/newsletters" },
+  ],
+  whoWeHelp: CONDITIONS.map((condition) => ({
+    label: condition.navLabel,
+    href: `/who-we-help/${condition.slug}`,
+  })),
+  cta: { label: "Schedule Consultation", href: "/contact" },
+};
 
-/**
- * Resolves SITE.quickLinks (version-relative paths) to version-prefixed hrefs.
- */
-export function quickLinksFor(
-  version: VersionId
-): { label: string; href: string }[] {
-  return SITE.quickLinks.map((link) => ({
+/** SITE.quickLinks resolved to hrefs (paths are already root-relative). */
+export const QUICK_LINKS: { label: string; href: string }[] =
+  SITE.quickLinks.map((link) => ({
     label: link.label,
-    href: `/${version}${link.path}`,
+    href: link.path,
   }));
-}

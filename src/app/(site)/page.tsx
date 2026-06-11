@@ -17,7 +17,7 @@ import { ARROW_LINK, CARD, CONTAINER, EYEBROW } from "./_components/styles";
 
 const MARQUEE_ITEMS = CONDITIONS.map((condition) => ({
   label: condition.navLabel,
-  href: `/v2/who-we-help/${condition.slug}`,
+  href: `/who-we-help/${condition.slug}`,
 }));
 
 const TRUST_POINTS = [
@@ -86,7 +86,7 @@ export default function V2HomePage() {
                 &ldquo;{HOW_IT_WORKS.why.body[0]}&rdquo;
               </p>
               <a
-                href="/v2/how-it-works#why-neurofeedback"
+                href="/how-it-works#why-neurofeedback"
                 className={`mt-6 inline-flex ${ARROW_LINK}`}
               >
                 Why neurofeedback <span aria-hidden>&rarr;</span>

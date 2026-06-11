@@ -668,19 +668,10 @@ select:focus {
 }
 
 /* =================================================================
-   VERSION THEMING (v1 / v2 / v3 alternative site designs)
+   VERSION THEMING (v2 "Modern Clinical" site design)
    Scoped via data-version, set on <body> by SetBodyVersion.
    Append-only block — do not modify rules above this line.
    ================================================================= */
-
-[data-version="v1"] {
-  --v-surface: #ffffff;
-  --v-surface-alt: #F2F2F2;
-  --v-ink: #002554;
-  --v-accent: #5362EF;
-  --v-accent-2: #00D3D2;
-  --v-focus: #223BA8;
-}
 
 [data-version="v2"] {
   --v-surface: #ffffff;
@@ -691,112 +682,48 @@ select:focus {
   --v-focus: #2563EB;
 }
 
-[data-version="v3"] {
-  --v-surface: #001A3D;
-  --v-surface-alt: #002554;
-  --v-ink: #ffffff;
-  --v-accent: #35F3E6;
-  --v-accent-2: #5362EF;
-  --v-focus: #35F3E6;
-}
-
-/* Light page chrome for the two light versions */
-body[data-version="v1"],
+/* Light page chrome */
 body[data-version="v2"] {
   background: #ffffff;
   color: #002554;
 }
 
-/* Light scrollbars for v1/v2 — viewport (root) scrollbar, body, and inner scrollables */
+/* Light scrollbars — viewport (root) scrollbar, body, and inner scrollables */
 
 /* Firefox: scrollbar-color (thumb track) inherits, so html/body covers inner scrollables */
-html:has(body[data-version="v1"]),
 html:has(body[data-version="v2"]),
-body[data-version="v1"],
 body[data-version="v2"] {
   scrollbar-color: #94A3B8 #F2F2F2;
 }
 
-html:has(body[data-version="v1"])::-webkit-scrollbar-track,
 html:has(body[data-version="v2"])::-webkit-scrollbar-track,
-body[data-version="v1"]::-webkit-scrollbar-track,
 body[data-version="v2"]::-webkit-scrollbar-track,
-body[data-version="v1"] ::-webkit-scrollbar-track,
 body[data-version="v2"] ::-webkit-scrollbar-track {
   background: #F2F2F2;
 }
 
-html:has(body[data-version="v1"])::-webkit-scrollbar-thumb,
 html:has(body[data-version="v2"])::-webkit-scrollbar-thumb,
-body[data-version="v1"]::-webkit-scrollbar-thumb,
 body[data-version="v2"]::-webkit-scrollbar-thumb,
-body[data-version="v1"] ::-webkit-scrollbar-thumb,
 body[data-version="v2"] ::-webkit-scrollbar-thumb {
   background: #94A3B8;
 }
 
-html:has(body[data-version="v1"])::-webkit-scrollbar-thumb:hover,
 html:has(body[data-version="v2"])::-webkit-scrollbar-thumb:hover,
-body[data-version="v1"]::-webkit-scrollbar-thumb:hover,
 body[data-version="v2"]::-webkit-scrollbar-thumb:hover,
-body[data-version="v1"] ::-webkit-scrollbar-thumb:hover,
 body[data-version="v2"] ::-webkit-scrollbar-thumb:hover {
   background: #5362EF;
 }
 
-body[data-version="v3"] {
-  background: #001A3D;
-}
-
-/* Per-version text selection */
-body[data-version="v1"] ::selection,
+/* Text selection */
 body[data-version="v2"] ::selection {
   background: #002554;
   color: #ffffff;
 }
 
-body[data-version="v3"] ::selection {
-  background: #35F3E6;
-  color: #001A3D;
-}
-
-/* Teal focus ring stands out against the dark v3 surfaces */
-body[data-version="v3"] :focus-visible {
-  outline-color: #35F3E6;
-}
-
 /* =================================================================
-   V1 "EDITORIAL CALM" (appended block — /v1 subtree only)
-   Fraunces display utility + a quieter, on-palette focus treatment.
-   --font-fraunces is provided by src/app/v1/layout.tsx via next/font.
-   ================================================================= */
-
-.v1-display {
-  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  font-optical-sizing: auto;
-}
-
-/* Replace the heavy global 3px :focus outline with a calm
-   focus-visible ring in the v1 palette. */
-body[data-version="v1"] :is(a, button, input, textarea, select, summary):focus {
-  outline: none;
-}
-
-body[data-version="v1"]
-  :is(a, button, input, textarea, select, summary):focus-visible {
-  outline: 2px solid var(--color-brand-purple);
-  outline-offset: 3px;
-}
-
-/* Teal ring inside the navy CTA band, where navy-on-navy would vanish */
-body[data-version="v1"] .v1-band-dark :is(a, button):focus-visible {
-  outline-color: var(--color-brand-dark-teal);
-}
-
-/* =================================================================
-   V2 "MODERN CLINICAL" (appended block — /v2 subtree only)
+   V2 "MODERN CLINICAL"
    Bebas display utility, focus treatment, navy band texture, card
-   shadow recipe. --font-bebas-real is provided by src/app/v2/layout.tsx.
+   shadow recipe. --font-bebas-real is provided by src/app/(site)/layout.tsx.
    ================================================================= */
 
 .v2-display {
@@ -846,26 +773,4 @@ body[data-version="v2"]
 
 .v2-no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-/* === V3 Immersive Neuro === */
-
-/* Bebas Neue display utility; --font-bebas-v3 is provided by
-   src/app/v3/layout.tsx via next/font so the payload stays /v3-scoped. */
-.v3-display {
-  font-family: var(--font-bebas-v3), "Bebas Neue", "Arial Narrow", sans-serif;
-  letter-spacing: 0.015em;
-}
-
-/* Replace the heavy global blue 3px :focus outline with a teal
-   focus-visible ring that reads as light against the dark surfaces. */
-body[data-version="v3"]
-  :is(a, button, input, textarea, select, summary):focus {
-  outline: none;
-}
-
-body[data-version="v3"]
-  :is(a, button, input, textarea, select, summary):focus-visible {
-  outline: 2px solid var(--color-brand-teal);
-  outline-offset: 3px;
 }

@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { navFor } from "@/lib/content/nav";
+import { NAV } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
 import MagneticButton from "./MagneticButton";
 import {
@@ -19,8 +19,6 @@ import {
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
-
-const NAV = navFor("v2");
 
 /** Floating metric chips layered over the hero imagery. */
 const CHIPS = [

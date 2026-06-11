@@ -104,7 +104,7 @@ export default function PinnedSteps() {
                 </ol>
               </div>
               <Link
-                href="/v2/how-it-works"
+                href="/how-it-works"
                 className="mt-10 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-teal transition-colors hover:text-white"
               >
                 The full method <span aria-hidden>&rarr;</span>
@@ -139,7 +139,7 @@ export default function PinnedSteps() {
             ))}
           </ol>
           <Link
-            href="/v2/how-it-works"
+            href="/how-it-works"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-teal transition-colors hover:text-white lg:hidden"
           >
             The full method <span aria-hidden>&rarr;</span>

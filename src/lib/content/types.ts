@@ -1,11 +1,12 @@
 /**
- * Shared content-layer types consumed by the three site versions (/v1, /v2, /v3).
- * Keep these shapes stable — multiple version builds code against them.
+ * Shared content-layer types for the site.
  */
 
-export const VERSION_IDS = ["v1", "v2", "v3"] as const;
-
-export type VersionId = (typeof VERSION_IDS)[number];
+/**
+ * Design-version id used by the [data-version] theming hooks in globals.css.
+ * Only the v2 "Modern Clinical" design remains (it serves at the root paths).
+ */
+export type VersionId = "v2";
 
 export interface ConditionContent {
   slug: string;
@@ -45,7 +46,7 @@ export interface SiteContent {
     instagram: string;
     facebook: string;
   };
-  /** Version-relative paths — resolve with quickLinksFor(version) from nav.ts. */
+  /** Root-relative paths — exposed as hrefs via QUICK_LINKS in nav.ts. */
   quickLinks: { label: string; path: string }[];
   disclaimer: string;
 }
@@ -55,7 +56,7 @@ export interface NavConfig {
   primary: { label: string; href: string }[];
   /** 10 condition links */
   whoWeHelp: { label: string; href: string }[];
-  /** Schedule Consultation -> /vN/contact */
+  /** Schedule Consultation -> /contact */
   cta: { label: string; href: string };
 }
 

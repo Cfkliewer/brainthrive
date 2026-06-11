@@ -42,7 +42,7 @@ export default function ConditionCard({
       </p>
       <h3 className="mt-2 text-xl font-semibold leading-snug tracking-tight text-brand-navy">
         <Link
-          href={`/v2/who-we-help/${condition.slug}`}
+          href={`/who-we-help/${condition.slug}`}
           className="after:absolute after:inset-0 after:rounded-2xl"
         >
           {condition.navLabel}
