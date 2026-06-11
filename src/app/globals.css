@@ -666,3 +666,92 @@ select:focus {
     transform: none !important;
   }
 }
+
+/* =================================================================
+   VERSION THEMING (v1 / v2 / v3 alternative site designs)
+   Scoped via data-version, set on <body> by SetBodyVersion.
+   Append-only block — do not modify rules above this line.
+   ================================================================= */
+
+[data-version="v1"] {
+  --v-surface: #ffffff;
+  --v-surface-alt: #F2F2F2;
+  --v-ink: #002554;
+  --v-accent: #5362EF;
+  --v-accent-2: #00D3D2;
+  --v-focus: #223BA8;
+}
+
+[data-version="v2"] {
+  --v-surface: #ffffff;
+  --v-surface-alt: #F8FAFC;
+  --v-ink: #0F172A;
+  --v-accent: #5362EF;
+  --v-accent-2: #35F3E6;
+  --v-focus: #2563EB;
+}
+
+[data-version="v3"] {
+  --v-surface: #001A3D;
+  --v-surface-alt: #002554;
+  --v-ink: #ffffff;
+  --v-accent: #35F3E6;
+  --v-accent-2: #5362EF;
+  --v-focus: #35F3E6;
+}
+
+/* Light page chrome for the two light versions */
+body[data-version="v1"],
+body[data-version="v2"] {
+  background: #ffffff;
+  color: #002554;
+}
+
+/* Light scrollbars for v1/v2 — viewport (root) scrollbar, body, and inner scrollables */
+html:has(body[data-version="v1"])::-webkit-scrollbar-track,
+html:has(body[data-version="v2"])::-webkit-scrollbar-track,
+body[data-version="v1"]::-webkit-scrollbar-track,
+body[data-version="v2"]::-webkit-scrollbar-track,
+body[data-version="v1"] ::-webkit-scrollbar-track,
+body[data-version="v2"] ::-webkit-scrollbar-track {
+  background: #F2F2F2;
+}
+
+html:has(body[data-version="v1"])::-webkit-scrollbar-thumb,
+html:has(body[data-version="v2"])::-webkit-scrollbar-thumb,
+body[data-version="v1"]::-webkit-scrollbar-thumb,
+body[data-version="v2"]::-webkit-scrollbar-thumb,
+body[data-version="v1"] ::-webkit-scrollbar-thumb,
+body[data-version="v2"] ::-webkit-scrollbar-thumb {
+  background: #94A3B8;
+}
+
+html:has(body[data-version="v1"])::-webkit-scrollbar-thumb:hover,
+html:has(body[data-version="v2"])::-webkit-scrollbar-thumb:hover,
+body[data-version="v1"]::-webkit-scrollbar-thumb:hover,
+body[data-version="v2"]::-webkit-scrollbar-thumb:hover,
+body[data-version="v1"] ::-webkit-scrollbar-thumb:hover,
+body[data-version="v2"] ::-webkit-scrollbar-thumb:hover {
+  background: #5362EF;
+}
+
+body[data-version="v3"] {
+  background: #001A3D;
+}
+
+/* Per-version text selection */
+body[data-version="v1"] ::selection,
+body[data-version="v2"] ::selection {
+  background: #002554;
+  color: #ffffff;
+}
+
+body[data-version="v3"] ::selection {
+  background: #35F3E6;
+  color: #001A3D;
+}
+
+/* Teal focus ring stands out against the dark v3 surfaces */
+body[data-version="v3"] :focus-visible {
+  outline-color: #35F3E6;
+}

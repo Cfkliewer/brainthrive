@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import AnimationProvider from "@/components/AnimationProvider";
 
 // Golos Text - Secondary font from brand guide
 const golosText = Inter({
@@ -47,7 +46,7 @@ export default function RootLayout({
       <body
         className={`${golosText.variable} ${bebasNeue.variable} antialiased`}
       >
-        <AnimationProvider>{children}</AnimationProvider>
+        {children}
       </body>
     </html>
   );
