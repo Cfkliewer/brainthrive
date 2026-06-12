@@ -154,17 +154,73 @@ function SlideBlend({ slide }: { slide: ResolvedHeroSlide }) {
   );
 }
 
-/** Renders a slide headline with its optional gradient-accented word. */
-function HeadlineText({ slide }: { slide: ResolvedHeroSlide }) {
+/**
+ * The accent word with its per-slide treatment (heroSlides.ts decides).
+ * `isActive` retriggers the underline's draw-in each time the slide
+ * takes the stage (the svg remounts via key).
+ */
+function AccentWord({
+  slide,
+  isActive,
+}: {
+  slide: ResolvedHeroSlide;
+  isActive: boolean;
+}) {
+  const accent = slide.headlineAccent!;
+  switch (slide.accentStyle ?? "teal") {
+    case "italic":
+      return <em className="italic">{accent}</em>;
+    case "gradient":
+      return (
+        <span className="bg-linear-to-r from-brand-teal to-brand-ultraviolet bg-clip-text text-transparent">
+          {accent}
+        </span>
+      );
+    case "underline":
+      return (
+        <span className="relative inline-block">
+          {accent}
+          <svg
+            key={isActive ? "drawing" : "idle"}
+            aria-hidden
+            viewBox="0 0 100 12"
+            preserveAspectRatio="none"
+            className="absolute -bottom-[0.1em] left-0 h-[0.24em] w-full overflow-visible"
+          >
+            {/* Slightly uneven hand-drawn stroke; draws in on activation. */}
+            <path
+              d="M3 8.5 C 22 4.5, 38 10.5, 57 7 S 88 8.5, 97 5.5"
+              fill="none"
+              stroke="var(--color-brand-teal)"
+              strokeWidth="4"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+              className="v2-underline-path"
+            />
+          </svg>
+        </span>
+      );
+    case "teal":
+    default:
+      return <span className="text-brand-teal">{accent}</span>;
+  }
+}
+
+/** Renders a slide headline with its optional accented word. */
+function HeadlineText({
+  slide,
+  isActive,
+}: {
+  slide: ResolvedHeroSlide;
+  isActive: boolean;
+}) {
   const { headline, headlineAccent } = slide;
   const accentStart = headlineAccent ? headline.indexOf(headlineAccent) : -1;
   if (!headlineAccent || accentStart === -1) return <>{headline}</>;
   return (
     <>
       {headline.slice(0, accentStart)}
-      <span className="bg-linear-to-r from-brand-teal to-brand-ultraviolet bg-clip-text text-transparent">
-        {headlineAccent}
-      </span>
+      <AccentWord slide={slide} isActive={isActive} />
       {headline.slice(accentStart + headlineAccent.length)}
     </>
   );
@@ -347,7 +403,7 @@ export default function HeroCarousel({
                           : "pointer-events-none translate-y-10 opacity-0"
                     }`}
                   >
-                    <HeadlineText slide={slide} />
+                    <HeadlineText slide={slide} isActive={index === active} />
                   </span>
                 );
               })}

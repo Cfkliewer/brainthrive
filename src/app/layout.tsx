@@ -3,8 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 // Golos Text - Secondary font from brand guide
+// (italic faces included for the hero headline's italic accent style)
 const golosText = Inter({
   weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   variable: "--font-golos",
   subsets: ["latin"],
   display: "swap",

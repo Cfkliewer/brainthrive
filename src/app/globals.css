@@ -787,6 +787,30 @@ body[data-version="v2"]
   }
 }
 
+/* Hand-drawn accent underline on the hero headline: the stroke draws in
+   shortly after the headline rises into place (svg remounts per
+   activation, restarting the animation). */
+@keyframes v2-underline-draw {
+  from {
+    stroke-dashoffset: 120;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.v2-underline-path {
+  stroke-dasharray: 120;
+  animation: v2-underline-draw 0.6s ease-out 0.5s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-underline-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
 /* Fine engineering-grid texture for navy bands (decorative only). */
 .v2-grid-pattern {
   background-image:

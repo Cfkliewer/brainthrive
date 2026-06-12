@@ -35,9 +35,17 @@ export interface HeroSlide {
   eyebrow: string;
   /** Hero headline shown while this slide is up (rotates with the image). */
   headline: string;
-  /** Optional substring of `headline` rendered with the teal→ultraviolet
-   *  gradient treatment. */
+  /** Optional substring of `headline` to emphasize. */
   headlineAccent?: string;
+  /**
+   * How the accent substring is treated (per slide, mix freely):
+   * - "underline": white word with a hand-drawn teal stroke beneath it
+   * - "italic":    true italic emphasis, stays white
+   * - "teal":      flat brand-teal word
+   * - "gradient":  teal→ultraviolet clipped gradient (available, unused)
+   * Defaults to "teal" when omitted.
+   */
+  accentStyle?: "underline" | "italic" | "teal" | "gradient";
 }
 
 export interface ResolvedHeroSlide extends HeroSlide {
@@ -63,6 +71,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: "Brain Mapping",
     headline: "See how your brain is working",
     headlineAccent: "brain",
+    accentStyle: "underline",
   },
   {
     src: "/images/hero/slide-2.jpg",
@@ -70,6 +79,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: "Neurofeedback",
     headline: "Train your brain with real time feedback",
     headlineAccent: "real time",
+    accentStyle: "italic",
   },
   {
     src: "/images/hero/slide-3.jpg",
@@ -77,6 +87,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: "Light Therapy",
     headline: "Gentle, non-invasive support at the cellular level",
     headlineAccent: "non-invasive",
+    accentStyle: "teal",
   },
   {
     src: "/images/hero/slide-4.jpg",
@@ -84,6 +95,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: "Why It Matters",
     headline: "Feel like yourself again.",
     headlineAccent: "yourself",
+    accentStyle: "underline",
   },
 ];
 
