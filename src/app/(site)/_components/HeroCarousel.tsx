@@ -154,6 +154,22 @@ function SlideBlend({ slide }: { slide: ResolvedHeroSlide }) {
   );
 }
 
+/** Renders a slide headline with its optional gradient-accented word. */
+function HeadlineText({ slide }: { slide: ResolvedHeroSlide }) {
+  const { headline, headlineAccent } = slide;
+  const accentStart = headlineAccent ? headline.indexOf(headlineAccent) : -1;
+  if (!headlineAccent || accentStart === -1) return <>{headline}</>;
+  return (
+    <>
+      {headline.slice(0, accentStart)}
+      <span className="bg-linear-to-r from-brand-teal to-brand-ultraviolet bg-clip-text text-transparent">
+        {headlineAccent}
+      </span>
+      {headline.slice(accentStart + headlineAccent.length)}
+    </>
+  );
+}
+
 /**
  * Full-screen hero: rotating full-bleed imagery (crossfade + subtle Ken
  * Burns, ~5.5s per slide) under a layered navy legibility overlay, with
@@ -185,6 +201,14 @@ export default function HeroCarousel({
   // even while crossfaded out, and may be the page's LCP element).
   const firstImageIndex = slides.findIndex((slide) => slide.resolvedSrc);
   const activeSlide = slides[active];
+
+  // Previous slide index, so the outgoing headline can animate up and out
+  // while the incoming one rises into place.
+  const prevRef = useRef(active);
+  const previous = prevRef.current;
+  useEffect(() => {
+    prevRef.current = active;
+  }, [active]);
 
   useGSAP(
     () => {
@@ -296,15 +320,37 @@ export default function HeroCarousel({
                 {SITE.address.city}, {SITE.address.state}
               </span>
             </p>
+            {/* Rotating headline: all variants stacked in one grid cell so
+                the block reserves the tallest headline's height (no layout
+                jump). The outgoing one slides up and out, the incoming one
+                rises from below; reduced motion swaps text instantly. */}
             <h1
               data-hero-intro
-              className="mt-5 text-balance text-[clamp(2.4rem,5.2vw,4.4rem)] font-semibold leading-[1.04] tracking-[-0.025em] text-white"
+              className="mt-5 grid text-[clamp(2.4rem,5.2vw,4.4rem)] font-semibold leading-[1.04] tracking-[-0.025em] text-white"
             >
-              Feel like{" "}
-              <span className="bg-linear-to-r from-brand-teal to-brand-ultraviolet bg-clip-text text-transparent">
-                yourself
-              </span>{" "}
-              again.
+              {slides.map((slide, index) => {
+                const state =
+                  index === active
+                    ? "active"
+                    : index === previous
+                      ? "previous"
+                      : "idle";
+                return (
+                  <span
+                    key={slide.src}
+                    aria-hidden={index !== active}
+                    className={`col-start-1 row-start-1 block text-balance motion-reduce:translate-y-0 motion-reduce:transition-none ${
+                      state === "active"
+                        ? "translate-y-0 opacity-100 transition-all duration-700 ease-out"
+                        : state === "previous"
+                          ? "pointer-events-none -translate-y-10 opacity-0 transition-all duration-700 ease-out"
+                          : "pointer-events-none translate-y-10 opacity-0"
+                    }`}
+                  >
+                    <HeadlineText slide={slide} />
+                  </span>
+                );
+              })}
             </h1>
             <p
               data-hero-intro
@@ -335,19 +381,14 @@ export default function HeroCarousel({
             data-hero-intro
             className="flex shrink-0 flex-col items-start gap-4 lg:items-end"
           >
+            {/* The rotating headline now carries each slide's message, so
+                the chip is just the category tag. */}
             <div
               key={active}
-              className="v2-hero-caption-in max-w-xs rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-md"
+              className="v2-hero-caption-in rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 backdrop-blur-md"
             >
-              {/* The placeholder treatment already shows the eyebrow as a
-                  motif, so repeat it on the chip only for real photos. */}
-              {activeSlide.resolvedSrc ? (
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-teal">
-                  {activeSlide.eyebrow}
-                </p>
-              ) : null}
-              <p className="mt-0.5 text-sm font-medium leading-snug text-white">
-                {activeSlide.caption}
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-teal">
+                {activeSlide.eyebrow}
               </p>
             </div>
             <div className="flex items-center gap-1.5">

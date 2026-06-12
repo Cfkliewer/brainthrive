@@ -10,10 +10,17 @@ import { TEAM_PHOTO, TEAM_PHOTO_ALT } from "./assets";
  * /public/images/hero/ using the exact filename in `src` below
  * (slide-1.jpg ... slide-4.jpg) and rebuild.
  *
- * The hero renders slides full-screen (object-cover at every viewport),
+ * The hero renders slides full-bleed (object-cover at every viewport),
  * so buy wide landscape crops — ~16:9, at least 1920px wide — and keep
  * the subject in the upper-right half: a navy legibility gradient covers
  * the bottom-left where the headline and CTAs sit.
+ *
+ * Photo-to-file mapping (note slide-1 is BRAIN MAPPING, slide-2 is
+ * NEUROFEEDBACK — the headline copy is keyed to this order):
+ *   slide-1.jpg  clinician reviewing a brain map with a client
+ *   slide-2.jpg  neurofeedback session (EEG sensors)
+ *   slide-3.jpg  light therapy session
+ *   slide-4.jpg  everyday-life outcome shot
  *
  * Availability is resolved server-side at build time (node:fs — do not
  * import this module from client components; see assets.ts for the same
@@ -26,8 +33,11 @@ export interface HeroSlide {
   alt: string;
   /** Short uppercase label shown on the caption chip and placeholder. */
   eyebrow: string;
-  /** One plain sentence under the eyebrow on the caption chip. */
-  caption: string;
+  /** Hero headline shown while this slide is up (rotates with the image). */
+  headline: string;
+  /** Optional substring of `headline` rendered with the teal→ultraviolet
+   *  gradient treatment. */
+  headlineAccent?: string;
 }
 
 export interface ResolvedHeroSlide extends HeroSlide {
@@ -49,27 +59,31 @@ export interface ResolvedHeroSlide extends HeroSlide {
 export const HERO_SLIDES: HeroSlide[] = [
   {
     src: "/images/hero/slide-1.jpg",
-    alt: "A client wearing EEG sensors during a neurofeedback training session",
-    eyebrow: "Neurofeedback",
-    caption: "Training your brain with real-time feedback",
+    alt: "A clinician reviewing a qEEG brain map with a client",
+    eyebrow: "Brain Mapping",
+    headline: "See how your brain is working",
+    headlineAccent: "brain",
   },
   {
     src: "/images/hero/slide-2.jpg",
-    alt: "A clinician reviewing a qEEG brain map with a client",
-    eyebrow: "Brain Mapping",
-    caption: "We start by seeing how your brain is working",
+    alt: "A client wearing EEG sensors during a neurofeedback training session",
+    eyebrow: "Neurofeedback",
+    headline: "Train your brain with real time feedback",
+    headlineAccent: "real time",
   },
   {
     src: "/images/hero/slide-3.jpg",
     alt: "A photobiomodulation light therapy session in a calm clinic room",
     eyebrow: "Light Therapy",
-    caption: "Gentle, non-invasive support at the cellular level",
+    headline: "Gentle, non-invasive support at the cellular level",
+    headlineAccent: "non-invasive",
   },
   {
     src: "/images/hero/slide-4.jpg",
     alt: "A family enjoying an ordinary, focused day together",
     eyebrow: "Why It Matters",
-    caption: "Clearer days at work, school, and home",
+    headline: "Feel like yourself again.",
+    headlineAccent: "yourself",
   },
 ];
 
