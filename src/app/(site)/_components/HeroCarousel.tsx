@@ -116,6 +116,45 @@ function SlidePlaceholder({ slide }: { slide: ResolvedHeroSlide }) {
 }
 
 /**
+ * A slide whose photo is too small to cover the hero without visible
+ * upscaling blur: the image renders near its native size over the same
+ * navy backdrop the placeholders use, with a radial opacity vignette
+ * melting its edges into the background. Positioned in the upper-right
+ * clear zone, away from the bottom-left text block.
+ */
+function SlideBlend({ slide }: { slide: ResolvedHeroSlide }) {
+  return (
+    <div className="absolute inset-0">
+      <div
+        data-kenburns
+        aria-hidden
+        className="absolute inset-0 bg-linear-to-br from-brand-navy via-brand-navy/95 to-medical-gray-600"
+      >
+        <div className="v2-grid-pattern absolute inset-0" />
+        <div className="absolute left-[16%] top-[20%] h-80 w-80 rounded-full bg-brand-ultraviolet/30 blur-3xl" />
+        <div className="absolute bottom-[12%] right-[30%] h-64 w-64 rounded-full bg-brand-purple/25 blur-3xl" />
+      </div>
+      <div className="absolute inset-x-0 top-[14%] flex justify-center lg:inset-x-auto lg:right-[7%] lg:top-1/2 lg:-translate-y-[60%]">
+        <Image
+          src={slide.resolvedSrc!}
+          alt={slide.alt}
+          width={512}
+          height={384}
+          sizes="(min-width: 1024px) 30rem, 85vw"
+          className="h-auto w-[min(85vw,26rem)] lg:w-[min(34vw,30rem)]"
+          style={{
+            maskImage:
+              "radial-gradient(ellipse 72% 72% at 50% 50%, black 42%, transparent 74%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 72% 72% at 50% 50%, black 42%, transparent 74%)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
  * Full-screen hero: rotating full-bleed imagery (crossfade + subtle Ken
  * Burns, ~5.5s per slide) under a layered navy legibility overlay, with
  * the headline + dual CTA overlaid bottom-left and the caption chip +
@@ -215,7 +254,7 @@ export default function HeroCarousel({
               index === active ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            {slide.resolvedSrc ? (
+            {slide.resolvedSrc && slide.renderMode === "cover" ? (
               <div data-kenburns className="absolute inset-0">
                 <Image
                   src={slide.resolvedSrc}
@@ -226,6 +265,8 @@ export default function HeroCarousel({
                   className="object-cover"
                 />
               </div>
+            ) : slide.resolvedSrc ? (
+              <SlideBlend slide={slide} />
             ) : (
               <SlidePlaceholder slide={slide} />
             )}

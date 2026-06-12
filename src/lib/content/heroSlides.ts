@@ -36,6 +36,14 @@ export interface ResolvedHeroSlide extends HeroSlide {
    * a stand-in path, or null — null means "render the placeholder panel".
    */
   resolvedSrc: string | null;
+  /**
+   * How the resolved image is rendered:
+   * - "cover": full-bleed object-cover (for purchased high-res photos)
+   * - "blend": near-native size over the navy backdrop with a radial
+   *   opacity vignette — for images too small to cover the hero without
+   *   visible upscaling blur (e.g. the 512px team-photo stand-in).
+   */
+  renderMode: "cover" | "blend";
 }
 
 export const HERO_SLIDES: HeroSlide[] = [
@@ -75,15 +83,23 @@ const heroImageOnDisk = (slide: HeroSlide) =>
 export const RESOLVED_HERO_SLIDES: ResolvedHeroSlide[] = HERO_SLIDES.map(
   (slide, index) => {
     if (heroImageOnDisk(slide)) {
-      return { ...slide, resolvedSrc: slide.src };
+      return { ...slide, resolvedSrc: slide.src, renderMode: "cover" as const };
     }
     // TEMPORARY stand-in: until the purchased "everyday life" photo for
     // slide 4 arrives, reuse the existing team/clinic photo there (and
-    // only there — it's the one real photo we have). Dropping the real
-    // slide-4.jpg into /public/images/hero/ replaces it automatically.
+    // only there — it's the one real photo we have). It is only 512px
+    // wide, so it renders in "blend" mode (near-native size, vignetted
+    // into the navy backdrop) instead of a blurry full-bleed stretch.
+    // Dropping the real slide-4.jpg into /public/images/hero/ replaces
+    // it automatically and switches the slide back to "cover".
     if (index === 3 && TEAM_PHOTO) {
-      return { ...slide, resolvedSrc: TEAM_PHOTO, alt: TEAM_PHOTO_ALT };
+      return {
+        ...slide,
+        resolvedSrc: TEAM_PHOTO,
+        alt: TEAM_PHOTO_ALT,
+        renderMode: "blend" as const,
+      };
     }
-    return { ...slide, resolvedSrc: null };
+    return { ...slide, resolvedSrc: null, renderMode: "cover" as const };
   }
 );
