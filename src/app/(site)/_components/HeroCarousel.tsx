@@ -1,9 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { NAV } from "@/lib/content/nav";
 import { SITE } from "@/lib/content/site";
 import type { ResolvedHeroSlide } from "@/lib/content/heroSlides";
@@ -15,91 +13,131 @@ import {
   EYEBROW_ON_DARK,
 } from "./styles";
 
-/** Time each slide stays up before auto-advancing. */
-const SLIDE_MS = 5000;
-/** Ken Burns drift: 1.0 -> 1.04 across the slide's duration. */
-const KEN_BURNS_SCALE = 1.04;
+/** Seconds each slide stays up before the next takes over. */
+const PER = 5;
+/** Crossfade / rise duration between slides, in seconds. */
+const FADE = 0.5;
+/** Ken Burns drift: 1.0 -> this across a slide's visible window. */
+const KEN_BURNS_SCALE = 1.06;
 
 /**
- * Auto-advance for the carousel. Rotation pauses while hovered or
- * focus-within (returned handlers), while the tab is hidden, while the
- * carousel is scrolled off-screen, and entirely under reduced motion.
+ * Build the keyframes + rules that drive the carousel.
+ *
+ * The auto-advance is intentionally pure CSS: every cycling element (image,
+ * headline word, caption chip, dot) runs the SAME animation over a cycle of
+ * `n * PER` seconds, each offset by `i * PER` via animation-delay, so they
+ * stay in lockstep with zero JavaScript. This is what fixes the cold-load
+ * "frozen first slide": the rotation starts at first paint instead of waiting
+ * for the route's JS bundle to download and hydrate (which, on a cold cache,
+ * can take many seconds). JS only enhances — pause, dot navigation, aria.
+ *
+ * Percentages are derived from the slide count so the timing is correct for
+ * any `n`. Each slide is visible for `PER + FADE` seconds (the FADE overlap
+ * is the crossfade with its neighbour), spaced `PER` apart.
  */
-function useAutoRotate(
-  slideCount: number,
-  stageRef: React.RefObject<HTMLDivElement | null>
-) {
-  const [active, setActive] = useState(0);
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [inView, setInView] = useState(true);
-  const [tabHidden, setTabHidden] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+function buildHeroStyles(n: number): string {
+  const cycle = n * PER;
+  const round = (x: number) => Math.round(x * 1000) / 1000;
+  const fp = round((FADE / cycle) * 100); // fade ramp, % of cycle
+  const vis = round(((PER + FADE) / cycle) * 100); // end of visible window
+  const hold = round(vis - fp); // start of fade-out
 
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
+  return `
+@keyframes bt-hero-fade {
+  0% { opacity: 0; }
+  ${fp}% { opacity: 1; }
+  ${hold}% { opacity: 1; }
+  ${vis}% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes bt-hero-word {
+  0% { transform: translateY(110%); opacity: 0; }
+  ${fp}% { transform: translateY(0); opacity: 1; }
+  ${hold}% { transform: translateY(0); opacity: 1; }
+  ${vis}% { transform: translateY(-110%); opacity: 0; }
+  100% { transform: translateY(-110%); opacity: 0; }
+}
+@keyframes bt-hero-zoom {
+  0% { transform: scale(1); }
+  ${vis}% { transform: scale(${KEN_BURNS_SCALE}); }
+  100% { transform: scale(${KEN_BURNS_SCALE}); }
+}
+@keyframes bt-hero-dot {
+  0% { width: 1rem; background-color: var(--btd-off); }
+  ${fp}% { width: 2.25rem; background-color: var(--btd-on); }
+  ${hold}% { width: 2.25rem; background-color: var(--btd-on); }
+  ${vis}% { width: 1rem; background-color: var(--btd-off); }
+  100% { width: 1rem; background-color: var(--btd-off); }
+}
+/* Instant (motionless) variant used under reduced motion. */
+@keyframes bt-hero-step {
+  0% { opacity: 1; }
+  ${vis}% { opacity: 1; }
+  ${round(vis + 0.001)}% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes bt-hero-dot-step {
+  0% { width: 2.25rem; background-color: var(--btd-on); }
+  ${vis}% { width: 2.25rem; background-color: var(--btd-on); }
+  ${round(vis + 0.001)}% { width: 1rem; background-color: var(--btd-off); }
+  100% { width: 1rem; background-color: var(--btd-off); }
+}
+@keyframes bt-hero-intro {
+  0% { opacity: 0; transform: translateY(32px); }
+  100% { opacity: 1; transform: none; }
+}
 
-  useEffect(() => {
-    const onVisibility = () => setTabHidden(document.hidden);
-    // Sync the initial state: a tab that *loads* hidden/occluded never fires
-    // visibilitychange, so without this the pause logic thinks it's playing and
-    // schedules a browser-throttled timer — the first slide then lingers far
-    // past SLIDE_MS until the tab is revealed.
-    onVisibility();
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
-  }, []);
+[data-hero-cycle] {
+  animation-duration: ${cycle}s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+}
+[data-hero-img] { animation-name: bt-hero-fade; }
+[data-hero-chip] { animation-name: bt-hero-fade; }
+[data-hero-word] { animation-name: bt-hero-word; }
+[data-hero-dot] { animation-name: bt-hero-dot; }
+[data-hero-zoom] {
+  animation: bt-hero-zoom ${cycle}s linear infinite backwards;
+}
+[data-hero-intro] {
+  animation: bt-hero-intro 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
 
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.2 }
-    );
-    observer.observe(stage);
-    return () => observer.disconnect();
-  }, [stageRef]);
+/* Paused while hovered / focus-within / off-screen / tab hidden. */
+.bt-hero-paused [data-hero-cycle],
+.bt-hero-paused [data-hero-zoom] {
+  animation-play-state: paused !important;
+}
 
-  const playing = !reducedMotion && !hovered && !focused && !tabHidden && inView;
-
-  useEffect(() => {
-    if (!playing) return;
-    const id = window.setTimeout(
-      () => setActive((index) => (index + 1) % slideCount),
-      SLIDE_MS
-    );
-    return () => window.clearTimeout(id);
-  }, [playing, active, slideCount]);
-
-  return {
-    active,
-    goTo: setActive,
-    pauseHandlers: {
-      onMouseEnter: () => setHovered(true),
-      onMouseLeave: () => setHovered(false),
-      onFocus: () => setFocused(true),
-      onBlur: () => setFocused(false),
-    },
-  };
+@media (prefers-reduced-motion: reduce) {
+  /* The site-wide reduced-motion rule (globals.css) disables all animation.
+     Re-enable just the carousel's cycling so it still auto-advances — but as
+     instant, motionless swaps (no fade, rise, or Ken Burns). */
+  [data-hero-cycle] {
+    animation-duration: ${cycle}s !important;
+    animation-iteration-count: infinite !important;
+    animation-timing-function: linear !important;
+  }
+  [data-hero-img],
+  [data-hero-chip],
+  [data-hero-word] { animation-name: bt-hero-step !important; }
+  [data-hero-dot] { animation-name: bt-hero-dot-step !important; }
+  [data-hero-zoom] { animation: none !important; transform: none !important; }
+  [data-hero-intro] { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+`;
 }
 
 /**
  * Styled full-bleed stand-in for a slide whose photo hasn't been added
  * yet: navy gradient + engineering grid + soft color blooms, with the
- * slide's eyebrow as an art-direction motif in the upper-right (the area
- * the legibility overlay leaves clear).
+ * slide's eyebrow as an art-direction motif in the upper-right.
  */
 function SlidePlaceholder({ slide }: { slide: ResolvedHeroSlide }) {
   return (
-    <div className="absolute inset-0">
+    <div data-hero-zoom className="absolute inset-0">
       <div
-        data-kenburns
         aria-hidden
         className="absolute inset-0 bg-linear-to-br from-brand-navy via-brand-navy/95 to-medical-gray-600"
       >
@@ -122,16 +160,13 @@ function SlidePlaceholder({ slide }: { slide: ResolvedHeroSlide }) {
 
 /**
  * A slide whose photo is too small to cover the hero without visible
- * upscaling blur: the image renders near its native size over the same
- * navy backdrop the placeholders use, with a radial opacity vignette
- * melting its edges into the background. Positioned in the upper-right
- * clear zone, away from the bottom-left text block.
+ * upscaling blur: the image renders near its native size over the navy
+ * backdrop with a radial opacity vignette melting its edges in.
  */
 function SlideBlend({ slide }: { slide: ResolvedHeroSlide }) {
   return (
-    <div className="absolute inset-0">
+    <div data-hero-zoom className="absolute inset-0">
       <div
-        data-kenburns
         aria-hidden
         className="absolute inset-0 bg-linear-to-br from-brand-navy via-brand-navy/95 to-medical-gray-600"
       >
@@ -159,25 +194,26 @@ function SlideBlend({ slide }: { slide: ResolvedHeroSlide }) {
   );
 }
 
-/** The rotating word, rendered as plain white italic emphasis. */
-function AccentWord({ slide }: { slide: ResolvedHeroSlide }) {
-  return <em className="italic">{slide.rotatingWord}</em>;
-}
-
 /**
- * Full-screen hero: rotating full-bleed imagery (crossfade + subtle Ken
- * Burns, ~5.5s per slide) under a layered navy legibility overlay, with
- * the headline + dual CTA overlaid bottom-left and the caption chip +
- * dots bottom-right. Slides without a purchased photo render a gradient
- * placeholder treatment instead.
+ * Full-screen hero with a CSS-driven rotating-image carousel under a layered
+ * navy legibility overlay; headline + dual CTA bottom-left, caption chip +
+ * dots bottom-right.
  *
- * The transparent-over-hero header relies on this section being exactly
- * the first thing in <main> at 72svh (.v2-hero-vh) — Header.tsx flips to
- * its solid style at the matching HERO_EXIT_RATIO threshold.
+ * Rotation is pure CSS (see buildHeroStyles): it starts at first paint and
+ * keeps every cycling element — image, the rotating headline word, the
+ * caption chip, and the dots — in sync without any JavaScript, so a slow
+ * cold-load hydration never leaves the hero frozen on slide 1. JavaScript is
+ * progressive enhancement only:
+ *   - pause on hover / focus-within / off-screen / hidden tab
+ *   - dot navigation (re-bases the cycle to the chosen slide)
+ *   - keeping aria-current / aria-hidden in step with the visible slide
  *
- * Ken Burns and the load-in stagger are gated to no-preference; the
- * crossfade is a CSS opacity transition driven by React state, so dot
- * navigation still works (instantly) under reduced motion.
+ * Under reduced motion the cycle still advances, but as instant swaps (no
+ * crossfade, rise, or Ken Burns).
+ *
+ * The transparent-over-hero header relies on this section being exactly the
+ * first thing in <main> at 72svh (.v2-hero-vh) — Header.tsx flips to its
+ * solid style at the matching HERO_EXIT_RATIO threshold.
  */
 export default function HeroCarousel({
   slides,
@@ -185,76 +221,123 @@ export default function HeroCarousel({
   /** Resolved server-side (heroSlides.ts is node-only) and passed down. */
   slides: ResolvedHeroSlide[];
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const { active, goTo, pauseHandlers } = useAutoRotate(
-    slides.length,
-    stageRef
-  );
+  const n = slides.length;
+  const rootRef = useRef<HTMLElement>(null);
+  const css = buildHeroStyles(n);
+
+  // Which slide leads the cycle (0 by default; a dot click re-bases here).
+  const [base, setBase] = useState(0);
+  // Bumped on each dot click to trigger an animation restart.
+  const [jump, setJump] = useState(0);
+  // aria bookkeeping only — the visible rotation is CSS, so this lagging by a
+  // little (or not running at all without JS) never freezes the carousel.
+  const [current, setCurrent] = useState(0);
+
   // Preload the first slide that actually has a photo (it's above the fold
-  // even while crossfaded out, and may be the page's LCP element).
+  // even while faded out, and may be the page's LCP element).
   const firstImageIndex = slides.findIndex((slide) => slide.resolvedSrc);
-  const activeSlide = slides[active];
 
-  // Previous slide index, so the outgoing headline can animate up and out
-  // while the incoming one rises into place.
-  const prevRef = useRef(active);
-  const previous = prevRef.current;
+  // animation-delay for slide i given the current base, in seconds. Computed
+  // in render so it's present in the SSR HTML — the cycle runs pre-hydration.
+  const delayFor = (i: number) => ((i - base + n) % n) * PER;
+
+  // Re-seek every cycling element so the chosen (base) slide is on stage
+  // immediately after a dot click. Seeking to FADE (rather than 0) lands the
+  // base slide just past its fade-in — fully visible at once, and visible even
+  // if focus-within then pauses the cycle (a 0-second seek would freeze it on
+  // the blank start of the fade). The base slide has delay 0, so its local
+  // time is FADE (faded in); every other slide is still pre-delay (hidden).
+  const restart = useCallback(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const els = root.querySelectorAll<HTMLElement>(
+      "[data-hero-cycle],[data-hero-zoom]"
+    );
+    els.forEach((el) => {
+      const anim = el.getAnimations?.()[0];
+      if (anim) anim.currentTime = FADE * 1000;
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (jump > 0) restart();
+  }, [jump, restart]);
+
+  const goTo = (index: number) => {
+    setBase(index);
+    setCurrent(index);
+    setJump((j) => j + 1);
+  };
+
+  // Pause state. Defaults assume "playing" so the SSR/no-JS markup animates.
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [inView, setInView] = useState(true);
+  const [tabHidden, setTabHidden] = useState(false);
+  const playing = !hovered && !focused && !tabHidden && inView;
+
   useEffect(() => {
-    prevRef.current = active;
-  }, [active]);
+    const onVisibility = () => setTabHidden(document.hidden);
+    onVisibility();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
-  useGSAP(
-    () => {
-      const section = ref.current;
-      if (!section) return;
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // Staggered load-in for the overlaid content.
-        gsap.from("[data-hero-intro]", {
-          autoAlpha: 0,
-          y: 32,
-          duration: 0.9,
-          ease: "power3.out",
-          stagger: 0.09,
-        });
-      });
-    },
-    { scope: ref }
-  );
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.2 }
+    );
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
 
-  // Ken Burns on the active slide: restart 1.0 -> 1.04 each time it takes
-  // the stage. The outgoing slide keeps its scale while fading out and is
-  // re-set from 1.0 on its next turn, so there is no visible snap.
-  useGSAP(
-    () => {
-      const stage = stageRef.current;
-      if (!stage) return;
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const layer = stage.querySelector<HTMLElement>(
-          `[data-slide="${active}"] [data-kenburns]`
-        );
-        if (!layer) return;
-        gsap.fromTo(
-          layer,
-          { scale: 1 },
-          { scale: KEN_BURNS_SCALE, duration: SLIDE_MS / 1000 + 1, ease: "none" }
-        );
-      });
-    },
-    { scope: stageRef, dependencies: [active] }
-  );
+  // Align aria bookkeeping to the real CSS animation phase on hydration, then
+  // step it in time with the cycle while playing. Reading the running
+  // animation's currentTime keeps aria-current matching what's on screen even
+  // when hydration lands mid-cycle.
+  useEffect(() => {
+    const img = rootRef.current?.querySelector<HTMLElement>("[data-hero-img]");
+    const anim = img?.getAnimations?.()[0];
+    const t = anim?.currentTime;
+    if (typeof t === "number") {
+      const phase = (t / 1000) % (n * PER);
+      setCurrent((base + Math.floor(phase / PER)) % n);
+    }
+  }, [n, base, jump]);
+
+  useEffect(() => {
+    if (!playing) return;
+    const id = window.setInterval(
+      () => setCurrent((c) => (c + 1) % n),
+      PER * 1000
+    );
+    return () => window.clearInterval(id);
+  }, [playing, n, jump]);
 
   return (
     <section
-      ref={ref}
-      {...pauseHandlers}
-      className="v2-hero-vh v2-band-dark relative isolate flex flex-col justify-end overflow-hidden bg-brand-navy text-white"
+      ref={rootRef}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      className={`v2-hero-vh v2-band-dark relative isolate flex flex-col justify-end overflow-hidden bg-brand-navy text-white ${
+        playing ? "" : "bt-hero-paused"
+      }`}
+      style={
+        {
+          "--btd-on": "#35F3E6",
+          "--btd-off": "rgb(255 255 255 / 0.4)",
+        } as React.CSSProperties
+      }
     >
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+
       {/* Full-bleed rotating imagery */}
       <div
-        ref={stageRef}
         role="region"
         aria-roledescription="carousel"
         aria-label="What a visit looks like"
@@ -263,17 +346,17 @@ export default function HeroCarousel({
         {slides.map((slide, index) => (
           <div
             key={slide.src}
-            data-slide={index}
+            data-hero-cycle
+            data-hero-img
             role="group"
             aria-roledescription="slide"
-            aria-label={`${index + 1} of ${slides.length}`}
-            aria-hidden={index !== active}
-            className={`absolute inset-0 transition-opacity duration-[900ms] ease-out motion-reduce:transition-none ${
-              index === active ? "opacity-100" : "pointer-events-none opacity-0"
-            }`}
+            aria-label={`${index + 1} of ${n}`}
+            aria-hidden={index !== current}
+            style={{ animationDelay: `${delayFor(index)}s` }}
+            className="absolute inset-0"
           >
             {slide.resolvedSrc && slide.renderMode === "cover" ? (
-              <div data-kenburns className="absolute inset-0">
+              <div data-hero-zoom className="absolute inset-0">
                 <Image
                   src={slide.resolvedSrc}
                   alt={slide.alt}
@@ -291,11 +374,9 @@ export default function HeroCarousel({
           </div>
         ))}
 
-        {/* Legibility overlay: a soft navy wash, a directional gradient
-            rising from the bottom-left text zone (guarantees AA contrast
-            for the white copy on photos AND placeholders), and a top
-            scrim under the transparent header. Photos still read in the
-            upper-right. */}
+        {/* Legibility overlay: navy wash + directional gradient rising from
+            the bottom-left text zone (guarantees AA contrast for the white
+            copy) + a top scrim under the transparent header. */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-medical-secondary/35" />
           <div className="absolute inset-0 bg-linear-to-tr from-medical-secondary/90 via-medical-secondary/45 to-transparent" />
@@ -314,44 +395,34 @@ export default function HeroCarousel({
                 {SITE.address.city}, {SITE.address.state}
               </span>
             </p>
-            {/* Fixed lead-in; only the trailing word rotates with the
-                image. The word variants are stacked in one inline-grid cell
-                so the line reserves the widest word's width (no reflow). The
-                outgoing word slides up and out, the incoming one rises from
-                below; reduced motion swaps it instantly. */}
+            {/* Fixed lead-in; only the trailing word rotates with the image.
+                The word variants are stacked in one inline-grid cell so the
+                line reserves the widest word's width (no reflow). Each word
+                rises in / out on the same CSS cycle as its slide. */}
             <h1
               data-hero-intro
+              style={{ animationDelay: "0.09s" }}
               className="mt-5 text-balance text-[clamp(2.4rem,5.2vw,4.4rem)] font-semibold leading-[1.04] tracking-[-0.025em] text-white"
             >
               See improvement in your{" "}
-              <span className="relative inline-grid align-baseline">
-                {slides.map((slide, index) => {
-                  const state =
-                    index === active
-                      ? "active"
-                      : index === previous
-                        ? "previous"
-                        : "idle";
-                  return (
-                    <span
-                      key={slide.src}
-                      aria-hidden={index !== active}
-                      className={`col-start-1 row-start-1 block whitespace-nowrap motion-reduce:translate-y-0 motion-reduce:transition-none ${
-                        state === "active"
-                          ? "translate-y-0 opacity-100 transition-all duration-700 ease-out"
-                          : state === "previous"
-                            ? "pointer-events-none -translate-y-full opacity-0 transition-all duration-700 ease-out"
-                            : "pointer-events-none translate-y-full opacity-0"
-                      }`}
-                    >
-                      <AccentWord slide={slide} />
-                    </span>
-                  );
-                })}
+              <span className="relative inline-grid overflow-hidden align-baseline">
+                {slides.map((slide, index) => (
+                  <span
+                    key={slide.src}
+                    data-hero-cycle
+                    data-hero-word
+                    aria-hidden={index !== current}
+                    style={{ animationDelay: `${delayFor(index)}s` }}
+                    className="col-start-1 row-start-1 block whitespace-nowrap"
+                  >
+                    <em className="italic">{slide.rotatingWord}</em>
+                  </span>
+                ))}
               </span>
             </h1>
             <p
               data-hero-intro
+              style={{ animationDelay: "0.18s" }}
               className="mt-6 max-w-[52ch] text-pretty text-base leading-relaxed text-white/85 md:text-lg"
             >
               We start with a qEEG brain map to see what&rsquo;s going on, then
@@ -360,6 +431,7 @@ export default function HeroCarousel({
             </p>
             <div
               data-hero-intro
+              style={{ animationDelay: "0.27s" }}
               className="mt-8 flex flex-wrap items-center gap-4"
             >
               <MagneticButton href={NAV.cta.href} className={BTN_PRIMARY}>
@@ -369,7 +441,11 @@ export default function HeroCarousel({
                 Call {SITE.phone.display}
               </a>
             </div>
-            <p data-hero-intro className="mt-7 text-sm text-white/70">
+            <p
+              data-hero-intro
+              style={{ animationDelay: "0.36s" }}
+              className="mt-7 text-sm text-white/70"
+            >
               {SITE.address.note}
             </p>
           </div>
@@ -377,17 +453,25 @@ export default function HeroCarousel({
           {/* Caption chip + slide dots */}
           <div
             data-hero-intro
+            style={{ animationDelay: "0.45s" }}
             className="flex shrink-0 flex-col items-start gap-4 lg:items-end"
           >
-            {/* The rotating headline now carries each slide's message, so
-                the chip is just the category tag. */}
-            <div
-              key={active}
-              className="v2-hero-caption-in rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 backdrop-blur-md"
-            >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-teal">
-                {activeSlide.eyebrow}
-              </p>
+            {/* Category tag — cycles in sync with the imagery. */}
+            <div className="relative grid">
+              {slides.map((slide, index) => (
+                <div
+                  key={slide.src}
+                  data-hero-cycle
+                  data-hero-chip
+                  aria-hidden={index !== current}
+                  style={{ animationDelay: `${delayFor(index)}s` }}
+                  className="col-start-1 row-start-1 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 backdrop-blur-md"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-teal">
+                    {slide.eyebrow}
+                  </p>
+                </div>
+              ))}
             </div>
             <div className="flex items-center gap-1.5">
               {slides.map((slide, index) => (
@@ -396,15 +480,14 @@ export default function HeroCarousel({
                   type="button"
                   onClick={() => goTo(index)}
                   aria-label={`Go to slide ${index + 1}: ${slide.eyebrow}`}
-                  aria-current={index === active ? "true" : undefined}
+                  aria-current={index === current ? "true" : undefined}
                   className="group cursor-pointer rounded-full p-1.5"
                 >
                   <span
-                    className={`block h-1.5 rounded-full transition-all duration-300 ${
-                      index === active
-                        ? "w-9 bg-brand-teal"
-                        : "w-4 bg-white/40 group-hover:bg-white/70"
-                    }`}
+                    data-hero-cycle
+                    data-hero-dot
+                    style={{ animationDelay: `${delayFor(index)}s` }}
+                    className="block h-1.5 w-4 rounded-full bg-white/40"
                   />
                 </button>
               ))}
