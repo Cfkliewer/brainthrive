@@ -7,6 +7,7 @@ export const NAV: NavConfig = {
   primary: [
     { label: "How It Works", href: "/how-it-works" },
     { label: "About Us", href: "/about" },
+    { label: "Self-Assessment", href: "/quiz" },
     { label: "Newsletters", href: "/newsletters" },
   ],
   whoWeHelp: CONDITIONS.map((condition) => ({

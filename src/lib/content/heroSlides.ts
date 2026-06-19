@@ -33,19 +33,17 @@ export interface HeroSlide {
   alt: string;
   /** Short uppercase label shown on the caption chip and placeholder. */
   eyebrow: string;
-  /** Hero headline shown while this slide is up (rotates with the image). */
-  headline: string;
-  /** Optional substring of `headline` to emphasize. */
-  headlineAccent?: string;
   /**
-   * How the accent substring is treated (per slide, mix freely):
-   * - "underline": white word with a hand-drawn teal stroke beneath it
-   * - "italic":    true italic emphasis, stays white
-   * - "teal":      flat brand-teal word
-   * - "gradient":  teal→ultraviolet clipped gradient (available, unused)
-   * Defaults to "teal" when omitted.
+   * The word that completes the static headline "See improvement in your
+   * ___". Only this word rotates with the image; the lead-in is fixed.
    */
-  accentStyle?: "underline" | "italic" | "teal" | "gradient";
+  rotatingWord: string;
+  /**
+   * How `rotatingWord` is treated. Every slide currently uses plain italic
+   * emphasis (white text); the field is kept for per-slide flexibility.
+   * Defaults to "italic" when omitted.
+   */
+  accentStyle?: "italic";
 }
 
 export interface ResolvedHeroSlide extends HeroSlide {
@@ -69,33 +67,29 @@ export const HERO_SLIDES: HeroSlide[] = [
     src: "/images/hero/slide-1.jpg",
     alt: "A clinician reviewing a qEEG brain map with a client",
     eyebrow: "Brain Mapping",
-    headline: "See how your brain is working",
-    headlineAccent: "brain",
-    accentStyle: "underline",
+    rotatingWord: "memory",
+    accentStyle: "italic",
   },
   {
     src: "/images/hero/slide-2.jpg",
     alt: "A client wearing EEG sensors during a neurofeedback training session",
     eyebrow: "Neurofeedback",
-    headline: "Train your brain with real time feedback",
-    headlineAccent: "real time",
+    rotatingWord: "sleep",
     accentStyle: "italic",
   },
   {
     src: "/images/hero/slide-3.jpg",
     alt: "A photobiomodulation light therapy session in a calm clinic room",
     eyebrow: "Light Therapy",
-    headline: "Gentle, non-invasive support at the cellular level",
-    headlineAccent: "non-invasive",
-    accentStyle: "teal",
+    rotatingWord: "focus",
+    accentStyle: "italic",
   },
   {
     src: "/images/hero/slide-4.jpg",
     alt: "A family enjoying an ordinary, focused day together",
     eyebrow: "Why It Matters",
-    headline: "Feel like yourself again.",
-    headlineAccent: "yourself",
-    accentStyle: "underline",
+    rotatingWord: "anxiety",
+    accentStyle: "italic",
   },
 ];
 
@@ -113,17 +107,16 @@ export const RESOLVED_HERO_SLIDES: ResolvedHeroSlide[] = HERO_SLIDES.map(
     }
     // TEMPORARY stand-in: until the purchased "everyday life" photo for
     // slide 4 arrives, reuse the existing team/clinic photo there (and
-    // only there — it's the one real photo we have). It is only 512px
-    // wide, so it renders in "blend" mode (near-native size, vignetted
-    // into the navy backdrop) instead of a blurry full-bleed stretch.
-    // Dropping the real slide-4.jpg into /public/images/hero/ replaces
-    // it automatically and switches the slide back to "cover".
+    // only there — it's the one real photo we have). It renders full-bleed
+    // ("cover"). The source is a Lanczos-upscaled 1920px copy of the 512px
+    // original, so the stretch reads cleanly rather than blurry. Dropping
+    // the real slide-4.jpg into /public/images/hero/ replaces it.
     if (index === 3 && TEAM_PHOTO) {
       return {
         ...slide,
         resolvedSrc: TEAM_PHOTO,
         alt: TEAM_PHOTO_ALT,
-        renderMode: "blend" as const,
+        renderMode: "cover" as const,
       };
     }
     return { ...slide, resolvedSrc: null, renderMode: "cover" as const };

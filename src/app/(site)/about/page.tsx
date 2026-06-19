@@ -35,14 +35,14 @@ export default function AboutPage() {
         <div className={`${CONTAINER} pb-16 lg:pb-24`}>
           <Reveal>
             {TEAM_PHOTO ? (
-              <div className="relative aspect-[16/7] overflow-hidden rounded-3xl">
+              <div className="relative aspect-[3/2] overflow-hidden rounded-3xl md:aspect-[16/9]">
                 <Image
                   src={TEAM_PHOTO}
                   alt={TEAM_PHOTO_ALT}
                   fill
                   priority
                   sizes="(min-width: 1280px) 1280px, 100vw"
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
               </div>
             ) : (

@@ -16,7 +16,7 @@ import {
 } from "./styles";
 
 /** Time each slide stays up before auto-advancing. */
-const SLIDE_MS = 5500;
+const SLIDE_MS = 5000;
 /** Ken Burns drift: 1.0 -> 1.04 across the slide's duration. */
 const KEN_BURNS_SCALE = 1.04;
 
@@ -46,6 +46,11 @@ function useAutoRotate(
 
   useEffect(() => {
     const onVisibility = () => setTabHidden(document.hidden);
+    // Sync the initial state: a tab that *loads* hidden/occluded never fires
+    // visibilitychange, so without this the pause logic thinks it's playing and
+    // schedules a browser-throttled timer — the first slide then lingers far
+    // past SLIDE_MS until the tab is revealed.
+    onVisibility();
     document.addEventListener("visibilitychange", onVisibility);
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
@@ -154,76 +159,9 @@ function SlideBlend({ slide }: { slide: ResolvedHeroSlide }) {
   );
 }
 
-/**
- * The accent word with its per-slide treatment (heroSlides.ts decides).
- * `isActive` retriggers the underline's draw-in each time the slide
- * takes the stage (the svg remounts via key).
- */
-function AccentWord({
-  slide,
-  isActive,
-}: {
-  slide: ResolvedHeroSlide;
-  isActive: boolean;
-}) {
-  const accent = slide.headlineAccent!;
-  switch (slide.accentStyle ?? "teal") {
-    case "italic":
-      return <em className="italic">{accent}</em>;
-    case "gradient":
-      return (
-        <span className="bg-linear-to-r from-brand-teal to-brand-ultraviolet bg-clip-text text-transparent">
-          {accent}
-        </span>
-      );
-    case "underline":
-      return (
-        <span className="relative inline-block">
-          {accent}
-          <svg
-            key={isActive ? "drawing" : "idle"}
-            aria-hidden
-            viewBox="0 0 100 12"
-            preserveAspectRatio="none"
-            className="absolute -bottom-[0.1em] left-0 h-[0.24em] w-full overflow-visible"
-          >
-            {/* Slightly uneven hand-drawn stroke; draws in on activation. */}
-            <path
-              d="M3 8.5 C 22 4.5, 38 10.5, 57 7 S 88 8.5, 97 5.5"
-              fill="none"
-              stroke="var(--color-brand-teal)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-              className="v2-underline-path"
-            />
-          </svg>
-        </span>
-      );
-    case "teal":
-    default:
-      return <span className="text-brand-teal">{accent}</span>;
-  }
-}
-
-/** Renders a slide headline with its optional accented word. */
-function HeadlineText({
-  slide,
-  isActive,
-}: {
-  slide: ResolvedHeroSlide;
-  isActive: boolean;
-}) {
-  const { headline, headlineAccent } = slide;
-  const accentStart = headlineAccent ? headline.indexOf(headlineAccent) : -1;
-  if (!headlineAccent || accentStart === -1) return <>{headline}</>;
-  return (
-    <>
-      {headline.slice(0, accentStart)}
-      <AccentWord slide={slide} isActive={isActive} />
-      {headline.slice(accentStart + headlineAccent.length)}
-    </>
-  );
+/** The rotating word, rendered as plain white italic emphasis. */
+function AccentWord({ slide }: { slide: ResolvedHeroSlide }) {
+  return <em className="italic">{slide.rotatingWord}</em>;
 }
 
 /**
@@ -376,37 +314,41 @@ export default function HeroCarousel({
                 {SITE.address.city}, {SITE.address.state}
               </span>
             </p>
-            {/* Rotating headline: all variants stacked in one grid cell so
-                the block reserves the tallest headline's height (no layout
-                jump). The outgoing one slides up and out, the incoming one
-                rises from below; reduced motion swaps text instantly. */}
+            {/* Fixed lead-in; only the trailing word rotates with the
+                image. The word variants are stacked in one inline-grid cell
+                so the line reserves the widest word's width (no reflow). The
+                outgoing word slides up and out, the incoming one rises from
+                below; reduced motion swaps it instantly. */}
             <h1
               data-hero-intro
-              className="mt-5 grid text-[clamp(2.4rem,5.2vw,4.4rem)] font-semibold leading-[1.04] tracking-[-0.025em] text-white"
+              className="mt-5 text-balance text-[clamp(2.4rem,5.2vw,4.4rem)] font-semibold leading-[1.04] tracking-[-0.025em] text-white"
             >
-              {slides.map((slide, index) => {
-                const state =
-                  index === active
-                    ? "active"
-                    : index === previous
-                      ? "previous"
-                      : "idle";
-                return (
-                  <span
-                    key={slide.src}
-                    aria-hidden={index !== active}
-                    className={`col-start-1 row-start-1 block text-balance motion-reduce:translate-y-0 motion-reduce:transition-none ${
-                      state === "active"
-                        ? "translate-y-0 opacity-100 transition-all duration-700 ease-out"
-                        : state === "previous"
-                          ? "pointer-events-none -translate-y-10 opacity-0 transition-all duration-700 ease-out"
-                          : "pointer-events-none translate-y-10 opacity-0"
-                    }`}
-                  >
-                    <HeadlineText slide={slide} isActive={index === active} />
-                  </span>
-                );
-              })}
+              See improvement in your{" "}
+              <span className="relative inline-grid align-baseline">
+                {slides.map((slide, index) => {
+                  const state =
+                    index === active
+                      ? "active"
+                      : index === previous
+                        ? "previous"
+                        : "idle";
+                  return (
+                    <span
+                      key={slide.src}
+                      aria-hidden={index !== active}
+                      className={`col-start-1 row-start-1 block whitespace-nowrap motion-reduce:translate-y-0 motion-reduce:transition-none ${
+                        state === "active"
+                          ? "translate-y-0 opacity-100 transition-all duration-700 ease-out"
+                          : state === "previous"
+                            ? "pointer-events-none -translate-y-full opacity-0 transition-all duration-700 ease-out"
+                            : "pointer-events-none translate-y-full opacity-0"
+                      }`}
+                    >
+                      <AccentWord slide={slide} />
+                    </span>
+                  );
+                })}
+              </span>
             </h1>
             <p
               data-hero-intro

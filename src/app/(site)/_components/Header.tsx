@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -89,20 +90,48 @@ export default function Header() {
           scrolled ? "py-2.5" : "py-4 lg:py-5"
         }`}
       >
-        <Link href="/" className="block">
-          <span
-            className={`block text-lg font-semibold leading-none tracking-tight transition-colors ${
-              transparent ? "text-white" : "text-brand-navy"
-            }`}
-          >
-            {SITE.name}
+        <Link href="/" className="flex items-center gap-3">
+          {/* White mark over the hero, full-color once the bar goes solid.
+              Both are stacked and cross-faded so the swap tracks the same
+              transparent->solid transition as the text. Decorative (alt=""):
+              the site name beside it already names the brand. */}
+          <span className="relative block h-14 w-14 shrink-0">
+            <Image
+              src="/BrainThrive_Icon_White.png"
+              alt=""
+              fill
+              sizes="56px"
+              priority
+              className={`object-contain transition-opacity duration-300 ${
+                transparent ? "opacity-100" : "opacity-0"
+              }`}
+            />
+            <Image
+              src="/BrainThrive_Icon_FullColor.png"
+              alt=""
+              fill
+              sizes="56px"
+              priority
+              className={`object-contain transition-opacity duration-300 ${
+                transparent ? "opacity-0" : "opacity-100"
+              }`}
+            />
           </span>
-          <span
-            className={`mt-1 block text-[10px] font-medium uppercase tracking-[0.28em] transition-colors ${
-              transparent ? "text-white/70" : "text-medical-gray-500"
-            }`}
-          >
-            {SITE.tagline}
+          <span className="block">
+            <span
+              className={`block text-lg font-semibold leading-none tracking-tight transition-colors ${
+                transparent ? "text-white" : "text-brand-navy"
+              }`}
+            >
+              {SITE.name}
+            </span>
+            <span
+              className={`mt-1 block text-[10px] font-medium uppercase tracking-[0.28em] transition-colors ${
+                transparent ? "text-white/70" : "text-medical-gray-500"
+              }`}
+            >
+              {SITE.tagline}
+            </span>
           </span>
         </Link>
 

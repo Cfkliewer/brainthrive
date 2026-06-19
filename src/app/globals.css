@@ -459,7 +459,6 @@ body {
 .medical-focus:focus {
   outline: 3px solid #2563EB;
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Enhanced focus indicators for all interactive elements */
@@ -470,7 +469,6 @@ textarea:focus,
 select:focus {
   outline: 3px solid #2563EB;
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Skip navigation link */
@@ -560,7 +558,6 @@ select:focus {
 .gsap-element:focus-visible {
   outline: 3px solid #2563EB;
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Loading states */

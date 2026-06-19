@@ -45,7 +45,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
+      {/* SetBodyVersion sets data-version on <body> via a pre-hydration inline
+          script (themes scrollbar/selection/background before first paint), so
+          the server HTML and the hydrated tree intentionally differ here. The
+          suppress flag is shallow — it does not mask mismatches in children. */}
       <body
+        suppressHydrationWarning
         className={`${golosText.variable} ${bebasNeue.variable} antialiased`}
       >
         {children}
