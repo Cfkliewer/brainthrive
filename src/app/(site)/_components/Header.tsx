@@ -77,14 +77,24 @@ export default function Header() {
   return (
     <header
       ref={whoWeHelp.containerRef}
-      className={`top-0 z-40 border-b transition-colors duration-300 ${
+      className={`top-0 z-40 transition-colors duration-300 ${
         isHome ? "fixed inset-x-0" : "sticky"
-      } ${
-        transparent
-          ? "v2-band-dark border-transparent bg-transparent"
-          : "border-medical-gray-200 bg-white/90 backdrop-blur-md"
-      }`}
+      } ${transparent ? "v2-band-dark" : ""}`}
     >
+      {/* Background, border and blur live on this sibling layer instead of
+          on <header> itself. backdrop-filter on an element makes it the
+          containing block for position:fixed descendants in Safari/WebKit,
+          which would otherwise shrink the full-screen mobile menu (a fixed
+          child of the header) down to the header bar. Keeping the filter off
+          the panel's ancestor chain lets `fixed inset-0` fill the viewport. */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 -z-10 border-b transition-colors duration-300 ${
+          transparent
+            ? "border-transparent bg-transparent"
+            : "border-medical-gray-200 bg-white/90 backdrop-blur-md"
+        }`}
+      />
       <div
         className={`${CONTAINER} flex items-center justify-between transition-[padding] duration-300 ${
           scrolled ? "py-2.5" : "py-4 lg:py-5"
