@@ -459,7 +459,6 @@ body {
 .medical-focus:focus {
   outline: 3px solid #2563EB;
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Enhanced focus indicators for all interactive elements */
@@ -470,7 +469,6 @@ textarea:focus,
 select:focus {
   outline: 3px solid #2563EB;
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Skip navigation link */
@@ -560,7 +558,6 @@ select:focus {
 .gsap-element:focus-visible {
   outline: 3px solid #2563EB;
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Loading states */
@@ -665,4 +662,173 @@ select:focus {
     visibility: visible !important;
     transform: none !important;
   }
+}
+
+/* =================================================================
+   VERSION THEMING (v2 "Modern Clinical" site design)
+   Scoped via data-version, set on <body> by SetBodyVersion.
+   Append-only block — do not modify rules above this line.
+   ================================================================= */
+
+[data-version="v2"] {
+  --v-surface: #ffffff;
+  --v-surface-alt: #F8FAFC;
+  --v-ink: #0F172A;
+  --v-accent: #5362EF;
+  --v-accent-2: #35F3E6;
+  --v-focus: #2563EB;
+}
+
+/* Light page chrome */
+body[data-version="v2"] {
+  background: #ffffff;
+  color: #002554;
+}
+
+/* Light scrollbars — viewport (root) scrollbar, body, and inner scrollables */
+
+/* Firefox: scrollbar-color (thumb track) inherits, so html/body covers inner scrollables */
+html:has(body[data-version="v2"]),
+body[data-version="v2"] {
+  scrollbar-color: #94A3B8 #F2F2F2;
+}
+
+html:has(body[data-version="v2"])::-webkit-scrollbar-track,
+body[data-version="v2"]::-webkit-scrollbar-track,
+body[data-version="v2"] ::-webkit-scrollbar-track {
+  background: #F2F2F2;
+}
+
+html:has(body[data-version="v2"])::-webkit-scrollbar-thumb,
+body[data-version="v2"]::-webkit-scrollbar-thumb,
+body[data-version="v2"] ::-webkit-scrollbar-thumb {
+  background: #94A3B8;
+}
+
+html:has(body[data-version="v2"])::-webkit-scrollbar-thumb:hover,
+body[data-version="v2"]::-webkit-scrollbar-thumb:hover,
+body[data-version="v2"] ::-webkit-scrollbar-thumb:hover {
+  background: #5362EF;
+}
+
+/* Text selection */
+body[data-version="v2"] ::selection {
+  background: #002554;
+  color: #ffffff;
+}
+
+/* =================================================================
+   V2 "MODERN CLINICAL"
+   Bebas display utility, focus treatment, navy band texture, card
+   shadow recipe. --font-bebas-real is provided by src/app/(site)/layout.tsx.
+   ================================================================= */
+
+.v2-display {
+  font-family: var(--font-bebas-real), "Arial Narrow", "Oswald", sans-serif;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+/* Replace the heavy global 3px :focus outline with a focus-visible ring
+   in the v2 palette (blue on light surfaces, teal inside navy bands). */
+body[data-version="v2"] :is(a, button, input, textarea, select, summary):focus {
+  outline: none;
+}
+
+body[data-version="v2"]
+  :is(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--color-brand-blue-600);
+  outline-offset: 3px;
+}
+
+body[data-version="v2"]
+  .v2-band-dark
+  :is(a, button, summary):focus-visible {
+  outline-color: var(--color-brand-teal);
+}
+
+/* Re-light focus rings inside solid-white surfaces nested in a dark band
+   (e.g. the mega panel / mobile menu under the transparent hero header).
+   Same specificity as the dark rule — order makes this one win. */
+body[data-version="v2"]
+  .v2-band-light
+  :is(a, button, summary):focus-visible {
+  outline-color: var(--color-brand-blue-600);
+}
+
+/* Hero height (~3/4 viewport) with a vh fallback for older engines. */
+.v2-hero-vh {
+  min-height: 72vh;
+  min-height: 72svh;
+}
+
+/* Caption chip swap on the hero carousel (re-runs via React key change). */
+@keyframes v2-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.v2-hero-caption-in {
+  animation: v2-fade-in 0.5s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-hero-caption-in {
+    animation: none;
+  }
+}
+
+/* Hand-drawn accent underline on the hero headline: the stroke draws in
+   shortly after the headline rises into place (svg remounts per
+   activation, restarting the animation). */
+@keyframes v2-underline-draw {
+  from {
+    stroke-dashoffset: 120;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.v2-underline-path {
+  stroke-dasharray: 120;
+  animation: v2-underline-draw 0.6s ease-out 0.5s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-underline-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Fine engineering-grid texture for navy bands (decorative only). */
+.v2-grid-pattern {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Layered elevation for white cards sitting on slate sections. */
+.v2-card-shadow {
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.05),
+    0 16px 40px -16px rgb(15 23 42 / 0.2);
+}
+
+/* Hide the scrollbar on the mobile scroll-snap carousel track without
+   disabling scrolling (cards remain swipeable + keyboard reachable). */
+.v2-no-scrollbar {
+  scrollbar-width: none;
+}
+
+.v2-no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

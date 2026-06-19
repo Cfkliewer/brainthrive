@@ -1,0 +1,96 @@
+{
+  "title": "Is BrainThrive right for your child?",
+  "intro": "Seven quick questions about what's really going on at home. There are no wrong answers — this just helps us understand whether our drug-free, brain-based approach might be a good fit for your family.",
+  "threshold": 50,
+  "result": {
+    "aboveHeading": "Your answers line up with the families we help most.",
+    "aboveBody": "There's a real pattern here — the kind of persistent, day-to-day struggle we see all the time. The honest next step is a no-obligation consultation. We'll talk through what's going on and whether a qEEG brain map makes sense, so we're working from what's actually happening in the brain instead of guessing.",
+    "belowHeading": "You're paying attention early — and that's a good thing.",
+    "belowBody": "Your answers don't show the high-distress patterns we usually see when families reach out. Things sound relatively manageable right now. If that changes, or if you'd just like a clearer picture of what's going on, we're always happy to talk it through."
+  },
+  "questions": [
+    {
+      "id": "age",
+      "text": "How old is your child?",
+      "type": "single",
+      "answers": [
+        { "id": "4-7", "text": "4–7", "target": false },
+        { "id": "8-11", "text": "8–11", "target": false },
+        { "id": "12-15", "text": "12–15", "target": false },
+        { "id": "16-plus", "text": "16+", "target": false }
+      ]
+    },
+    {
+      "id": "disruption",
+      "text": "What's the most disruptive thing going on right now?",
+      "type": "single",
+      "answers": [
+        { "id": "focus", "text": "Focus and attention", "target": true },
+        { "id": "sleep", "text": "Sleep — falling asleep, staying asleep, both", "target": true },
+        { "id": "regulation", "text": "Emotional meltdowns / regulation", "target": true },
+        { "id": "anxiety", "text": "Anxiety / overwhelm", "target": true },
+        { "id": "academic", "text": "Falling behind academically", "target": true },
+        { "id": "other", "text": "Something else", "target": false }
+      ]
+    },
+    {
+      "id": "duration",
+      "text": "How long has this been going on?",
+      "type": "single",
+      "answers": [
+        { "id": "lt-6mo", "text": "Less than 6 months", "target": false },
+        { "id": "6-12mo", "text": "6–12 months", "target": true },
+        { "id": "1-3yr", "text": "1–3 years", "target": true },
+        { "id": "3yr-plus", "text": "3+ years", "target": true }
+      ]
+    },
+    {
+      "id": "diagnosis",
+      "text": "Has anyone formally diagnosed your child?",
+      "type": "single",
+      "answers": [
+        { "id": "adhd", "text": "Yes — ADHD", "target": false },
+        { "id": "other-dx", "text": "Yes — something else (anxiety, autism, learning, etc.)", "target": false },
+        { "id": "suspect-adhd", "text": "No, but I suspect ADHD", "target": false },
+        { "id": "unsure", "text": "No, and I'm not sure what's going on", "target": false }
+      ]
+    },
+    {
+      "id": "medication",
+      "text": "Have you tried medication?",
+      "type": "single",
+      "answers": [
+        { "id": "current", "text": "Currently on it", "target": false },
+        { "id": "stopped", "text": "Tried it, stopped", "target": true },
+        { "id": "considering", "text": "Considering it", "target": true },
+        { "id": "no-route", "text": "Won't go that route", "target": true }
+      ]
+    },
+    {
+      "id": "mornings",
+      "text": "What do mornings look like at your house?",
+      "type": "single",
+      "answers": [
+        { "id": "easy", "text": "Easy", "target": false },
+        { "id": "manageable", "text": "Manageable", "target": false },
+        { "id": "battle", "text": "A daily battle", "target": true },
+        { "id": "war", "text": "An actual war", "target": true }
+      ]
+    },
+    {
+      "id": "tried",
+      "text": "What have you already tried? Pick anything that applies.",
+      "type": "multi",
+      "answers": [
+        { "id": "stimulant", "text": "Stimulant medication", "target": true },
+        { "id": "non-stimulant", "text": "Non-stimulant medication", "target": true },
+        { "id": "therapy", "text": "Therapy / counseling", "target": true },
+        { "id": "tutoring", "text": "Tutoring or academic support", "target": true },
+        { "id": "ot", "text": "Occupational therapy", "target": true },
+        { "id": "diet", "text": "Diet changes / supplements", "target": true },
+        { "id": "behavioral", "text": "Behavioral interventions", "target": true },
+        { "id": "nothing", "text": "Nothing yet — we're still figuring it out", "target": false }
+      ]
+    }
+  ]
+}
