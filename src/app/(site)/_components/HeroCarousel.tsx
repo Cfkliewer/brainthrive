@@ -104,12 +104,6 @@ function buildHeroStyles(n: number): string {
   animation: bt-hero-intro 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Paused while hovered / focus-within / off-screen / tab hidden. */
-.bt-hero-paused [data-hero-cycle],
-.bt-hero-paused [data-hero-zoom] {
-  animation-play-state: paused !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   /* The site-wide reduced-motion rule (globals.css) disables all animation.
      Re-enable just the carousel's cycling so it still auto-advances — but as
@@ -202,9 +196,9 @@ function SlideBlend({ slide }: { slide: ResolvedHeroSlide }) {
  * Rotation is pure CSS (see buildHeroStyles): it starts at first paint and
  * keeps every cycling element — image, the rotating headline word, the
  * caption chip, and the dots — in sync without any JavaScript, so a slow
- * cold-load hydration never leaves the hero frozen on slide 1. JavaScript is
- * progressive enhancement only:
- *   - pause on hover / focus-within / off-screen / hidden tab
+ * cold-load hydration never leaves the hero frozen on slide 1. The carousel
+ * never pauses — the cycle runs continuously. JavaScript is progressive
+ * enhancement only:
  *   - dot navigation (re-bases the cycle to the chosen slide)
  *   - keeping aria-current / aria-hidden in step with the visible slide
  *
@@ -269,35 +263,11 @@ export default function HeroCarousel({
     setJump((j) => j + 1);
   };
 
-  // Pause state. Defaults assume "playing" so the SSR/no-JS markup animates.
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [inView, setInView] = useState(true);
-  const [tabHidden, setTabHidden] = useState(false);
-  const playing = !hovered && !focused && !tabHidden && inView;
-
-  useEffect(() => {
-    const onVisibility = () => setTabHidden(document.hidden);
-    onVisibility();
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
-  }, []);
-
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.2 }
-    );
-    observer.observe(root);
-    return () => observer.disconnect();
-  }, []);
-
   // Align aria bookkeeping to the real CSS animation phase on hydration, then
-  // step it in time with the cycle while playing. Reading the running
-  // animation's currentTime keeps aria-current matching what's on screen even
-  // when hydration lands mid-cycle.
+  // step it in time with the cycle. Reading the running animation's
+  // currentTime keeps aria-current matching what's on screen even when
+  // hydration lands mid-cycle. This is aria-only — the visible rotation is
+  // pure CSS, which always runs (the carousel never pauses).
   useEffect(() => {
     const img = rootRef.current?.querySelector<HTMLElement>("[data-hero-img]");
     const anim = img?.getAnimations?.()[0];
@@ -309,24 +279,17 @@ export default function HeroCarousel({
   }, [n, base, jump]);
 
   useEffect(() => {
-    if (!playing) return;
     const id = window.setInterval(
       () => setCurrent((c) => (c + 1) % n),
       PER * 1000
     );
     return () => window.clearInterval(id);
-  }, [playing, n, jump]);
+  }, [n, jump]);
 
   return (
     <section
       ref={rootRef}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-      className={`v2-hero-vh v2-band-dark relative isolate flex flex-col justify-end overflow-hidden bg-brand-navy text-white ${
-        playing ? "" : "bt-hero-paused"
-      }`}
+      className="v2-hero-vh v2-band-dark relative isolate flex flex-col justify-end overflow-hidden bg-brand-navy text-white"
       style={
         {
           "--btd-on": "#35F3E6",
